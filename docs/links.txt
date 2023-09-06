@@ -1,0 +1,2 @@
+cv32e40s Documentation:
+https://docs.openhwgroup.org/projects/cv32e40s-user-manual/en/latest/
