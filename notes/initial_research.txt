@@ -1,0 +1,11 @@
+-- cv32e40s --
+    * 32-bit
+    * in-order RISC-V 
+    * 4-stage pipeline
+    * Several ISAs implemented 
+
+cv32e40s is focused on security applications and offers:
+    * Machine mode - Highest privilege level operating mode
+    * User mode - Lowest privilege level intended for application software.
+    * "Physical Memory Protection" PMP - Provides a way to restrict access to specific regions of physical memory 
+      to prevent unauthorized reads or writes

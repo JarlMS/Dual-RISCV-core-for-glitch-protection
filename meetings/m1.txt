@@ -1,0 +1,15 @@
+SAmmenligner man hele staten eller bare resultatet? 
+ECC register file 
+
+Del 1:
+Analysere glitch angerep og analysere hvordan gjøre dual lockstep 
+Kjøre syntese, power use (PPA)
+
+Pass på at syntese verktøyet ikke fjerner brukbar logikk 
+
+github/openhwgroup/cv32e40s
+
+Tentativ plan 
+
+Mandager 10:00 
+Neste uke - 11.September

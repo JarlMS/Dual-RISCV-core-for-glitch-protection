@@ -1,0 +1,953 @@
+@phdthesis{powerbook,
+ author = {Chao-Hung Cheng, A.},
+ note = {Adviser-Tyson, G. S. and Adviser-Mudge, T. N.},
+ title = {Application-specific architecture framework for high-performance low-power embedded computing},
+ year = {2006},
+ isbn = {0-542-56871-3},
+ order_no = {AAI3208438},
+ publisher = {University of Michigan},
+ address = {Ann Arbor, MI, USA},
+ }
+
+@book{tclbook,
+ author = {Welch, B.B. and Jones, K. and Hobbs, J.},
+ title = {Practical Programming in Tcl \& Tk},
+ year = {2003},
+ isbn = {0130385603},
+ publisher = {Prentice Hall Professional Technical Reference},
+ }
+
+@Article{digfil,
+	author = {Keselbrener, L. and Keselbrener, M. and Akselrod, S.},
+	title = {Nonlinear high pass filter for R-wave detection in ECG signal},
+	journal = {Medical engineering \& physics},
+	year = {1997},
+	abstract = {A simple and easily implemented method for R-wave detection from ECG signals is presented. The method is based on the subtraction of a filtered version of the signal. The filter we use is a nonlinear median filter. The median filter is applied to the ECG signal. It results in a smoothed version of the signal, without any reminder of the R waves. This smoothed signal is then subtracted from the original signal and the resulting signal presents undistorted R-waves, without baseline drift. A simple threshold detection can then be performed on the filtered signal. Results are presented for simulated signals, with sinusoidal and step baseline drifts, as well as ECG complex shape change. The detection is accurate and the average error we obtained for 300s length signals was of the order of 10−8s, for RR intervals of 1s. Results are also presented for a real experimental signal with strong baseline drift, and the accuracy of the detection can be observed.},
+OPTkey = {},
+	volume = {19},
+	number = {5},
+	pages = {481-484},
+	month = {1 June},
+OPTnote = {},
+OPTannote = {}
+}
+
+@Misc{convdef,
+OPTkey = {},
+author = {Weisstein, E.W.},
+title = {Convolution},
+howpublished = {From MathWorld--A Wolfram Web Resource},
+OPTmonth = {},
+OPTyear = {},
+note = {http://mathworld.wolfram.com/Convolution.html on April 26, 2009},
+OPTannote = {}
+}
+
+
+
+
+
+
+
+
+
+
+@book{boka,
+author = {Wolf, W. and Kaufmann, M.},
+title = {Computers as Components: Principles of Embedded Computer System Design},
+year = {2005},
+publisher = {Morgan Kaufmann},
+language = {english}
+}
+
+@INPROCEEDINGS{inakiCollection,
+title={Long term continuous collection of high resolution ECG signals from a coronary care unit},
+author={Legarreta, I.R. and Reed, M.J. and Watson, J.N. and Addison, P.S. and Grubb, N. and Clegg, G.R. and Robertson, C.E. and Fox, K.A.A.},
+journal={Computers in Cardiology, 2003},
+year={2003},
+month={Sept.},
+volume={},
+number={},
+pages={ 407-409},
+abstract={ Cardiovascular disease is the commonest cause of death in Western society. For this reason much effort has been dedicated to the study of its origins, prevention and treatment. Our group has a specific interest in the analysis of the electrocardiogram (ECG) in life threatening cardiac arrhythmias and its antecedents, with a view to providing diagnostic tools and information to facilitate patient resuscitation. For development and testing of analytical tools we require a relevant library of real ECG signals. In this paper we describe the acquisition and storage of a continuous collection of ECG signals obtained from the Coronary Care Unit (CCU) at the Royal Infirmary of Edinburgh, UK.},
+keywords={ cardiovascular system, data acquisition, electrocardiography, medical diagnostic computing, medical information systems Coronary Care Unit, Edinburgh, Royal Infirmary, UK, cardiac arrhythmias, cardiovascular disease, diagnostic tools, electrocardiogram, high resolution ECG signals, patient resuscitation, signal acquisition, signal storage},
+doi={10.1109/CIC.2003.1291178},
+ISSN={0276-6547 }, }
+
+@INPROCEEDINGS{taiwan,
+title={Development of a real-time QRS beat classifier using a nonlinear trimmed moving averaging-based system},
+author={Chen, S.W. and Chen, H.C.},
+journal={Computers in Cardiology, 2003},
+year={2003},
+month={Sept.},
+volume={},
+number={},
+pages={ 577-580},
+abstract={ In this paper, a real-time QRS beat classification system devised based on a nonlinear trimmed moving averaging filter is presented. Such a nonlinear system aims to identify the abnormal beat of ventricular origin from the normal one. The proposed beat classifier can function in parallel with a real-time QRS detector, permitting the tasks of beat detection and diagnosis to alternate with each other. Algorithm performance was evaluated against the ECG recordings selected from the MIT-BIH arrhythmia database. Numerical results demonstrated that over 99.8\% beat identification rate can be achieved by the algorithm.},
+keywords={ electrocardiography, medical signal detection, medical signal processing, nonlinear filters, signal classification ECG recordings, MIT-BIH arrhythmia database, beat detection, diagnosis, nonlinear trimmed moving averaging filter, real-time QRS beat classifier, ventricular arrhythmia},
+doi={10.1109/CIC.2003.1291221},
+ISSN={0276-6547 }, }
+
+@INPROCEEDINGS{Romerointro,
+title={ECG frequency domain features extraction: a new characteristic for arrhythmias classification},
+author={Romero Legarreta, I. and Serrano, L.},
+journal={Engineering in Medicine and Biology Society, 2001. Proceedings of the 23rd Annual International Conference of the IEEE},
+year={2001},
+month={},
+volume={2},
+number={},
+pages={ 2006-2008 vol.2},
+abstract={ This article describes a new ECG spectrum feature that allows the classification of dangerous arrhythmia. In order to check the classification effectiveness of this variable, the statistical method known as ANOVA has been used. The results obtained show that this parameter could be an effective classification feature of dangerous arrhythmia with an approximated probability of error of 0.00%.},
+keywords={ electrocardiography, error statistics, feature extraction, frequency-domain analysis, medical signal processing, probability, signal classification ANOVA, ECG signal classification, ECG spectrum feature, arrhythmias classification, classification effectiveness, frequency domain features extraction, half point feature, probability of error, resultant probability value column},
+doi={},
+ISSN={1094-687X }, }
+
+@Misc{wikiCardio,
+	lastchecked = {\printdate{2009-04-06}},
+	author = {Wikipedia},
+	title  = {Cardiovascular disease},
+	month = {April 06},
+	year = {2009},
+	url = {http://en.wikipedia.org/wiki/Cardiovascular\_disease},
+	note = {http://en.wikipedia.org/wiki/Cardiovascular\_disease on April 06, 2009},
+}
+
+@Misc{wikiEMG,
+	lastchecked = {\printdate{2009-04-10}},
+	author = {Wikipedia},
+	title  = {Electromyography},
+	month = {April 08},
+	year = {2009},
+	url = {http://en.wikipedia.org/wiki/Electromyography},
+	note = {http://en.wikipedia.org/wiki/Electromyography on April 10, 2009},
+}
+
+@Misc{wikihann,
+	lastchecked = {\printdate{2009-04-10}},
+	author = {Wikipedia},
+	title  = {Hann function},
+	month = {December 09},
+	year = {2008},
+	url = {http://en.wikipedia.org/wiki/Hann\_function},
+	note = {http://en.wikipedia.org/wiki/Hann\_function on April 10, 2009},
+}
+
+@inproceedings{hann,
+ author = {Cabral, B. and Leedom, L.C.},
+ title = {Imaging vector fields using line integral convolution},
+ booktitle = {SIGGRAPH '93: Proceedings of the 20th annual conference on Computer graphics and interactive techniques},
+ year = {1993},
+ isbn = {0-89791-601-8},
+ pages = {263--270},
+ location = {Anaheim, CA},
+ doi = {http://doi.acm.org/10.1145/166117.166151},
+ publisher = {ACM},
+ address = {New York, NY, USA},
+ }
+
+
+@article{EMGart,
+	abstract = {Electromyography (EMG) signals can be used for clinical/biomedical applications, Evolvable Hardware Chip (EHW) development, and modern human computer interaction. EMG signals acquired from muscles require advanced methods for detection, decomposition, processing, and classification. The purpose of this paper is to illustrate the various methodologies and algorithms for EMG signal analysis to provide efficient and effective ways of understanding the signal and its nature. We further point up some of the hardware implementations using EMG focusing on applications related to prosthetic hand control, grasp recognition, and human computer interaction. A comparison study is also given to show performance of various EMG signal analysis methods. This paper provides researchers a good understanding of EMG signal and its analysis procedures. This knowledge will help them develop more powerful, flexible, and efficient applications.},
+	author = {Raez, M. B.  and Hussain, M. S.  and Yasin, Mohd  F. },
+	citeulike-article-id = {3729353},
+	doi = {10.1251/bpo115},
+	issn = {1480-9222},
+	journal = {Biological procedures online},
+	pages = {11--35},
+	posted-at = {2008-11-30 11:46:21},
+	priority = {2},
+	title = {Techniques of EMG signal analysis: detection, processing, classification and applications.},
+	url = {http://dx.doi.org/10.1251/bpo115},
+	volume = {8},
+	year = {2006}
+}
+
+@Misc{CWTDEF,
+	author = {Schniter, P.},
+	title = {Continuous Wavelet Transform},
+	howpublished = {Connexions},
+	month = {June 9},
+	year = {2005},
+	url = {http://cnx.org/content/m10418/2.13/},
+	note = {http://cnx.org/content/m10418/2.13/ on April 06, 2009},
+}
+
+@Misc{heartbasic1,
+	author = {HRSonline},
+	title = {The normal heart: the electrical system},	
+	howpublished = {http://www.hrspatients.org},	
+	note = {http://www.hrspatients.org/patients/the\_normal\_heart/electrical\_system.asp on April 07, 2009},
+}
+
+
+@Misc{heartbasic2,
+OPTkey = {},
+	author = {Abdulla, Dr. A. M.},
+	title = {Heart Electrical Activity},
+	howpublished = {http://www.heartsite.com},
+OPTmonth = {},
+OPTyear = {},
+	url = {http://www.heartsite.com/html/electrical\_activity.html},
+	note = {http://www.heartsite.com/html/electrical\_activity.html on April 07, 2009},
+OPTannote = {}
+}
+
+
+
+@Book{wikiCardioRef,
+	author = {Maton, A. and Hopkins, J. and McLaughlin, C. W. and Johnson, S. and Warner, M. Q. and LaHart, D. and Wright, J. D.},
+	title = {Human Biology and Health},
+	publisher = {Prentice Hall},
+	year = {1993},
+	address = {Englewood Cliffs, New Jersey, USA},
+}
+
+
+@Article{QRSWD,
+author = {Fraden, J. and Neuman, M. R.},
+title = {QRS wave detection },
+journal = {Medical and Biological Engineering and Computing},
+year = {2006},
+OPTvolume = {18},
+OPTnumber = {2},
+OPTpages = {125-132},
+OPTmonth = {July},
+}
+
+@ARTICLE{FILTERBANK,
+title={ECG beat detection using filter banks},
+author={Afonso, V.X. and Tompkins, W.J. and Nguyen, T.Q. and Shen Luo},
+journal={Biomedical Engineering, IEEE Transactions on},
+year={1999},
+month={Feb. },
+volume={46},
+number={2},
+pages={192-202},
+abstract={The authors have designed a multirate digital signal processing algorithm to detect heartbeats in the electrocardiogram (ECG). The algorithm incorporates a filter bank (FB) which decomposes the ECG into subbands with uniform frequency bandwidths. The FB-based algorithm enables independent time and frequency analysis to be performed on a signal. Features computed from a set of the subbands and a heuristic detection strategy are used to fuse decisions from multiple one-channel beat detection algorithms. The overall beat detection algorithm has a sensitivity of 99.59\% and a positive predictivity of 99.56\% against the MIT/BIH database. Furthermore this is a real-time algorithm since its beat detection latency is minimal. The FB-based beat detection algorithm also inherently lends itself to a computationally efficient structure since the detection logic operates at the subband rate. The FB-based structure is potentially useful for performing multiple ECG processing tasks using one set of preprocessing filters.},
+keywords={digital filters, electrocardiography, medical signal detection, medical signal processing ECG beat detection, MIT/BIH database, computationally efficient structure, detection logic, electrodiagnostics, filter banks, heartbeats detection, heuristic detection strategy, minimal beat detection latency, multiple one-channel beat detection algorithms, multirate digital signal processing algorithm, positive predictivity, preprocessing filters, real-time algorithm, subband rate},
+doi={10.1109/10.740882},
+ISSN={0018-9294}, }
+
+@ARTICLE{multichannelECG,
+title={Classifying multichannel ECG patterns with an adaptive neural network},
+author={Barro, S. and Fernandez-Delgado, M. and Vila-Sobrino, J.A. and Regueiro, C.V. and Sanchez, E.},
+journal={Engineering in Medicine and Biology Magazine, IEEE},
+year={1998},
+month={Jan/Feb},
+volume={17},
+number={1},
+pages={45-55},
+abstract={In this article the authors describe the application of a new artificial neural network model aimed at the morphological classification of heartbeats detected on a multichannel ECG signal. They emphasize the special characteristics of the algorithm as an adaptive classifier with the capacity to dynamically self-organize its response to the characteristics of the ECG input signal. They also present evaluation results based on traces from the MIT-BIH arrhythmia database },
+keywords={adaptive signal processing, electrocardiography, medical signal processing, neural nets ECG input signal, MIT-BIH arrhythmia database, adaptive neural network, algorithm characteristics, dynamically self-organized response, electrodiagnostics, heartbeats, morphological classification, multichannel ECG patterns classification},
+doi={10.1109/51.646221},
+ISSN={0739-5175}, }
+
+@Article{CWTR,
+author = {Romero Legarreta, I. and Addison, P.S. and Reed, M.J. and Grubb, N. and Clegg, G.R. and Robertson, C.E.},
+title = {Continuous wavelet transform modulus maxima analysis of the electrocardiogram: beat characterisation and beat-to-beat measurement},
+journal = {International Journal of Wavelets, Multiresolution and Information Processing},
+year = {2005},
+OPTvolume = {3},
+OPTnumber = {1},
+OPTpages = {19-42},
+}
+
+@ARTICLE{SQRS,
+title={The principles of software QRS detection},
+author={Kohler, B.-U. and Hennig, C. and Orglmeister, R.},
+journal={Engineering in Medicine and Biology Magazine, IEEE},
+year={2002},
+month={Jan.-Feb. },
+volume={21},
+number={1},
+pages={42-57},
+abstract={The QRS complex is the most striking waveform within the electrocardiogram (ECG). Since it reflects the electrical activity within the heart during the ventricular contraction, the time of its occurrence as well as its shape provide much information about the current state of the heart. Due to its characteristic shape it serves as the basis for the automated determination of the heart rate, as an entry point for classification schemes of the cardiac cycle, and often it is also used in ECG data compression algorithms. In that sense, QRS detection provides the fundamentals for almost all automated ECG analysis algorithms. Software QRS detection has been a research topic for more than 30 years. The evolution of these algorithms clearly reflects the great advances in computer technology. Within the last decade many new approaches to QRS detection have been proposed; for example, algorithms from the field of artificial neural networks genetic algorithms wavelet transforms, filter banks as well as heuristic methods mostly based on nonlinear transforms. The authors provide an overview of these recent developments as well as of formerly proposed algorithms.},
+keywords={Bayes methods, Hilbert transforms, adaptive filters, data compression, digital filters, electrocardiography, genetic algorithms, hidden Markov models, matched filters, mathematical morphology, medical signal detection, medical signal processing, neural nets, reviews, wavelet transforms Bayesian framework, ECG waveform, Hilbert transform, MAP estimation, adaptive filters, artificial neural networks, computational load, data compression algorithms, digital filters, filter banks, genetic algorithms, heuristic methods, hidden Markov models, matched filtering, mathematical morphology operators, nonlinear transforms, signal derivatives, singularity detection, software QRS detection principles, syntactic algorithms, wavelet transforms},
+doi={10.1109/51.993193},
+ISSN={0739-5175}, }
+
+@TechReport{TN08WATS,
+author = {Romero Legarreta, I. and Grundlehner, B.},
+title = {Development and Evaluation of an ECG Beat Detection algorithm for ambulatory monitoring applications},
+institution = {IMEC-NL},
+year = {2008},
+OPTkey = {},
+OPTtype = {},
+OPTnumber = {},
+OPTaddress = {},
+OPTmonth = {},
+OPTnote = {TN-08-WATS-SP1-025},
+OPTannote = {}
+}
+
+@Inbook{EMSP75,
+  author = {Kohler, B.U. and Henning, C. and Orglmeister, R.},
+  title = {QRS Detection Using Zero Crossing Counts.},
+  year = {2003},
+  abstract = {},
+  booktitle = {Progress in Biomedical Research},
+  publisher = { },
+  address = {Erlangen},
+  pages = {138-145}
+}
+
+@Article{digfil,
+	author = {Keselbrener, L. and Keselbrener, M. and Akselrod, S.},
+	title = {Nonlinear high pass filter for R-wave detection in ECG signal},
+	journal = {Medical engineering \& physics},
+	year = {1997},
+	abstract = {A simple and easily implemented method for R-wave detection from ECG signals is presented. The method is based on the subtraction of a filtered version of the signal. The filter we use is a nonlinear median filter. The median filter is applied to the ECG signal. It results in a smoothed version of the signal, without any reminder of the R waves. This smoothed signal is then subtracted from the original signal and the resulting signal presents undistorted R-waves, without baseline drift. A simple threshold detection can then be performed on the filtered signal. Results are presented for simulated signals, with sinusoidal and step baseline drifts, as well as ECG complex shape change. The detection is accurate and the average error we obtained for 300s length signals was of the order of 10−8s, for RR intervals of 1s. Results are also presented for a real experimental signal with strong baseline drift, and the accuracy of the detection can be observed.},
+OPTkey = {},
+	volume = {19},
+	number = {5},
+	pages = {481-484},
+	month = {1 June},
+OPTnote = {},
+OPTannote = {}
+}
+
+@ARTICLE{wav1,
+title={Detection of ECG characteristic points using wavelet transforms},
+author={Li, C. and Zheng, C. and Tai, C.},
+journal={Biomedical Engineering, IEEE Transactions on},
+year={1995},
+month={Jan. },
+volume={42},
+number={1},
+pages={21-28},
+abstract={An algorithm based on wavelet transforms (WT's) has been developed for detecting ECG characteristic points. With the multiscale feature of WT's, the QRS complex can be distinguished from high P or T waves, noise, baseline drift, and artifacts. The relation between the characteristic points of ECG signal and those of modulus maximum pairs of its WT's is illustrated. By using this method, the detection rate of QRS complexes is above 99.8\% for the MIT/BIH database and the P and T waves can also be detected, even with serious base line drift and noise.},
+keywords={medical signal processing, wavelet transforms ECG characteristic points detection, P waves, QRS complexes, T waves, artifacts, baseline drift, modulus maximum pairs, multiscale feature, wavelet transform-based algorithm},
+doi={10.1109/10.362922},
+ISSN={0018-9294}, }
+
+@book{mallatbook,
+	abstract = {{This book is intended to serve as an invaluable reference for anyone concerned with the application of wavelets to signal processing. It has evolved from material used to teach "wavelet signal processing" courses in electrical engineering departments at Massachusetts Institute of Technology and Tel Aviv University, as well as applied mathematics departments at the Courant Institute of New York University and \&\#201;cole<br>Polytechnique in Paris.<br><br>Key Features<br>* Provides a broad perspective on the principles and applications of transient signal processing with wavelets<br>* Emphasizes intuitive understanding, while providing the mathematical foundations and description of fast algorithms<br>* Numerous examples of real applications to noise removal, deconvolution, audio and image compression, singularity and edge detection,<br>multifractal analysis, and time-varying frequency measurements<br>* Algorithms and numerical examples are implemented in Wavelab, which is a Matlab toolbox freely available over the Internet<br>* Content is accessible on several level of complexity, depending on the individual reader's needs<br>New to the Second Edition<br>* Optical flow calculation and video compression algorithms<br>* Image models with bounded variation functions<br>* Bayes and Minimax theories for signal estimation<br>* 200 pages rewritten and most illustrations redrawn<br>* More problems and topics for a graduate course in wavelet signal processing, in engineering and applied mathematics}},
+	author = {Mallat, S.},
+	citeulike-article-id = {503580},
+	howpublished = {Hardcover},
+	isbn = {012466606X},
+	keywords = {case3},
+	month = {September},
+	posted-at = {2008-04-18 17:17:25},
+	priority = {2},
+	publisher = {{Academic Press}},
+	title = {A Wavelet Tour of Signal Processing, Second Edition (Wavelet Analysis \& Its Applications)},
+	url = {http://www.amazon.ca/exec/obidos/redirect?tag=citeulike09-20\&amp;path=ASIN/012466606X},
+	year = {1999}
+}
+
+@article{PhysioNet,
+ author = "Goldberger, A. L. and Amaral, L. A. N. and Glass, L. and
+	   Hausdorff, J. M. and Ivanov, P. Ch. and Mark, R. G. and
+	   Mietus, J. E. and Moody, G. B. and Peng, C.-K. and Stanley, H. E.",
+ title = "{PhysioBank, PhysioToolkit, and PhysioNet}: Components of a New
+	  Research Resource for Complex Physiologic Signals",
+ journal = "Circulation",
+ year = "2000 (June 13)",
+ volume = "101",
+ number = "23",
+ pages = "e215--e220",
+ note = "Circulation Electronic Pages:
+         http://circ.ahajournals.org/cgi/content/full/101/23/e215"
+}
+
+@misc{matlabConv,
+title = {conv},
+howpublished = {www.mathworks.com},
+month = {}, 
+year = {}, 
+note = {Site last visited 14 April, 2009},
+url = {http://www.mathworks.com/access/helpdesk/help/techdoc/index.html?/access/helpdesk/help/techdoc/ref/conv.html},
+language = {english},
+key = {}
+}
+
+
+@MISC{Cilio99floatingpoint,
+    author = {Cilio, A.G.M. and Corporaal, H.},
+    title = {Floating Point to Fixed Point Conversion of C Code},
+    year = {1999}
+}
+
+
+@inproceedings{fixconvdsp,
+	address = {New York, NY, USA},
+	author = {Menard, D.   and Chillet, D.   and Charot, F.   and Sentieys, O.  },
+	booktitle = {CASES '02: Proceedings of the 2002 international conference on Compilers, architecture, and synthesis for embedded systems},
+	citeulike-article-id = {2398885},
+	doi = {10.1145/581630.581674},
+	isbn = {1581135750},
+	keywords = {ffc},
+	pages = {270--276},
+	posted-at = {2008-02-19 13:45:55},
+	priority = {2},
+	publisher = {ACM},
+	title = {Automatic floating-point to fixed-point conversion for DSP code generation},
+	url = {http://dx.doi.org/10.1145/581630.581674},
+	year = {2002}
+}
+
+@article{fipoi,
+title = {Fixed-Point Representation \& Fractional Math},
+author = {Oberstar, E. L.},
+organization = {Oberstar Consulting},
+edition = {1.2},
+month = {August 30},
+year = {2007},
+note = {http://www.superkits.net/whitepapers/Fixed\%20Point
+		\%20Representation\%20\&\%20Fractional\%20Math.pdf}
+}
+
+@TechReport{ME08WATS,
+author = {Romero Legarreta, I. and Grundlehner, B.},
+title = {ECG Datafile format},
+institution = {IMEC-NL},
+year = {2008},
+OPTkey = {},
+OPTtype = {},
+OPTnumber = {},
+OPTaddress = {},
+month = {October 15},
+OPTnote = {ME-08-WATS-SP1-033},
+OPTannote = {}
+}
+
+
+@inproceedings{cord,
+ author = {Volder, J.},
+ title = {The CORDIC computing technique},
+ booktitle = {IRE-AIEE-ACM '59 (Western): Papers presented at the the March 3-5, 1959, western joint computer conference},
+ year = {1959},
+ pages = {257--261},
+ location = {San Francisco, California},
+ doi = {http://doi.acm.org/10.1145/1457838.1457886},
+ publisher = {ACM},
+ address = {New York, NY, USA},
+ }
+
+@INPROCEEDINGS{asipintro1,
+title={An evaluation system for application specific architectures},
+author={De Gloria, A. and Faraboschi, P.},
+journal={Microprogramming and Microarchitecture. Micro 23. Proceedings of the 23rd Annual Workshop and Symposium., Workshop on},
+year={1990},
+month={Nov},
+volume={},
+number={},
+pages={80-89},
+keywords={computer architecture, digital arithmetic, performance evaluationapplication benchmarks, application intrinsic features, application specific architectures, code generation, cost/performance ratio, design, design environment, detailed data-path, evaluation system, floating-point processing, high-level description, instruction structures, simulation, tailored systems},
+doi={10.1109/MICRO.1990.151429},
+ISSN={}, }
+
+@INPROCEEDINGS{asipintro2,
+title={ASIP design methodologies: survey and issues},
+author={Jain, M.K. and Balakrishnan, M. and Kumar, A.},
+journal={VLSI Design, 2001. Fourteenth International Conference on},
+year={2001},
+month={},
+volume={},
+number={},
+pages={76-81},
+abstract={Interest in synthesis of Application Specific Instruction Processors or ASIPs has increased considerably and a number of methodologies have been proposed in the last decade. This paper attempts to survey the state of the art in this area and identifies some issues which need to be addressed. We have identified the five key steps in ASIP design as application analysis, architectural design space exploration, instruction set generation, code synthesis and hardware synthesis. A broad classification of the approaches reported in the literature is done. The paper notes the need to broaden the architectural space being explored and to tightly couple the various subtasks in ASIP synthesis},
+keywords={application specific integrated circuits, high level synthesis, instruction sets, microprocessor chips, processor scheduling, programmable circuits ASIP design, application analysis, application specific instruction processors, architectural design space exploration, code synthesis, design methodologies, hardware synthesis, instruction set generation, subtasks},
+doi={10.1109/ICVD.2001.902643},
+ISSN={}, }
+
+@INPROCEEDINGS{asipintro3,
+title={An ASIP design methodology for embedded systems},
+author={Kucukcakar, K.},
+journal={Hardware/Software Codesign, 1999. (CODES '99) Proceedings of the Seventh International Workshop on},
+year={1999},
+month={},
+volume={},
+number={},
+pages={17-21},
+abstract={A well-known challenge during processor design is to obtain the best possible results for a typical target application domain that is generally described as a set of benchmarks. Obtaining the best possible result in turn becomes a complex tradeoff between the generality of the processor and the physical characteristics. A custom instruction to perform a task can result in significant improvements for an application, but generally, at the expense of some overhead for all other applications. In the recent years, Application-Specific Instruction-Set Processors (ASIP) have gained popularity in production chips as well as in the research community. In this paper, we present a unique architecture and methodology to design ASIPs in the embedded controller domain by customizing an existing processor instruction set and architecture rather than creating an entirely new ASIP tuned to a benchmark},
+keywords={ application specific integrated circuits, embedded systems, hardware-software codesign, instruction sets, microprocessor chips ASIP design methodology, application domain, application-specific instruction-set processors, benchmarks, embedded systems},
+doi={10.1109/HSC.1999.777384},
+ISSN={}, }
+
+@INPROCEEDINGS{asipintro4,
+title={Application Specific Processors for Multimedia Applications},
+author={Rashid, M. and Apvrille, L. and Pacalet, R.},
+journal={Computational Science and Engineering, 2008. CSE '08. 11th IEEE International Conference on},
+year={2008},
+month={July},
+volume={},
+number={},
+pages={109-116},
+abstract={A well-known challenge during processor design is to obtain best possible results for a typical target application domain by combining flexibility and computational performance. ASIPs (Application Specific Instruction Set Processors) provide a tradeoff between generality of processor (flexibility) and its physical characteristics (computational performance and silicon area). This paper evaluates an ASIP design methodology based on the extension of an existing instruction set and architecture described with LISA 2.0 language. The objective is to accelerate the ASIPs design process by using partially predefined, configurable RISC-like embedded processor cores that can be quickly tuned to given applications by means of ISE (Instruction Set Extension) techniques. A case study demonstrates the methodological approach for the JPEG algorithm and motion estimation encoding algorithm of H.264 encoding standard.},
+keywords={instruction sets, microcomputers, multimedia systems, reduced instruction set computingH.264 encoding standard, JPEG algorithm, LISA 2.0 language, RISC-like embedded processor core, application specific instruction set processor, application specific processor, instruction set extension, motion estimation encoding algorithm, multimedia application, reduced instruction set computing},
+doi={10.1109/CSE.2008.26},
+ISSN={}, }
+
+@INPROCEEDINGS{asipintro5,
+title={Fine-grained application source code profiling for ASIP design},
+author={Karuri, K. and Al Faruque, M.A. and Kraemer, S. and Leupers, R. and Ascheid, G. and Meyr, H.},
+journal={Design Automation Conference, 2005. Proceedings. 42nd},
+year={2005},
+month={June},
+volume={},
+number={},
+pages={ 329-334},
+abstract={ Current application specific instruction set processor (ASIP) design methodologies are mostly based on iterative architecture exploration that uses Architecture Description Languages (ADLs) and retargetable software development tools. However, for improved design efficiency, additional pre-architecture exploration tools are required to help narrow-down the huge design space and making coarse-grained instruction set architecture (ISA) decisions before detailed ADL modeling. Extensive application code profiling is the key in such early design stages. Based on a novel code instrumentation technology, we present a micro-profiling approach that fills the current gap between source-level and instruction-level profilers and combines their advantages w.r.t. speed and accuracy. We show how the micro-profiler is embedded into an advanced ASIP design flow and justify its use in a case study to design an MP3 decoder ASIP.},
+keywords={ application specific integrated circuits, hardware description languages, hardware-software codesign, instruction sets, integrated circuit design, microprocessor chips ASIP design, application source code profiling, application specific instruction set processor, architecture description languages, code instrumentation technology, instruction set architecture, instruction-level profilers, iterative architecture exploration, microprofiling approach, pre-architecture exploration tools, retargetable software development tools, source-level profilers},
+doi={},
+ISSN={}, }
+
+@INPROCEEDINGS{asipintro6,
+title={Power reduction for ASIPS: a case study},
+author={Glokler, T. and Meyr, H.},
+journal={Signal Processing Systems, 2001 IEEE Workshop on},
+year={2001},
+month={},
+volume={},
+number={},
+pages={235-246},
+abstract={Application specific instruction set processors (ASIPs) are an excellent architecture for mixed control/data-flow oriented tasks with medium to low data rate and high complexity. The main advantage of ASIPs is the higher flexibility due to programmability compared to dedicated hardware. A drawback of this design style is an increase in power consumption. The current case study focuses on an ASIP design methodology considering the classical parameters computational performance and area as well as energy consumption simultaneously. Several ASIP power optimization options have been applied and evaluated: clock-gating, logic netlist restructuring, ISA optimization, instruction memory power reduction, and use of a dedicated coprocessor. These optimizations are demonstrated with the WORE (ISS-core) ASIP for DVB-T acquisition and tracking algorithms. The results reveal a potential of about one order of magnitude in energy savings for these optimizations },
+keywords={application specific integrated circuits, circuit optimisation, coprocessors, digital video broadcasting, hardware description languages, instruction sets, integrated circuit design, low-power electronics, program assemblers, trackingASIP, DVB-T acquisition algorithms, DVB-T tracking algorithms, ISA optimization, VHDL hardware, WORE ASEP, application specific instruction set processors, assembler programs, clock-gating, computational performance, dedicated coprocessor, energy savings, instruction memory power reduction, logic netlist restructuring, mixed control/data-flow oriented tasks, performance optimization, power consumption, power optimization},
+doi={10.1109/SIPS.2001.957352},
+ISSN={},}
+
+
+
+@Book{pappasbok,
+author = {Hampton, J.R.},
+ALTeditor = {},
+title = {The E.C.G. Made Easy},
+publisher = {Churchill Livingstone},
+year = {1980},
+OPTkey = {},
+OPTvolume = {},
+OPTnumber = {},
+OPTseries = {},
+OPTaddress = {},
+edition = {2},
+OPTmonth = {},
+OPTnote = {},
+OPTannote = {}
+}
+ 
+@Misc{hanningdef,
+OPTkey = {},
+author = {Weisstein, E.W.},
+title = {Hanning Function},
+howpublished = {From MathWorld--A Wolfram Web Resource},
+OPTmonth = {},
+OPTyear = {},
+note = {http://mathworld.wolfram.com/HanningFunction.html on April 26, 2009},
+OPTannote = {}
+}
+
+@Misc{hanning2,
+OPTkey = {},
+OPTauthor = {},
+title = {Hanning Window},
+howpublished = {From http://www.diracdelta.co.uk},
+OPTmonth = {},
+OPTyear = {},
+note = {http://www.diracdelta.co.uk/science/source/h/a/hanning\%20window/source.html on April 26, 2009},
+OPTannote = {}
+}
+
+@Misc{convdef,
+OPTkey = {},
+author = {Weisstein, E.W.},
+title = {Convolution},
+howpublished = {From MathWorld--A Wolfram Web Resource},
+OPTmonth = {},
+OPTyear = {},
+note = {http://mathworld.wolfram.com/Convolution.html on April 26, 2009},
+OPTannote = {}
+}
+
+@book{algdatboka,
+	abstract = {Aimed at any serious programmer or computer science student, the new second edition of \_Introduction to Algorithms\_ builds on the tradition of the original with a truly magisterial guide to the world of algorithms. Clearly presented, mathematically rigorous, and yet approachable even for the maths- averse, this title sets a high standard for a textbook and reference to the best algorithms for solving a wide range of computing problems. With sample problems and mathematical proofs demonstrating the correctness of each algorithm, this book is ideal as a textbook for classroom study, but its reach doesn't end there. The authors do a fine job at explaining each algorithm. (Reference sections on basic mathematical notation will help readers bridge the gap, but it will help to have some maths background to appreciate the full achievement of this handsome hardcover volume.) Every algorithm is presented in pseudo-code, which can be implemented in any computer language, including C/C++ and Java. This ecumenical approach is one of the book's strengths. When it comes to sorting and common data structures, from basic linked list to trees (including binary trees, red-black and B-trees), this title really shines with clear diagrams that show algorithms in operation. Even if you glance over the mathematical notation here, you can definitely benefit from this text in other ways. The book moves forward with more advanced algorithms that implement strategies for solving more complicated problems (including dynamic programming techniques, greedy algorithms, and amortised analysis). Algorithms for graphing problems (used in such real-world business problems as optimising flight schedules or flow through pipelines) come next. In each case, the authors provide the best from current research in each topic, along with sample solutions. This text closes with a grab bag of useful algorithms including matrix operations and linear programming, evaluating polynomials and the well-known Fast Fourier Transformation (FFT) (useful in signal processing and engineering). Final sections on "NP-complete" problems, like the well-known traveloling salesmen problem, show off that while not all problems have a demonstrably final and best answer, algorithms that generate acceptable approximate solutions can still be used to generate useful, real-world answers. Throughout this text, the authors anchor their discussion of algorithms with current examples drawn from molecular biology (like the Human Genome project), business, and engineering. Each section ends with short discussions of related historical material often discussing original research in each area of algorithms. In all, they argue successfully that algorithms are a "technology" just like hardware and software that can be used to write better software that does more with better performance. Along with classic books on algorithms (like Donald Knuth's three-volume set, \_The Art of Computer Programming\_), this title sets a new standard for compiling the best research in algorithms. For any experienced developer, regardless of their chosen language, this text deserves a close look for extending the range and performance of real-world software. \_--Richard Dragan\_},
+	author = {Cormen, T.H.  and Leiserson, C.E.  and Rivest, R.L.  and Stein, C.},
+	citeulike-article-id = {3395496},
+	edition = {2nd},
+	howpublished = {Hardcover},
+	isbn = {0072970545},
+	keywords = {algorithms, datastructures, reference, teaching},
+	month = {December},
+	posted-at = {2009-01-27 11:46:27},
+	priority = {0},
+	publisher = {McGraw-Hill Science/Engineering/Math},
+	title = {Introduction to Algorithms},
+	url = {http://www.amazon.ca/exec/obidos/redirect?tag=citeulike09-20\&amp;path=ASIN/0072970545},
+	year = {2003}
+}
+
+@InCollection{proflin,
+author = {Brand, D.},
+title = {Integration of Runtime Profiling and Static Code Analysis in Linux},
+booktitle = {},
+OPTcrossref = {},
+OPTkey = {},
+OPTpages = {},
+publisher = {Computing Science Department, University of British Columbia},
+OPTyear = {},
+OPTeditor = {},
+OPTvolume = {},
+OPTnumber = {},
+OPTseries = {},
+OPTtype = {},
+OPTchapter = {},
+address = {Vancuver, BC, Canada},
+OPTedition = {},
+OPTmonth = {},
+note = {danube@cs.ubc.ca},
+OPTannote = {}
+}
+
+@Manual{TMS320C6413GTS500,
+title = {TMS320C6000 DSP Platform: The Highest-Performance DSPs},
+OPTkey = {},
+OPTauthor = {},
+organization = {Texas Instruments},
+OPTaddress = {},
+OPTedition = {},
+OPTmonth = {},
+year = {2006},
+note = {Updated Q1 2006},
+OPTannote = {}
+}
+
+@Manual{msp430f1611,
+title = {MSP430 Ultra-Low-Power Microcontrollers},
+OPTkey = {},
+OPTauthor = {},
+organization = {Texas Instruments},
+OPTaddress = {},
+OPTedition = {},
+OPTmonth = {},
+year = {2009},
+OPTnote = {},
+OPTannote = {}
+}
+
+@book{hwswcodesboka,
+ author = {Wolf, W. and Staunstrup, J.},
+ title = {Hardware/Software CO-Design: Principles and Practice},
+ year = {1997},
+ isbn = {},
+ publisher = {Kluwer Academic Publishers},
+ address = {Norwell, MA, USA},
+ }
+ 
+ @inproceedings{althwsw,
+ author = {Kassner, K. C. and Ricks, K. G.},
+ title = {Hardware/software co-design of embedded real-time systems from an undergraduate perspective},
+ booktitle = {WCAE '05: Proceedings of the 2005 workshop on Computer architecture education},
+ year = {2005},
+ pages = {9},
+ location = {Madison, Wisconsin},
+ doi = {http://doi.acm.org/10.1145/1275604.1275618},
+ publisher = {ACM},
+ address = {New York, NY, USA},
+ }
+ 
+ @inproceedings{hwswMem,
+ author = {Danckaert, K. and Catthoor, K. and De Man, H.},
+ title = {System level memory optimization for hardware-software co-design},
+ booktitle = {CODES '97: Proceedings of the 5th International Workshop on Hardware/Software Co-Design},
+ year = {1997},
+ isbn = {},
+ pages = {55},
+ publisher = {IEEE Computer Society},
+ address = {Washington, DC, USA},
+ }
+ 
+ @book{nadiaaccel,
+ author = {Nedjah, N. and de Macedo Mourelle, L.},
+ title = {Co-design for System Acceleration: A Quantitative Approach},
+ year = {2007},
+ isbn = {},
+ publisher = {Springer-Verlag New York, Inc.},
+ address = {Secaucus, NJ, USA},
+ }
+ 
+ @book{procdeslang,
+ author = {Mishra, P. and Dutt, N.},
+ title = {Processor Description Languages, Volume 1},
+ year = {2008},
+ isbn = {0123742870, 9780123742872},
+ publisher = {Morgan Kaufmann Publishers Inc.},
+ address = {San Francisco, CA, USA},
+ }
+ 
+ @Misc{abouttarget,
+OPTkey = {},
+OPTauthor = {},
+title = {About Target},
+OPThowpublished = {},
+OPTmonth = {},
+OPTyear = {},
+note = {http://retarget.com/about.php on May 16, 2009},
+OPTannote = {}
+}
+
+@Manual{checkersman,
+title = {CHESS/CHECKERS: A retargetable tool-suite for embedded processors},
+OPTkey = {},
+OPTauthor = {},
+organization = {Target Compiler Technologies n.v.},
+address = {Haasrode Research Park, Technologielaan 11-0002, B-3001 Leuven, Belgium},
+edition = {3.3},
+month = {June},
+year = {2003},
+OPTnote = {},
+OPTannote = {}
+}
+
+@Manual{pdgmanual,
+title = {Primitives Definition and Generation},
+OPTkey = {},
+OPTauthor = {},
+organization = {Target Compiler Technologies n.v.},
+address = {Haasrode Research Park, Technologielaan 11-0002, B-3001 Leuven, Belgium},
+OPTedition = {},
+month = {November},
+year = {2008},
+note = {Release 08R1},
+OPTannote = {}
+}
+
+@Manual{baseman,
+title = {Target base core processor manual},
+OPTkey = {},
+OPTauthor = {},
+organization = {Target Compiler Technologies n.v.},
+address = {Haasrode Research Park, Technologielaan 11-0002, B-3001 Leuven, Belgium},
+OPTedition = {},
+month = {March},
+year = {2009},
+note = {v4.0},
+OPTannote = {}
+}
+
+@MISC{Jain04anefficient,
+    author = {Kumar Jain, M. and Balakrishnan, M. and Kumar, A.},
+    title = {An Efficient Technique for Exploring Register File Size in ASIP Design},
+    year = {2004}
+}
+
+@Misc{pynet,
+OPTkey = {},
+OPTauthor = {},
+title = {http://www.physionet.org},
+OPThowpublished = {},
+OPTmonth = {},
+OPTyear = {},
+note = {Visited on April 08, 2009},
+OPTannote = {}
+}
+
+@article{syslevpower,
+ author = {Benini, L. and De Micheli, G. },
+ title = {System-level power optimization: techniques and tools},
+ journal = {ACM Trans. Des. Autom. Electron. Syst.},
+ volume = {5},
+ number = {2},
+ year = {2000},
+ issn = {1084-4309},
+ pages = {115--192},
+ doi = {http://doi.acm.org/10.1145/335043.335044},
+ publisher = {ACM},
+ address = {New York, NY, USA},
+ }
+
+@INPROCEEDINGS{powerart,
+title={Software power estimation and optimization for high performance, 32-bit embedded processors},
+author={Russell, J.T. and Jacome, M.F.},
+journal={Computer Design: VLSI in Computers and Processors, 1998. ICCD '98. Proceedings. International Conference on},
+year={1998},
+month={Oct},
+volume={},
+number={},
+pages={328-333},
+keywords={optimising compilers, reduced instruction set computingembedded RISC processors, energy savings, operand values, operating frequency, optimizing compiler, software energy estimation, source/destination registers},
+doi={10.1109/ICCD.1998.727070},
+ISSN={1063-6404}, }
+
+
+
+@INPROCEEDINGS{rabaey,
+title={Low-power design of memory intensive functions},
+author={Lidsky, D.B. and Rabaey, J.M.},
+journal={Low Power Electronics, 1994. Digest of Technical Papers., IEEE Symposium},
+year={1994},
+month={Oct},
+volume={},
+number={},
+pages={16-17},
+keywords={ integrated circuit design DSP chip, VQ design, low-power design, low-power vector quantizer, memory intensive functions, onchip memory, power consumption},
+doi={10.1109/LPE.1994.573187},
+ISSN={}, }
+
+@book{cathoor,
+ author = {Catthoor, F. and De Greef, E. and Suytack, S.},
+ title = {Custom Memory Management Methodology: Exploration of Memory Organisation for Embedded Multimedia System Design},
+ year = {1998},
+ isbn = {0792382889},
+ publisher = {Kluwer Academic Publishers},
+ address = {Norwell, MA, USA},
+ }
+ 
+@INPROCEEDINGS{cathoor2,
+title={Global communication and memory optimizing transformations for low power signal processing systems},
+author={Catthoor, F. and Franssen, F. and Wuytack, S. and Nachtergaele, L. and De Man, H.},
+journal={VLSI Signal Processing, VII, 1994., [Workshop on]},
+year={1994},
+month={},
+volume={},
+number={},
+pages={178-187},
+abstract={In this paper we first illustrate the crucial impact of memory related power consumption on the global system power budget, in particular for multi-dimensional real-time signal processing subsystems. A realistic medical imaging demonstrator shows that the power budget of the system is clearly dominated by the memory access and that up to an order of magnitude can be gained by transforming the initial specification, even without incorporating the effect of a possible supply voltage reduction. We have analyzed the most relevant contributions in this power budget and propose several ways to reduce them. In addition, an automated transformation technique is described to decrease the memory related power budget},
+keywords={ video signal processing automated transformation technique, global communication, low power signal processing systems, medical imaging, memory optimizing transformations, memory related power consumption, multi-dimensional real-time signal processing, video signal processing},
+doi={10.1109/VLSISP.1994.574742},
+ISSN={}, }
+
+@ARTICLE{embeddeds,
+title={Embedded software in real-time signal processing systems: design technologies},
+author={Goossens, G. and Van Praet, J. and Lanneer, D. and Geurts, W. and Kifli, A. and Liem, C. and Paulin, P.G.},
+journal={Proceedings of the IEEE},
+year={1997},
+month={Mar},
+volume={85},
+number={3},
+pages={436-454},
+abstract={The increasing use of embedded software, often implemented on a core processor in a single-chip system, is a clear trend in the telecommunications, multimedia, and consumer electronics industries. A companion paper (Paulin et al., 1997) presents a survey of application and architecture trends for embedded systems in these growth markets. However, the lack of suitable design technology remains a significant obstacle in the development of such systems. One of the key requirements is more efficient software compilation technology. Especially in the case of fixed-point digital signal processor (DSP) cores, it is often cited that commercially available compilers are unable to take full advantage of the architectural features of the processor. Moreover, due to the shorter lifetimes and the architectural specialization of many processor cores, processor designers are often compelled to neglect the issue of compiler support. This situation has resulted in an increased research activity in the area of design tool support for embedded processors. This paper discusses design technology issues for embedded systems using processor cores, with a focus on software compilation tools. Architectural characteristics of contemporary processor cores are reviewed and tool requirements are formulated. This is followed by a comprehensive survey of both existing and new software compilation techniques that are considered important in the context of embedded processors},
+keywords={computer architecture, program compilers, real-time systems, signal processing, software tools, systems analysis, telecommunication computing consumer electronics, design tool, embedded software, fixed-point digital signal processor cores, multimedia, real-time signal processing systems, single-chip system, software compilation, software design, software tools, survey, telecommunications},
+doi={10.1109/5.558718},
+ISSN={0018-9219}, }
+
+
+@INPROCEEDINGS{dought,
+title={Instruction subsetting: Trading power for programmability},
+author={Dougherty, W.E. and Pursley, D.J. and Thomas, D.E.},
+journal={VLSI '98. System Level Design. Proceedings. IEEE Computer Society Workshop on},
+year={1998},
+month={Apr},
+volume={},
+number={},
+pages={42-47},
+abstract={Power consumption is an increasingly important consideration in the design of mixed hardware/software systems. This work defines the notion of instruction subsetting and explores its use as a means of reducing power consumption from the system level of design. Instruction subsetting is defined as creating an application specific instruction set processor from a more general processor such as a DSP. Although not as effective as an ASIC solution, instruction subsetting provides much of the power savings while maintaining some level of programmability. Instruction set choice strongly affects the savings. We synthesized 5 ASIPs through place and route and found that a poorly chosen instruction set may consume more than 4 times the energy of an ASIP with a proper instruction set choice. This finding will allow designers to consider another set of trade-offs in their hardware/software design space exploration},
+keywords={application specific integrated circuits, computer architecture, digital signal processing chips, high level synthesis, instruction sets, software engineering application specific instruction set processor, hardware/software systems, instruction set, instruction subsetting, power consumption, power savings, system level},
+doi={10.1109/IWV.1998.667112},
+ISSN={}, }
+
+
+
+
+@ARTICLE{macop,
+title={A high-performance and low-power 32-bit multiply-accumulate unit with single-instruction-multiple-data (SIMD) feature},
+author={Liao, Y. and Roberts, D.B.},
+journal={Solid-State Circuits, IEEE Journal of},
+year={2002},
+month={Jul},
+volume={37},
+number={7},
+pages={926-931},
+abstract={A high-performance and low-power 32-bit multiply-accumulate unit (MAC) is described in this paper. The last mixed-length encoding scheme used in the MAC leverages the advantage of a 16-bit encoding scheme without adding extra delay to the faster four-stage Wallace tree of a 12-bit encoding scheme. With this new encoding scheme, one-cycle throughput for 16-bit ×16-bit and 32-bit ×16-bit MAC instructions was achieved at very high frequencies. To handle media streams more efficiently, the single-instruction-multiple-data (SIMD) and the multiply-with-implicit-accumulate (MIA) features were added. A mixture of static CMOS logic and complementary pass-gate logic (CPL) was used to achieve the high-speed and low-power goals. Several power-saving techniques were also implemented in this MAC},
+keywords={CMOS logic circuits, coprocessors, digital signal processing chips, low-power electronics, multiplying circuits, parallel architectures, pipeline processing, reduced instruction set computing32 bit, complementary pass-gate logic, coprocessor, digital signal processing, four-stage Wallace tree, high throughput, high-performance, low-power, mixed-length encoding, multiply-accumulate unit, multiply-with-implicit-accumulate features, one-cycle throughput, single-instruction-multiple-data, static CMOS logic, superpipelined RISC},
+doi={10.1109/JSSC.2002.1015692},
+ISSN={0018-9200}, }
+
+@INPROCEEDINGS{admodes,
+title={An extended addressing mode for low power},
+author={Kalambur, A. and Irwin, M.J.},
+journal={Low Power Electronics and Design, 1997. Proceedings., 1997 International Symposium on},
+year={1997},
+month={Aug},
+volume={},
+number={},
+pages={ 208-213},
+abstract={ This paper demonstrates the feasibility of a register-memory addressing mode in microprocessors targeted for low power applications. Using a high level power profiling tool that performs software energy evaluation, the major sources of power dissipation in a typical RISC processor are identified. It is shown that the addition of a register-memory addressing mode can target these "hot-spots" and provide power savings. Two different implementation options are considered and the power-performance trade-offs are evaluated. The reduction in performance is cushioned by the reduced instruction count and it is anticipated that the overall impact on the total execution time of programs will be acceptable in low power application domains.},
+keywords={ VLSI, circuit analysis computing, integrated circuit design, microprocessor chips, reduced instruction set computing RISC processor, VLSI, extended addressing mode, high level power profiling tool, instruction count, low power design, microprocessors, power dissipation, power-performance trade-offs, register-memory addressing mode, software energy evaluation, total execution time},
+doi={},
+ISSN={}, }
+
+@INPROCEEDINGS{parinstr,
+title={Power-Pro: programmable power management architecture},
+author={Ishihara, T. and Yasuura, H.},
+journal={Design Automation Conference 1998. Proceedings of the ASP-DAC '98. Asia and South Pacific},
+year={1998},
+month={Feb},
+volume={},
+number={},
+pages={321-322},
+abstract={This paper presents Power-Pro architecture (Programmable Power Management Architecture), a novel processor architecture for power reduction. Power-Pro architecture has following two functionalities: (i) Supply voltage and clock frequency can be dynamically varied. (ii) Active data-path width can be dynamically adjusted to requirement of application programs. For the application programs which require less performance or less data-path width, Power-Pro architecture realize dramatic power reduction},
+keywords={microprocessor chips, parallel architecturesPower-Pro architecture, application programs, clock frequency, power reduction, processor architecture, programmable power management architecture},
+doi={10.1109/ASPDAC.1998.669482},
+ISSN={}, }
+
+@book{powcow,
+ author = {Pedram, M.},
+ editor = {Rabaey, J. M.},
+ title = {Power Aware Design Methodologies},
+ year = {2002},
+ isbn = {1402071523},
+ publisher = {Kluwer Academic Publishers},
+ address = {Norwell, MA, USA},
+ }
+
+@book{lpmm,
+ author = {Keating, M. and Flynn, D. and Aitken, R. and Gibbons, A. and Shi, K.},
+ title = {Low Power Methodology Manual: For System-on-Chip Design},
+ year = {2007},
+ isbn = {0387718184, 9780387718187},
+ publisher = {Springer Publishing Company, Incorporated},
+ }
+
+@inproceedings{moss89,
+  author = {Eliot, J. and Moss, B.},
+  title = {Addressing Large Distributed Collections of Persistent Objects: The Mneme Project's Approach},
+  booktitle = {DBPL},
+  year = {1989},
+  pages = {358-374},
+  ee = {db/conf/dbpl/Moss89.html},
+  OPTcrossref = {DBLP:conf/dbpl/89},
+  bibsource = {DBLP, http://dblp.uni-trier.de}
+}
+
+@INPROCEEDINGS{michaelthesis,
+title={Ultra Low Power ASIP Design for Wireless Sensor Nodes},
+author={De Nil, M. and Yseboodt, L. and Bouwens, F. and Hulzink, J. and Berekovic, M. and Huisken, J. and van Meerbergen, J.},
+journal={Electronics, Circuits and Systems, 2007. ICECS 2007. 14th IEEE International Conference on},
+year={2007},
+month={Dec.},
+volume={},
+number={},
+pages={1352-1355},
+abstract={This work presents a methodology for designing an ultra low power application specific instruction set processor. This paper shows the different steps to develop a digital signal processing architecture for a single channel ECG application assuming a system level power dissipation constraint of 100Â¿W. We follow a bottleneck driven approach based on the following steps. First coarse grained clock gating is applied. Next, the static as well as the dynamic dissipation of the digital processor is reduced and possibilities for future improvements are discussed. Finally, an optimal processor is built consuming 8.40Â¿W when running the reference application.},
+keywords={application specific integrated circuits, electrocardiography, wireless sensor networksapplication specific instruction set processor, digital signal processing architecture, power dissipation constraint, single channel ECG application, ultra low power ASIP design, wireless sensor nodes},
+doi={10.1109/ICECS.2007.4511249},
+ISSN={}, }
+
+
+@INPROCEEDINGS{pingpong,
+title={Doubling memory bandwidth for network buffers},
+author={Joo, Y.-M. and McKeown, N.},
+journal={INFOCOM '98. Seventeenth Annual Joint Conference of the IEEE Computer and Communications Societies. Proceedings. IEEE},
+year={1998},
+month={Mar-2 Apr},
+volume={2},
+number={},
+pages={808-815 vol.2},
+abstract={Memory bandwidth is frequently a limiting factor in the design of high-speed switches and routers. We introduce a buffering scheme called ping-pong buffering, that increases memory bandwidth by a factor of two. Ping-pong buffering halves the number of memory operations per unit time, allowing faster buffers to be built from a given type of memory. Alternatively for a buffer of given bandwidth, ping-pong buffering allows the use of slower, lower-cost memory devices. But ping-pong buffers have an inherent penalty: they waste a fraction of the memory. Unless additional memory is used, the overflow rate is increased; in the worst case half of the memory is wasted. Although this can be compensated by doubling the size of the memory, this is undesirable in practice. Using simulations, we argue that the problem is eliminated by the addition of just 5% more memory. We show that this result holds over a wide range of traffic and switch types, for low or high offered load, and continues to hold when the buffer size is increased},
+keywords={asynchronous transfer mode, buffer storage, telecommunication network routing, telecommunication trafficATM switches, buffer size, high-speed routers, high-speed switches, low-cost memory devices, memory bandwidth doubling, network buffers, offered load, overflow rate, ping-pong buffering, simulations, switch types, traffic types},
+doi={10.1109/INFCOM.1998.665104},
+ISSN={0743-166X}, }
+
+@ARTICLE{statbuf,
+title={Synchronous data flow},
+author={Lee, E.A. and Messerschmitt, D.G.},
+journal={Proceedings of the IEEE},
+year={1987},
+month={Sept.},
+volume={75},
+number={9},
+pages={ 1235-1245},
+abstract={ Data flow is a natural paradigm for describing DSP applications for concurrent implementation on parallel hardware. Data flow programs for signal processing are directed graphs where each node represents a function and each arc represents a signal path. Synchronous data flow (SDF) is a special case of data flow (either atomic or large grain) in which the number of data samples produced or consumed by each node on each invocation is specified a priori. Nodes can be scheduled statically (at compile time) onto single or parallel programmable processors so the run-time overhead usually associated with data flow evaporates. Multiple sample rates within the same system are easily and naturally handled. Conditions for correctness of SDF graph are explained and scheduling algorithms are described for homogeneous parallel processors sharing memory. A preliminary SDF software system for automatically generating assembly language code for DSP microcomputers is described. Two new efficiency techniques are introduced, static buffering and an extension to SDF to efficiently implement conditionals.},
+doi={},
+ISSN={0018-9219}, }

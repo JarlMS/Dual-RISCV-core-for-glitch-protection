@@ -1,0 +1,155 @@
+\documentclass[english]{ntnuthesis}
+
+% Make index:
+\usepackage{makeidx}
+
+\usepackage{hyperref}
+\usepackage[T1]{fontenc}
+\usepackage[latin1]{inputenc}
+\usepackage{babel}
+\usepackage{appendix}
+\usepackage{textcomp}
+\usepackage[binary,squaren]{SIunits}
+\usepackage{amsmath, amsfonts, amssymb}
+\usepackage{graphicx, subfigure, wrapfig}
+\usepackage{listings}
+\usepackage{multirow}
+\usepackage[subfigure]{tocloft}
+\usepackage{acronym}
+\usepackage{lmodern}
+\usepackage{pdfpages}
+
+% MATLAB: load package with ``framed'' and ``numbered'' option.
+\usepackage[framed,numbered]{mcode}
+
+\usepackage{algorithm,algorithmicx,algpseudocode}
+\algnewcommand\algorithmicto{\textbf{to}}
+
+% Do not use bullets in un-numbered lists:
+\renewcommand{\labelitemi}{\normalfont\textendash}
+\renewcommand{\labelitemii}{\normalfont\textperiodcentered}
+
+% Do not use dot after speaches in numbered lists:
+\usepackage[pointlessenum]{paralist}
+
+% Accept comma as fraction separator in math expressions
+% (This package is much smarter than the icomma-package.)
+\usepackage{ncccomma}
+
+% Macro for microseconds
+\newcommand{\us}{\,$\mu$s}
+
+% Define AVR32 assembly
+\lstdefinelanguage{avr32asm}{
+morekeywords={lddpc,mov,st.w,cp.w,cp.b,bfextu,breq,
+brne,rete,sub,rjmp,lsl,lsr,com,st.w,ld.w,csrf,mtsr,
+rcall,reteq,br,ret,.int,.include,.globl},
+  sensitive=false,
+morecomment=[l]{//},
+morecomment=[s]{/*}{*/},
+alsodigit={.},
+}
+
+\lstloadlanguages{c, c++, avr32asm, vhdl}
+
+% Used with the make index package
+\makeindex
+
+\begin{document}
+\hyphenpenalty=8000
+\exhyphenpenalty=8000
+% Write how to divide long words:
+\hyphenation{temp-tation}
+
+\frontmatter
+
+\title{THE VERY LONG TITLE OF YOUR THESIS \\ \\ IS WRITTEN HERE}
+
+\author{ Your name }
+\degreetype{MSc in ..., Electronics}
+
+\maketitle
+%\includepdf{titlepage}
+%\includepdf{problemdes}
+% Insert page number
+\setcounter{page}{5}
+\input{abstract/abstract}
+\cleardoublepage
+
+% Remove parskip for toc
+\setlength{\parskip}{0ex plus 0.5ex minus 0.2ex}
+\thispagestyle{fancyplain}
+\setcounter{tocdepth}{2}
+\tableofcontents
+
+
+\cleardoublepage
+\listoftables
+\cleardoublepage
+\listoffigures
+\cleardoublepage
+\renewcommand{\lstlistlistingname}{Source code}
+\lstlistoflistings
+
+\chapter{List of abbreviations}
+\begin{acronym}
+\acro{ADC}{Analogue to Digital Converter}
+%\acro{}{}
+\end{acronym}
+
+\cleardoublepage
+
+\mainmatter
+
+\input{chapter1/chap1}
+\input{chapter2/chap2}
+%\input{chapter3/chap3}
+
+% Must be set after each chapter exept the first one in appendix.
+\cleardoublepage
+
+\appendix
+\noappendicestocpagenum
+\addappheadtotoc
+
+\input{appendix/appx1}
+\input{appendix/appx2}
+
+\lstset{language=matlab,breakautoindent, tabsize=1, breaklines, numbers=left, numberstyle=\tiny, numbersep=5pt, breakatwhitespace=true, frame=single, captionpos=tb, mathescape=true, basicstyle=\scriptsize}
+
+\renewcommand{\lstlistingname}{Matlab-code}
+\input{code/mcode}
+
+\lstset{language=c,breakautoindent, tabsize=1, breaklines, numbers=left, numberstyle=\tiny, numbersep=5pt, breakatwhitespace=true, frame=single, captionpos=tb, mathescape=true, basicstyle=\scriptsize}
+\renewcommand{\lstlistingname}{C-code}
+\input{code/ccode}
+
+\backmatter
+
+%% PHD THESIS
+\nocite{powerbook}
+
+%% BOOKS
+\nocite{tclbook}
+
+%% ARTICLES
+\nocite{digfil}
+
+%% MISC
+\nocite{convdef}
+
+%% INPROCEEDINGS
+\nocite{hwswMem}
+
+%% TECHNICAL NOTES
+\nocite{msp430f1611}
+
+\newpage
+\pagestyle{plain}
+\addcontentsline{toc}{chapter}{Bibliography}
+\bibliographystyle{alpha}
+\bibliography{references/ref}
+
+% Used with the make index package
+\printindex
+\end{document}
