@@ -1,0 +1,124 @@
+- Load Store Unit - 
+
+The LSU of the core takes care of accessing the data memory. Load and stores on words (32bit), half-words (16bit) and bytes (8bit)
+are supported. 
+
+* Misaligned Accesses 
+
+Misaligned transaction are supported by hardware for Main memory regions (Physical memory attribution, PMA). 
+
+    * PMA has been set to support misaligned transactions for main memory regions, but not for I/O regions.
+
+For loads and stores in Main memory where the effective address is not naturally aligned to the referenced datatype 
+(i.e., on a four-byte boundary for a word access, and a two-byte boundary for halfword accesses) the load/store is 
+performed as two bus transactions in case that the data item crosses a word boundary. A single load/store 
+instruction is therefore performed as two bus transactions for the following scenarios: 
+
+    * Load/store of a word for a non-word-aligned address
+        > A word in many computer architectures is 4 bytes. If we try to load/store a word but the address isnt a multiple of
+        4 its considerd misaligned.
+    * Load/store of a halfword crossing a word address boundary
+        > A halfword is typically 2 bytes. Attempting to load/store a halfword where the address is such that the data spans a
+        word boundary (e.g., address 6, which would mean the halfword spans addresses 6 and 7), its considered misaligned. 
+
+In both cases the transfer corresponding to the lowest address is performed first. All other scenarios can be handled with a single bus
+transaction. 
+
+    * In main memory regions the hardware can handle misaligned transactions by breaking them into two separate bus transactions. 
+    This is because if you try to read a word starting at address 6, you're actually reading data from two separate words 
+    (bytes from both address 4-7 and 8-11). The hardware simplifie sthis by making two separate transactions: 
+    one for the part from 4-7 and another for 8-11. 
+    * The sequence is essential, and the transfer corresponding to the lowest address is performed first. This order ensures 
+    data consistency and predictable behaviour, especially important for stores where write order matters. 
+
+Misaligned transactions are not supported in I/O regions and will result in an exception trap when attempted.
+
+    * Misalignment is most likely not supported for I/O regions because they interact with peripherals, and ensuring 
+    strict alignment can prevent data corruption or unpredictable behaviour. 
+
+* Protocol 
+
+The data bus interface is compliant with the "Open Bus Interface" (OBI) protocol. The OBI protocol that is used by the LSU 
+to communicate with a memory works as follows: 
+
+    * The LSU provides a valid address on 'data_addr_o', control information on 'data_we_o', 'data_be_o'
+    (as well as write data on 'data_wdata_o') and sets 'data_req_o' high. 
+    * The memory sets 'data_gnt_i' high as soon as it is ready to serve the request. This may happen at any time, 
+    even before the request was sent.
+    * After a request has been granted the address phase signals:
+        > 'data_addr_o', 'data_we_o', 'data_be_o' and 'data_wdata_o'
+    may be changed in the next cycle by the LSU as the memory is assumed to already have processed and stored that information. 
+    * After granting a request, the memory answers with a 'data_rvalid_i' set high if 'data_rdata_i' is valid.
+    This may happen one or more cycles after the request has been granted. Not that 'data_rvalid_i' must also be set high 
+    to signal the end of the response phase for a write transaction (although the 'data_rdata_i' has no meaning in that case).
+    * When multiple granted requests are outstanding, it is assumed that the memory requests will be kept in-order and 
+    one 'data_rvalid_i' will be signalled for each of them, in te order they were issued. 
+
+
+    Example timing diagrams:
+    'Basic Memory Transactions'
+    
+                                  ___     ___     ___     ___     ___     ___        
+    clk                          |   |___|   |___|   |___|   |___|   |___|   |___
+                                          _______________
+    data_req_o                   ________/               \_______________________
+                                                  _______
+    data_gnt_i                   ________________/       \_______________________
+                                 ________________________________________________
+    data_addr_o                  ________/\     A0      /\_______________________
+                                 ________________________________________________
+    data_wdata_o                 ________/\     WD0     /\_______________________
+                                 ________________________________________________
+    data_we_o                    ________/\     WE0     /\_______________________
+                                 ________________________________________________
+    data_be_o                    ________/\     BE0     /\_______________________
+                                                          _______
+    data_rvalid_i                ________________________/       \_______________
+                                 ________________________________________________
+    data_rdata_i                 ________________________/\  RD1 /\______________
+
+
+* Pysical Memory Protection Unit 
+
+The CV32E40S core has a PMP module which is optionally enabled. Such a unit has a configurable number of entries (up to 16)
+and supports all the modes as TOR, NAPOT and NA4. Every fetch, load and store access executed in USER MODE are first filtered by
+the PMP unit which can possibly generate exceptions. For the moment, the MPRV bit in MSTATUS as well as the LOCK mechanism in the
+PMP are not supported. 
+
+    * PMP works by using a set of registers to define protected memory regions and the access permissions for these regions.
+    The PMP unit in this core can support up to 16 of these protected addresses. 
+    * Supported addressing modes:
+        > Top Of Range - TOR: This mode uses the current entry to specify the top address of the protected region, 
+        and the base address is specified by the previous entry. 
+        > Naturally Aligned Power-Of-Two - NAPOT: This mode allows for specifying naturally aligned regions 
+        that are a size of a power of two. 
+        > Naturally aligned four-byte region - NA4
+    Having these different modes allows for flexibility in how memory is protected and partitioned. 
+
+* Write buffer 
+
+CV32E40S core contains a single entry write buffer that is used for bufferable transfers. A bufferable transfer is a write 
+transfer originating from a store instruction, where the write address is inside a bufferable region defined by the PMA. 
+
+The write buffer (when not full) allows CV32E40S to procees executing instructions without having to wait for 'data_gnt_i'=1 and 
+'data_rvalid_i'=1 for these bufferable transfers. 
+
+    * The main advantage of having this write buffer is improved efficiency and throughput.
+        - Normal operation without write buffer - 
+            > Normally when a core want to write data to memory, it sends the write request and might need to wait for an 
+            acknowledgement before proceeding. This waiting can introduce stalls in the pipeline, as the core has to hold off 
+            on certain operations untill the memory system acknowledges the write request. 
+        - Operation with write buffer -
+            > With the write buffer the core can place a bufferable write operation in the buffer and move on to execute 
+            subsequent instructions without waiting for immediate acknowledgement from the memory system. 
+            > The buffer will handle the task of ensuring the write operation gets to its destination
+            > The core only needs to check/wait for acknowledgements when the buffer is full or when certain conditions are met.
+            In this particular design, the buffer can hold a single write operation (single-entry), so the core would 
+            check if there is space in the buffer before writing into it. 
+
+Bus transfers will occur in program order, no matter if transfers are bufferable and non-bufferable. Transactions in the 
+write buffer must be completed before the CV32E40S is able to: 
+
+    > Retire a 'fence' instruction 
+    > Retire a 'fence.i' instruction 
+    > Enter SLEEP mode

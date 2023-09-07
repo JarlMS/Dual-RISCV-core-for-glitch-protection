@@ -2,10 +2,42 @@
     * 32-bit
     * in-order RISC-V 
     * 4-stage pipeline
+        > Instruction Fetch 
+        > Instruction Decode 
+        > Execute 
+        > Writeback 
     * Several ISAs implemented 
+
+C: Part of the 'CORE-V' family. This is a set of open source RISC-V cores developed by OpenHW group.
+V32: RISC-V 32 bit architecture
+E: Embedded ISA base. Base integer instruction set specifically designed for embedded causes, which has a narrower 
+16 general purpose registers set instead of the usual 32 found in the 'I' (Integer) base.
+40: Not sure yet 
+S: This core puts emphesis on secure operations. 
 
 cv32e40s is focused on security applications and offers:
     * Machine mode - Highest privilege level operating mode
     * User mode - Lowest privilege level intended for application software.
     * "Physical Memory Protection" PMP - Provides a way to restrict access to specific regions of physical memory 
       to prevent unauthorized reads or writes
+
+-- List of appreviations -- 
+    * PMP - Physical Memory Protection 
+    * PMA - Physical Memory Attribution
+    * LSU - Load/Store Unit 
+    * CSR - Control and Status Register 
+    * ECC - Error-Correcting Code
+        > Is used to handle bit errors natively in the memory interface 
+    * DfT - Design for Test
+
+> Everything in 'rtl' and 'rtl/include' is synthesizable. Top level is 'cv32e40s_core' < 
+
+User must provide a clock gating module. This file must have the same interface an dmodule name of the one provided for 
+simulation-only purposes at 'bhv/cv32e40s_sim_clock_gate.sv'. Clock gating is technology specific, which is why this 
+file is not provided for anything other than simulation. 
+
+No synthesis scrips are provided, but ecamples of synthesis constrains can be found in 'constraints/cv32e40s_core.sdc'. 
+
+
+"The CV32E40S has security features that are logically redundant and likely to be optimised away in synthesis. 
+Special care is therefore needed in synthesis scripts to ensure these features are preserved in the implemented netlist."

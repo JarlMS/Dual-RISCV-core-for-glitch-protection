@@ -1,4 +1,4 @@
-SAmmenligner man hele staten eller bare resultatet? 
+SAmmenligner man hele staten eller bare resultatet? -> Hele staten 
 ECC register file 
 
 Del 1:

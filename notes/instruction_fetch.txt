@@ -1,0 +1,58 @@
+- Instruction fetch - 
+
+The prefetch unit performes word-aligned 32-bit prefetches and stores the fetched words in an alignment buffer 
+with three entries. As a result of this (speculative) prefetch, CV32E40S can fetch up to three words outside of the 
+code region and care should therefore be takn that no unwanted read side effects occur for such prefetches outside the 
+of the actual code region. 
+
+* Misaligned Accesses
+
+Externally, the IF interface performs word-aligned instruction fetches only. Misaligned instruction fetches are handled by
+performing two separate word-aligne dinstruction fetches. Internally, the core can deal with both word- and half-word-aligned
+instruction addresses to support compressed instrcutions (RVC). The LSB of the instruction address is ignored internally.  
+
+* Protocol
+
+The instruction bus interface is compliant to the "Open Bus Interface" (OBI) protocol. The CV32E40S instruction fetch interface 
+can cause up to two outstanding transactions. 
+
+Example timing diagrams:
+'Back-to-back Memory Transactions'
+
+                              ___     ___     ___     ___     ___     ___        
+clk                          |   |___|   |___|   |___|   |___|   |___|   |___
+                                      _______________________________________
+instr_req_o                  ________/
+                             ________________________________________________
+instr_addr_o                 ________/\  A0  /\  A1  /\  A2  /\  A3  /\  A4  /
+                             ________________________________________________ 
+instr_gnt_i            
+                             ________________________________________________
+instr_rdata_i                ________________/\  RD0 /\  RD1 /\  RD2 /\  RD3 /
+                                              _______________________________
+instr_rvalid_i               ________________/
+
+instr_err_i                  ________________________________________________ 
+                             ________________________________________________ 
+Outstanding transactions     ______0_________/\  1   /\  1   /\  1   /\  1   /
+
+
+"Multiple outstanding memory transactions with bus error on A1/RD1"
+
+                              ___     ___     ___     ___     ___     ___        
+clk                          |   |___|   |___|   |___|   |___|   |___|   |___
+                                      _______________                 _______
+instr_req_o                  ________/               \_______________/
+                             ________________________________________________
+instr_addr_o                 ________/\  A0  /\  A1  /\______________/\  A2  /
+                             ________________________________________________ 
+instr_gnt_i            
+                             ________________________________________________
+instr_rdata_i                _______________________________/\  RD0 /\  RD1 /
+                                                             _______________
+instr_rvalid_i               _______________________________/               \
+                                                                     _______ 
+instr_err_i                  _______________________________________/       \
+                             ________________________________________________ 
+Outstanding transactions     ______0_________/\  1   /\  2   /\  2   /\  1   /
+

@@ -1,0 +1,47 @@
+- Pipeline Details -
+
+1) Instruction Fetch 
+    * Fetches instructions from memory via an aligning prefetch buffer, capable of fetching 1 instruction per 
+    cycle if the instruction side memory system allows. The IF stage also pre-decodes RVC instruction into RV32I 
+    base instructions. 
+        > Aligning: Instructions might be of different length and memory access might retrieve mote data than required
+        for a single instruction. 
+        > Prefetch buffer: Temporarily store fetched data from memory. Can store more than one instruction.
+        > 1 instruction per cycle can only be achieved if the external memory system where instructions are stored allows it.
+        > When the compressed 16-bit RVC instructions are fetched, they are immediatley translated into its corresponding 
+        RV32I form before it moves to the next pipeline stage.  
+
+2) Instruction Decode 
+    * Decodes fetched instruction and performs required register file reads. Jumps are taken from the ID stage. 
+        > Performing jumps from this stage is unusual, as this is often determined in the execution stage from the result of an operation.
+        > Determining whether to perform a jump in this stage can potentially streamline execution and improve pipeline efficiency.
+            ~ Detecting and resolving jumps at this stage means that the processor can potentially avoid fetching unnecessary instructions
+            that come after a taken jump. This helps keep the pipeline filled with relevant instructions.
+            ~ Detecting jumps early also allows for better branch prediction.
+            ~ Streamlining the decision-making process for jumps ensures that fewer pipeline stages are wasted on instructions that
+            wont be executed. This improves overall throughput.  
+        > Jumping at this stage can pose challanges, as a wrong jump can mean that the processor has to flush or clear susequent 
+        pipeline stages, introducing a delay. 
+
+3) Execute 
+    * Executes the instructions. The EX stage contains the 'ALU', 'Multiplier' and 'Divider'. Branches (with their condition met)
+    are taken from the EX stage. Multi-cycle instructions will stall at this stage untill they are complete. The address generation
+    part of the load-store-unit (LSU) is contained in EX as well. 
+        > The LSU calculates the memory address for operations. For instance, if an instruction dictates data be loaded from an 
+        address offset from a base registers value, the EX stage calculates the effective address by adding the offset to the 
+        base registers value. Including address generation in the EX stage can potentially leverage the ALU for calculations. 
+
+4) Writeback 
+    * Writes the result of 'ALU', 'Multiplier', 'Divider', or 'Load Instructions' instructions back to the register file. 
+
+- Branch vs Jump - 
+- Branches are often conditional and jumps are unconditional - 
+
+- Hazards - 
+
+The CV32E40S experiences a 1 cycle penalty on the following hazards:
+    * Load data hazard (in case the instruction immediately following a load uses the result of that load)
+    * Jump register (jalr) data hazard (in case that a jalr depends on the result of an immediately preceding non-load instruction)
+
+The CV32E40S experiences a 2 cycle penalty on the following hazards:
+    * Jump register (jalr) data hazard (in case that a jalr depends on the result of an immediately preceding load instruction)
