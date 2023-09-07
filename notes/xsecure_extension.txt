@@ -1,0 +1,42 @@
+- Xsecure extension - 
+
+The following is encompassed in the Xsecure extension:
+    > Security alerts 
+    > Data independent timing 
+    > Dummy instruction insertion 
+    > Random instruction for hint 
+    > Register file Error-Correcting Code (ECC)
+    > Hardened Program Counter (PC)
+    > Hardened Control and Status Registers (CSRs)
+    > Interface integrity 
+    > Bus protocol hardening 
+    > Reduction of profiling infrastructure
+
+* Security alerts
+
+CV32E40S has two outputs for signaling security issues: A major and a minor alert. 
+A major alert 'alert_major_o' indicates a critical security issue from which the core cannot recover. The minor alert 'alert_minor_o'
+indicates potential security issues, which can b emonitored by a system over time. These outputs can be used by external hardware
+to trigger security incident responses like for example a system wide reset or a memory erase. A security output is high for every 
+clock cycle that the related security issue persists. 
+
+The following results in a major security alert:
+    > Register file ECC error
+    > Hardened PC error 
+    > Hardened CSR error
+    > Non-associated instruction interface parity/checksum error
+    > Non-associated data interface parity/checksum error
+    > Instruction parity/checksum fault (i.e. when triggering a related exception)
+    > Store parity/checksum fault (i.e. when triggering the related NMI)
+    > Load parity/checksum fault NMI (i.e. when triggering the related NMI)
+    > Bus protocol error
+
+The following results in a minor security alert:
+    > LFSR0, LFSR1, LFSR2 lockup
+    > Instruction access fault 
+    > Illegal instruction 
+    > Load access fault 
+    > Store/AMO access fault
+    > Instruction bus fault 
+    > Store bus fault NMI 
+    > Load bus fault NMI 
