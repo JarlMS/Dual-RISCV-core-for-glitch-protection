@@ -1,0 +1,21 @@
+- Register File - 
+
+cv32e40s has 31 32-bit wide registers which form registers 'x1' to 'x31'. Register 'x0' is statically bound to 0 and can only be
+read, it does not contain any sequential logic. 
+
+The register file has two read ports and one write port. Register file reads are performed in the 'ID' stage. 
+Register file writed are perfoemd in the 'WB' stage.
+
+* General Purpose Register File
+
+The register file consists of positive-edge-triggered flip-flops. 
+
+* Error Detection 
+
+The register file has integrated error detection logic and a 6-bit hamming code for each word. This ensures detection of up to 
+two errors in each register file word. Detecte derrors trigger a major alert. 
+
+    * Hamming Code: Hamming codes are a family of linear error-correcting codes. They are specifically designed to detect and 
+    correct error in data. A notable feature of Hamming Codes is their ability to pinpoint errors in transmitted data bits. 
+    * The Hamming Code acts as a form of checksum or signature of the original word. When data is written or read from the 
+    register, the Hamming Code is updated or checked, respectively. 

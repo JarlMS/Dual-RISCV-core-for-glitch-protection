@@ -1,0 +1,16 @@
+- Physical Memory Protection - PMP - 
+
+The PMP module is both statically and dynamically configurable. Static configuration is performed through top level parameters.
+Dynamic configuration is performed through the Control and Status Registers (CSRs). 
+
+The granularity of PMP address matching can be configured. The minimum granularity is 2^(PMP_GRANULARITY+2) bytes, so at least 4 bytes.
+
+The number of PMP regions (PMP_NUM_REGIONS) can be configured. All PMP CSRs are always implemented, but CSRs (or bitfields of CSRs) relatedto PMP
+entries with number (PMP_NUM_REGIONS) and above are hardwired to zero. 
+
+The reset value of the PMP CSR registers can be set through the top level parameters. 
+
+* Debug mode
+
+In order for debug to always be possible, the PMP will disallow fetches, loads and stores in the Debug Module region when 
+the hart is in debug mode, regardless of how the PMP is configured. 

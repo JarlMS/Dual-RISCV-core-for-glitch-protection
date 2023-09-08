@@ -1,0 +1,73 @@
+- Physical Memory Attribution (PMA) - 
+
+The PMA included in the CV32E40S allows for compile time attribution of the physical memory map. 
+
+In case of address overlap between PMA regions, the region with the lowest index is the PMA_CFG array will have priority. 
+
+* Main memory vs I/O 
+
+Memory ranges can be defined as main or I/O. 
+
+Code execution is allowed from main memory and it is considerd to be idempotent.
+Non-aligned transactions and modifiable transactions are supported in main memory.
+
+    * Idempotent: An operation is considerd idempotent is performing it multiple times has the same effect as performing 
+    it once. If main memory is idempotent it means that repeatedly reading and writing to a specific memory address will have the
+    same effect as doing it once. 
+    * Non-aligned transactions: For example reading from address 0x02 in a system with 32-bit words where addresses are at (0x00, 0x04, 0x08, etc.)
+    * Modifiable transactions: Once data is written to main memory, it isnt set in stone and can be overwritten as needed. 
+
+Code execution is not allowed from I/O regions and an instruction access fault (exception code 1) is raised when attempting 
+to execute from such regions. I/O regions are considered to be non-idempotent and therefore the PMA will prevent 
+speculative access to such regions. Attempts to perform a non-naturally aligned load access to an I/O region causes a 
+precise load access fault (exception code 5). Attempting to do the same for a store access results in a precise 
+store access fault (exception code 7). Attempts to perform modifiable load access to an I/O region causes a precise 
+load access fault (exception code 5). Attempting to do the same for a store access results in a precise store access fault 
+(exception code 7). 
+
+"Modifiable transactions are transactions which allow transformations as for example merging or splitting. For example,
+a misaligned store word instruction that is handled as two subword transactions on the data interface is considered to use modified 
+transactions". 
+
+* Bufferable and Cacheable
+
+Access to regions marked as bufferable will result in the OBI 'mem_type[0]' bit being set, except if the access was an instruction fetch,
+a load, or part of an atomic memory operation. Bufferable stores will utilize the 'write buffer'. 
+
+Access to regions marked as cacheable will result in the OBI 'mem_type[1]' bit being set. 
+
+* Integrity 
+
+If integrity is globally enabled, then access to PMA regions marked with 'integrity=1' will have their OBI input signals 
+checked against the 'instr_gntpar_i', 'instr_rvalidpar_i', 'data_gntpar_i', 'data_rvalidpar_i', 'instr_rchk_i' and 'data_rchk_i' signals.
+No integrity cheks are performed for access to regions marked with 'integrity=0'. 
+
+Integrity checks can lead to the following alerts, exceptions and NMIs: 
+
+    * Alert on 'alert_major_o'
+    * Instruction parity/checksum fault 
+    * Load parity/checksum fault NMI 
+    * Store parity/checksum fault NMI 
+
+* Default attribution 
+
+If the PMA is deconfigured (PMA_NUM_REGIONS = 0), the entire memory range will be treated as
+main memory, non-bufferable, non-cacheable and no integrity.
+
+If the PMA is configured (PMA_NUM_REGIONS > 0), memory regions not covered by any PMA regions are treated as 
+I/O memory, non-bufferable, non-cacheable and no integrity. 
+
+Every instruction fetch, load and store will be subject to PMA checks and failed checks will result in an exception. 
+PMA checks connot be disabled. 
+
+* Debug mode
+
+Access to the Debug Module region (between DM_REGION_START and DM_REGION_END) are treated specially. 
+For such accesses the PMA configuration and default attribution rules are ignored and the following applies instead:
+
+    * The access is treated as a main memory access
+    * The access is treated as a non-bufferable access.
+    * The access is treated as a non-chacheable access.
+    * The access is treated as an access to a region without support for atomic operations. 
+
+
