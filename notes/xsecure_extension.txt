@@ -20,6 +20,18 @@ indicates potential security issues, which can b emonitored by a system over tim
 to trigger security incident responses like for example a system wide reset or a memory erase. A security output is high for every 
 clock cycle that the related security issue persists. 
 
+- Non-Maskable Interrupt - NMI -
+Features of an NMI that might be relevant for a secure RISC-V core:
+    * 'Priority' - NMI typically have higher priorities than regular maskable interrupts. This means an NMI will almost always 
+    be serviced immediately by the CPU.
+    * 'Response to Critical Events' - Often used for thins that require immediate attention, which in a security contect might
+    include hardware-based tamper detection, critical hardware errors, or other security breaches. 
+    * ' Reliability' - Because they cant be masked, NMIs ensure that certain critical events get the attention of the CPU. 
+    * 'Isolation' - Often an NMI can force the CPU into a secure mode or environment where it can safely access an drespond to the interrupt.
+    * Potential challanges: Because of their unmaskable nature, NMIs can potentially be exploited to create a denial-of-service 
+    condition where the processor is repeatedly interrupted, preventing it from doing its primary taks.
+
+
 The following results in a major security alert:
     > Register file ECC error
     > Hardened PC error 
@@ -33,10 +45,106 @@ The following results in a major security alert:
 
 The following results in a minor security alert:
     > LFSR0, LFSR1, LFSR2 lockup
-    > Instruction access fault 
-    > Illegal instruction 
-    > Load access fault 
-    > Store/AMO access fault
-    > Instruction bus fault 
-    > Store bus fault NMI 
-    > Load bus fault NMI 
+    > Instruction access fault (i.e. when triggering a related exception)
+    > Illegal instruction (i.e. when triggering a related exception)
+    > Load access fault (i.e. when triggering a related exception)
+    > Store/AMO access fault (i.e. when triggering a related exception)
+    > Instruction bus fault (i.e. when triggering a related exception)
+    > Store bus fault NMI (i.e. when triggering the related NMI)
+    > Load bus fault NMI (i.e. when triggering the related NMI)
+
+* Data independent timing
+
+When data independent timing is enabled, the execution times of all instructions are independent of the input data, making it
+more difficult for an external observer to extract information by observing power consumption or exploiting timing side-channels.
+
+When data independent timing es enabled the DIV, DIVU, REM and REMU instructions will have a fixed (data independent) latency
+and branches will have a fixed latency as well, regardless of whether they are taken or not. 
+
+Addresses used by loads and stores will still provide a timing side-channel due to the following properties:
+    * Misaligned loads and stores differ in cycle count from aligned loads and stores. 
+    * Stores to a bufferable address range react differently to wait states than stores to a non-bufferable address range. 
+
+Similarly the target address of branches and jumps will still provide a timing side-channel due to the following property:
+    * Branches and jumps to non-word-aligned non-RV32C instructions differ in cycle count from other branches and jumps.
+
+These side-channels can largely be mitigated by imposing (branch target and data) alignment restrictions on the used software. 
+
+* Dummy instruction insertion 
+
+Dummy instructions are inserted at random intervals into the execution pipeline if enabled in the CSR. The dummy instructions 
+have no functional impact on the processor state, but add difficult-to-predict timing and power disruptions to the executed code. 
+This makes it more difficult for an attacker toinfer what is being executed, and also makes it more difficult to execute 
+precisely timed fault injection attacks. 
+
+The frequency of dummy instructions can be tuned by setting the 'cpuctrl' bit in the CSR. 
+
+The frequency of dummy instructions and the dummy instructions them selves are randomized using an (Linear Feedback Shift Register)LFSR.
+Dummy instructions are constrained to use 'add', 'mul', 'and' and 'bltu'. The data in the instructions are obtained from other LFSRs 
+and not the register file. 
+
+Software can periodically re-seed the LFSRs with true random numbers (if available) via the 'secureseed*' CSRs, making the 
+insertion interval of dummy instructions much harder to predict. 
+
+* Register file ECC 
+
+ECC checking is added to all reads of the register file, where a checksum is stored for each register file word. All 
+1-bit and 2-bit errors will be detected. This can be useful to detect fault injection attacks since the register file covers a
+reasonably large area of CV32E40S. No attempt is made to correct detected errors, but a major alert is raised upon a detected error
+for the system to take action. 
+
+- The ECC in the register files is logically redundant and might be optimized away by synthesizers - 
+
+* Hardened PC 
+
+When hardened PC is enabled ('pcharden' in 'cpuctrl'), then during sequential execution the 'IF' stage 'Program Counter' is 
+hardened by checking that it has the correct value compared to the 'ID' stage with an offset determined by the
+compressed/uncompressed state of the instruction in 'ID'.  
+
+In addition, the 'IF' stage 'Program Counter' is then checked for correctness for potential non-sequential execution due to 
+control transfer instructions. For jumps (including mret) and branches, this is done by recomputing the 'PC' target and branch
+decision (incurring an additional cycle for non-taken branches).
+
+Any error in the PC or branch/jump decision results in a major error. 
+
+* Hardened CSRs 
+
+Critical CSRs have extra glitch detection enabled. For these registers a second copy of the register is added which stores a 
+complemented version of the main CSR data. A constant check is made that the two copies are consistent, and a major alert is 
+signaled if not. 
+
+- The shadow copies are logically redundant and might be optimized out by a synthesizer - 
+
+* Interface integrity 
+
+Interface cecking is performed botch associated and non-associated t specific instruction execution. 
+
+Non-associated interface checks are performed by only talking into account the bus interfaces themselves plus some state to
+determine whether checksum checks are enabled for a given transaction. The used observation interval is as wide as possible 
+(e.g. a data interface related parity error can be detected even if no load or store instruction is actually being executed).
+
+    * Bus interfaces: Connections between different components in a system (between memory an dcpu for example)
+    * Observation interval: Window of time or operations over which the interface checking mechanism is monitoring 
+    the bus interfaces. A wide observation interval means that the system is continually monitoring the interfaces 
+    over an extended period. 
+    * Parity errors: An error where the number of set bits in a data item is either odd or even when it should be the opposite.
+    * Associated checks: Checks that are directly tied or associated with specific instruction executions.
+    * Non-associated checks: Checks performed independent of specific instruction executions. 
+
+Associated interface checks are the interface cheks that can directly be associated to a fetched instruction or bus 
+transaction due to execution of a load or store instruction:
+
+    * A parity/checksum error on the OBI instruction interface while handling an instruction fetch results in a 
+    precise exception (instruction parity fault with exception code 25) if attempting to execute that instruction. 
+    * A partiy/checksum error on the OBI while handling a load results in an imprecise NMI trigger 
+    (load parity/checksum fault NMI with exception code 1026). This also triggers a major alert.
+    * A partiy/checksum error on the OBI while handling a store resutls in an imprecise NMI trigger 
+    (store parity/checksum fault NMI with exception code 1027). This also triggers a major alert. 
+
+* Bus protocol hardening
+
+The OBI protocol is used for both the instruction interface and data interface. With respect to handshake signals (req, gnt, rvalid)
+the main protocol violation is to receive a respose while there is no corresponding outstanding transaction. 
+
+A major alert is raised when 'instr_rvalid_i'=1 is received while there are no outstanding OBI instruction transactions. 
+A major alert is raised when 'data_rvalid_i'=1 is received while there are no outstanding OBI data transactions. 
