@@ -1,0 +1,18 @@
+- Exceptions and Interrupts - 
+
+The CV32E40S supports two interrupt architectures: CLIC and CLINT. They offer different tradeoffs, but if 
+more than 19 interrupts are required, if programmable interrupt levels are required or if hardware 
+support for preemption is important, then CLIC should be chosen. 
+
+Exceptions in general cannot be disabled and are always active. All exceptions are precise. 
+
+* Non Maskable Interrupts 
+
+An NMI will occur when a load or store instruction experiences a bus fault. The fault resulting in an NMI is 
+handled in an imprecise manner, meaning that the instruction that caused the fault is allowed to retire 
+and the associated NMI is taken afterwards. 
+
+* Interrupts 
+
+Although the RISC-V-CLIC specification supports up to 4096 interrupts, the CV32E40S only supports at most 
+1024. 

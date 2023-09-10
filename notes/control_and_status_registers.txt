@@ -1,0 +1,7 @@
+- Control and Status Registers - CSR - 
+
+* CSR Map 
+
+Some CSRs are only implemented if the associated parameters are set for compile/synthesis. 
+
+Descriptions of all CSRs can be found in the documentation: ../docs/documentation.sh -> 'Control and Status Registers'

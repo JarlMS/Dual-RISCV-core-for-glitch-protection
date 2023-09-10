@@ -1,0 +1,20 @@
+- Sleep Unit - 
+
+The sleep unit controles the instantiated clock gate that gates 'clk_i' and produces a gated clock for use by the 
+other modules insdide CV32E40S. The sleep unit is the only place in which 'clk_i' is used. All other modules use 
+the gated version of the clock. 
+
+* Startup behaviour 
+
+'clk_i' is internally gated off during startup:
+    * 'clk_i' is internally fated off during 'rst_ni' assertion 
+    * 'clk_i' is internally gated off from 'rst_ni' deassertion untill 'fetch_enable_i'=1
+
+After initial assertion of 'fetch_enable_i', the 'fetch_enable_i' signal is ignored untill after a next reset
+assertion. 
+
+* WFI 
+
+The 'wfi' instruction can under certain conditions be used to enter sleep mode awaiting a locally enabled
+interrupt to become pending. The operation of 'wfi' is unaffercted by the global interrupt bits in 'mstatus'.
+
