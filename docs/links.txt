@@ -1,2 +1,11 @@
 cv32e40s Documentation:
 https://docs.openhwgroup.org/projects/cv32e40s-user-manual/en/latest/
+
+'Side-Channel Attacks on RISC-V Processors: Current Progress, Challenges, and Opportunities'
+https://arxiv.org/abs/2106.08877
+
+'INTRODUCTION TO GLITCHING'
+https://myrelabs.com/introduction-to-glitching/
+
+'RISC-V forum channel with presentations about security from 2021'
+https://www.youtube.com/playlist?list=PL85jopFZCnbM38GY78JWxFjgpUp7-FVAa
