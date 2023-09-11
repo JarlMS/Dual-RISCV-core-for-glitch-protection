@@ -9,3 +9,15 @@ https://myrelabs.com/introduction-to-glitching/
 
 'RISC-V forum channel with presentations about security from 2021'
 https://www.youtube.com/playlist?list=PL85jopFZCnbM38GY78JWxFjgpUp7-FVAa
+
+'CVE-2021-1104 Detail'
+https://nvd.nist.gov/vuln/detail/CVE-2021-1104
+
+'Electromagnetic fault injection against a complex CPU, toward new micro-architectual fault models'
+https://hal.science/hal-03175704/document
+
+'Glitch Demystified: Alayzing Control-flow-based Glitching Attacks and Defenses'
+https://sites.cs.ucsb.edu/~vigna/publications/2021_DSN_Glitching.pdf
+
+'An introduction to fault injection'
+https://research.nccgroup.com/2021/07/07/an-introduction-to-fault-injection-part-1-3/
