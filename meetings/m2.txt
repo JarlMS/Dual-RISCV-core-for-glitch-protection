@@ -1,0 +1,11 @@
+Hvordan blir glitch attacks gjort i virkeligheten?
+Fortsette å gjøre research 
+
+Hvilke tester vil jeg gjøre? 
+Tvinge glitches inn i simulering 
+
+Skrive på en god måte og forklare hva begrensiningene er i teknologien vi har til rådighet 
+forklare fremgangsmåte for å gi en god og etterprøvbar rapport
+
+Ha med litt bakgrunn om fault injection
+Kanskje lage en modul som kan kontrolleres som slipper gjennom det den skal eller modifisere en bit. 
