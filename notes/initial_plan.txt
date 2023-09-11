@@ -1,0 +1,32 @@
+- Initial plan for thesis - 
+
+What are glitch attacks and how can they be performed? 
+    * Power glitching 
+    * Clock glitching 
+    * Fault injection 
+
+What is being done today to prevent glitch attacks?
+    * cv32e40s
+    * Hardened PC 
+    * Hardened CSRs 
+    * Xsecure extension 
+    * More... 
+
+What are the limitations of the ways glitch protection is done today? 
+    * High logic cost 
+    * Slower execution of certain pipeline stages 
+    * Lower throughput 
+
+Why might Dual Cores be a good way of doing glitch protection? 
+    * Compare performance 
+    * Compare area 
+    * Compare timing 
+    * Compare simulated power usage
+
+Why is this solution good/bad/no significant change 
+
+Things I need to test:
+    * Check synthesized area and timing on both setups
+    * Do fault injection in both setups 
+        > Maybe write a module whose sole purpose is to randomly corrupt data 
+    

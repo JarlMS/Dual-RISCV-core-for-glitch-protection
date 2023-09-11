@@ -1,0 +1,99 @@
+- CVE-2021-110 Detail - 
+- From the National Vulnerability Database - 
+
+The RISC-V instruction set manual contains documented ambiguity for the Machine Trap Vector (MTVEC) Base Address register that 
+may lead to a vulnerability due to the inital state of the register not being defined, potentially leading to 
+information disclosure, data tampering and DoS. 
+
+- Glitching RISC-V Chips - 
+
+Glitching is a pure HW attack. 
+
+Other pure HW attacks:
+    * Side channel 
+    * Physical probing 
+    * More...
+
+Pure HW attacks target specific implementation (e.g., CPU family, implementation of architecture, etc.)
+
+What if the bug is in the "reference code" like the HW ISA itself? 
+    * This would cause problems with 'all' implementations, not just a specific one. 
+    * This means SW cant trust HW at all
+
+RISC-V onsly has three privilege modes: 
+    * U-mode: User - Lowest privilege
+    * S-Mode: Supervisor - kernel runs here 
+    * M-mode: Machine - Highest privilege 
+
+What is MTVEC? 
+    * Official RISC-V doc defines MTVEC as read-only or read/write register that holds the BASE address of the M-mode trap vector. 
+    * By default RISC-V handles all traps at any level in Machine mode (though a machine-mode handler might redirect traps back to 
+    the appropriate level)
+    * When trap arrives, RISC-V switches to M-mode and sets the PC to the value configured in MTVEC. 
+
+What happens if any interrup occurs before MTVEC is initialized? 
+
+* Problem with MTVEC 
+
+MTVEC register specifications 'does not define' the initial value at all 
+During bootup, MTVEC is undefined by the standard, but most of the tested implementations set it to 0.
+In many implementations 0 is not a valid address, and any reference to it generates an exception. 
+If there is any trap/exception generated before initialization of MTVEC register, RISC-V ends up in a very 'stable' infinite 
+exception loop. 
+    1) An exception arises and RISC-V reads MTVEC and tries to jump to NULL page.
+    2) An exception is generated again because its a reserved and not accessible memory, and it jumps to MTVEC again, and so on... 
+    > RISC-V is not halted, its just spinning in the infinite exception loop. 
+This kind of state is ideal for fault injection (glitching) attack.
+    * RISC-V is running at the "highest privilege mode" and constantly dereferencing glitchable register.
+
+* How to exploit MTVEC 
+
+The described problem is fully exploitable if the attacker has the capabilities to: 
+    * Prefill D/I memory of the RISC-V core 
+    * Generate an early exception during core execution (e.g., physical HW damage)
+
+Scenario:
+    * Attacker prefills Instruction memory with the custom shellcode:
+        > attacker does that in a smart way by filling the entire instruction memory with NOPs and in the edge of 
+        the instruction memory the attacker puts a real shellcode
+    * Attacker boots RISC-V
+    * Attacker enforces the necessary conditions to generate an early exception during Boot-SW or secure code 
+    execution and before MTVEC is initialized
+    * RISC-V jumps to the NULL page and it enters the state of the infinite exception loop (very stable and predictable state)
+    * Attacker glitches the MTVEC register value of the looped core, and points it somewhere in the instruction memory 
+    where special payloa dwith the desired shellcode is placed. 
+        > Because MTVEC register has a NULL value, it is very likely that the change of just 1 bit ends 
+        up generating an addres spointing in the middle of the NOPed filled instruction memory.
+            
+Different fault injection attacks: 
+    * Clock glitching -> What they used in this case at is was very reliable
+    * Voltage glitching 
+    * Chip shooter(??)
+
+Because this bug is in the ISA, most silicon using a RISC-V architecture are probably exposed
+
+* How to fix MTVEC issue? 
+
+The described problem is a chain of multiple problems
+    * To exploit the bug we need fault injection 
+
+What are the effective fault injection protections? 
+    * DCLS (strong)
+        > Shadow core running in sync with the original core halting execution if they are not the same
+        > This is just 'Dual RISC-V core for glitch protection'
+    * TCLS (even stronger)
+        > Uses two shadow cores to do the same as DCLS
+    * SW mitigation (complexity)
+    * Compiler mitigations 
+
+Design decision to address MTVEC wakness:
+    * As soon as START_CPU signal arrives, pre-initialize MTVEC to point to 'halt' instruction
+    * Change ISA to at least WARM about the potential problems with the late MTVEC initialization
+    * Introduce double/triple fault-like exception which halts the core (instead of infinite loop)
+
+Pointer masking extension for RISC-V
+    * From security perspective it allows to implement:
+        > HWASAN 
+        > Pointer authentification codes 
+        > HW memory sandboxing
+            
