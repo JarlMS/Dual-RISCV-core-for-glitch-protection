@@ -1,0 +1,45 @@
+- Electromagnetic fault injection against a complex CPU, toward new micro-architectural fault models -
+
+Electromagnetic fault injection - EMFI 
+
+Hardware security is usually not the main concern when developing a complex CPU. Mostly they are tuned for the 
+best performance/energy consumption trade-off and software hardening. 
+
+For testing, only one core is enabled because you cannot easily link a fault in unified memory with a particular core 
+if more of them are running. 
+
+* Memory management unit - MMU 
+
+The MMU aims to virtualize the physical memory of the system into a virtual one to segregate each app in their own 
+address space. Therefore the CPU only works with virtual addresses, and during a memory access to one of them, the MMU translates 
+it into the corresponding physical address, which is transmitted to the memory controller. 
+
+The information required for the translation of an address is called a page table entry (PTE), and is stored in the 
+physical memory and cached in the translation looaside buffer (TLB). There is a PTE for all allocated pages in the physical memory. 
+
+The bare-metal implementation in this paper allocates the whole address space with an identity mapping (virtual and physical addresses
+are the same).
+
+In modern systems, the translation phase also checks if the page can be written or not, which kind of process (user or supervisor)
+can access ir or should the page be stored in cache or not. 
+
+* Injection signal 
+
+The signal parameters (shape, frequency, number of periods) have an optimal value with respect to our prequirements:
+    
+    * The shape is a sinus to reduce the presence of harmonics in the amplification chain
+    * The frequency (275 MHZ) maximizes the probe gain. The sinus period is then 3.6ns or ~4.3 clock periods
+    * The amplitude (-14dBm) has been manually tuned during fault injection untill the desire effect is achieved. 
+        > Too low: no faults are observed 
+        > Too high: chip crashes and must be rebooted
+
+* Temporal synchronization 
+
+The main difficulty for fault injection is the temporal synchronization: when to inject a fault on the targeted and 
+vulnerable instructions. 
+
+Memory transfers are particularly vulnerable to EMFI. They are also slower than the core pipeline, allowing for a bigger fault 
+injection timing window. 
+
+* Fault on the instruction cache 
+
