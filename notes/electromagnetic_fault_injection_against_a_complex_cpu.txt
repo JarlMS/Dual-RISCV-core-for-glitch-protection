@@ -43,3 +43,19 @@ injection timing window.
 
 * Fault on the instruction cache 
 
+The paper was not able to prevent or modify the execution of an instruction directly. The faults are instead inserted during cache transfers, which is probably because the bus 
+involved is easily coupled with the EM probe. 
+
+The L1I cache is invalidated just before launching the application, artificially triggering a memory transfer. 
+
+The fault injection resulted in the wrong instruction being stored in the cache, and thus a coutner value in the test program was not incremented correctly. 
+
+This fault can easily be exploited because it induces an instruction replacement fault model, where an instruction is replaced by another. It can often be reduced to the classical instruction 
+skip model, if the new instruction has no side effects on the application. However, since the faulted value is still present in the instruction cache, it will stay 
+faulted untill the cache is invalidated: we can call this model "sticky instruction skip". This fault model can be used to hijack the control flow and initiate 
+a 'return-oriented programming' (ROP) attack, among others. 
+
+* Targeting the Memory Management Unit
+
+This fault is based on corrupting the virtual-to-physical memory mapping, albeit 'in an uncontrolled manner'. The faults presented in the paper 'always' crash the test program. 
+  

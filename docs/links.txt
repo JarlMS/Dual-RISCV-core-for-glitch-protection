@@ -25,3 +25,8 @@ https://sites.cs.ucsb.edu/~vigna/publications/2021_DSN_Glitching.pdf
 https://research.nccgroup.com/2021/07/07/an-introduction-to-fault-injection-part-1-3/
 
 ---------------------------------------------------------------------
+
+T. Trouchkine, G. Bouffard, and J. Clediere. Fault
+Injection Characterization on modern CPUs –
+From the ISA to the Micro-Architecture. In WISTP
+2019, Paris, France, 2019.
