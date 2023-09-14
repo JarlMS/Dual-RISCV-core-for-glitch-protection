@@ -26,7 +26,32 @@ https://research.nccgroup.com/2021/07/07/an-introduction-to-fault-injection-part
 
 ---------------------------------------------------------------------
 
+------------------ Should read --------------------------------------
 T. Trouchkine, G. Bouffard, and J. Clediere. Fault
 Injection Characterization on modern CPUs –
 From the ISA to the Micro-Architecture. In WISTP
 2019, Paris, France, 2019.
+
+J. Balasch, B. Gierlichs, and I. Verbauwhede. An
+in-depth and black-box characterization of the ef-
+fects of clock glitches on 8-bit mcus. In 2011 Work-
+shop on Fault Diagnosis and Tolerance in Cryptog-
+raphy, FDTC 2011, Tokyo, Japan, September 29,
+2011, pages 105–114, 2011.
+
+H. Bar-El, H. Choukri, D. Naccache, M. Tunstall,
+and C. Whelan. The sorcerer’s apprentice guide to
+fault attacks. Proc. IEEE, 94(2):370–382, 2006.
+
+M. Dumont, M. Lisart, and P. Maurine. Electro-
+magnetic fault injection : How faults occur. In
+2019 Workshop on Fault Diagnosis and Tolerance
+in Cryptography, FDTC 2019, Atlanta, GA, USA,
+August 24, 2019, pages 9–16. IEEE, 2019.
+
+J. Proy, K. Heydemann, F. Majéric, A. Berzati, and
+A. Cohen. A first isa-level characterization of em
+pulse effects on superscalar microarchitectures – a
+secure software perspective. In ARES 2019, 2019.
+
+---------------------------------------------------------------------

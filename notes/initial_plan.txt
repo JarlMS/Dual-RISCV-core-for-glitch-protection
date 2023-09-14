@@ -16,6 +16,11 @@ What are the limitations of the ways glitch protection is done today?
     * High logic cost 
     * Slower execution of certain pipeline stages 
     * Lower throughput 
+    * A typical way of doing fault injection is though EMFI attacks which target larger components like caches or other memory components.
+    How can we prevent these? Comparing the state of the entire chache is not viable, and thus we must allow a fault to persist in 
+    memory untill it is read or used in one of the cores.
+    * Also, a fault in the MTVEC not being initialized can maybe still be exploite deven though we have two cores running if they both 
+    boot at the same time. 
 
 Why might Dual Cores be a good way of doing glitch protection? 
     * Compare performance 
