@@ -1,5 +1,21 @@
 - Initial plan for thesis - 
 
+Define the problem 
+    * What does this paper aim to tell about 
+
+Innledning
+    * Fange oppmerksomhet 
+
+State of the art 
+Eksperimental 
+    * metodikk + teori
+    * Begrensninger 
+    * Valg / undersøkelser 
+
+Resultatet / analyse - Skrive det sammen 
+
+Konklusjon
+
 What are glitch attacks and how can they be performed? 
     * Power glitching 
     * Clock glitching 
