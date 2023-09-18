@@ -1,0 +1,27 @@
+\chapter{State of the art}
+\label{chap3}
+
+\section{CV32E40S}
+\label{sec:cv32}
+
+\subsection{Hardened PC}
+
+\subsection{Hardened CSR}
+
+\subsection{Xsecure Extension}
+
+\section{Limitations of glitch protection}
+\label{sec:limits}
+
+\begin{itemize}
+    \item High logic cost 
+    \item Slower execution of certain pipeline stages
+    \item Lower throughput 
+    \item A typical way of doing fault injection is though EMFI attacks which target larger components like caches or other memory components.
+    How can we prevent these? Comparing the state of the entire chache is not viable, and thus we must allow a fault to persist in 
+    memory untill it is read or used in one of the cores.
+    \item 
+\end{itemize}
+
+\section{Why might Dual Cores be a good way of doing glitch protection}
+
