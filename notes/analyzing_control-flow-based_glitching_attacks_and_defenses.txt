@@ -38,3 +38,12 @@ into malicious ones. Nevertheless, software based techniques are cheaper to impl
 
 * Threat Model 
 
+A system must necessarily have some externally observable trigger to create a reliable glitch (e.g., a voltage drop, an 
+observable output, or a request for user input). In various high profile glitching attacks against gaming systems, the 
+exploits were crafted by first identifying the approximate area that appeared to be vulnerable (e.g., right before an error code)
+and then tuning the glitching parameters (e.g., clock waveform, voltage modification, or EM power and position). 
+
+* Glitching Effects in Emulation
+
+"What is the likelyhood that random bit flips will result in a skipped control-flow instruction?"
+
