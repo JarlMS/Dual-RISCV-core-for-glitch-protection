@@ -1,0 +1,21 @@
+Questions:
+
+Nå har jeg et gangske godt overblikk over hvordan glitching kan bli gjort, og hvilke effekter det kan ha på 
+et system. Hva er mitt neste steg nå? 
+
+Bør jeg gå inn i detalj i hvordan glitch protection blir gjort i CV32E40S? 
+
+    * Ja lurt å sette seg inn i deler av det 
+    * Kan vi dekke alle ting i dual core? 
+    * Kan være fordel rent akademisk 
+    * Dual kan detektere slike feil som vi ikke kan detektere med de andre tiltakene 
+
+Til simule
+
+Komme opp med noe veldig spesifikt hva jeg skal gjøre 
+Klargjøre målet fra start 
+
+Kjøre formell verifisering 
+    * Assertions i systemverilog 
+
+Masteroppgave

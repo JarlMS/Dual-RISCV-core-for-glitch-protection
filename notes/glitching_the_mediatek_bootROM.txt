@@ -1,0 +1,7 @@
+- There's A Hole In Your SoC: Glitching The MediaTek BootROM - 
+
+This is a 64-bit ARM Cortex-A chip, so quite complex. Glitching of this SoC shows that the BootROM is 
+suceptable to glitching, allowing an adversary to bypass signature verification of the preloader. 
+This circumvents all secure boot functionality and enables the execution of unsigned preloader images, 
+completely undermining the hardware root of trust.
+

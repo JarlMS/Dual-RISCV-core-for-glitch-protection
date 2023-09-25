@@ -55,3 +55,18 @@ pulse effects on superscalar microarchitectures – a
 secure software perspective. In ARES 2019, 2019.
 
 ---------------------------------------------------------------------
+
+'Theres A Hole In Your SoC: Glitching The MediaTek BootROM'
+https://research.nccgroup.com/2020/10/15/theres-a-hole-in-your-soc-glitching-the-mediatek-bootrom/
+
+'chip.fail'
+https://chip.fail/chipfail.pdf
+
+'nRF52 Debug Resurrection (APPROTECT Bypass) Part 1'
+https://limitedresults.com/2020/06/nrf52-debug-resurrection-approtect-bypass/
+
+'Qualcomm IPQ40xx: Breaking into QSEE using Fault Injection'
+https://raelize.com/blog/qualcomm-ipq40xx-breaking-into-qsee-using-fault-injection/
+
+'DEFCON 29 HW hacking village playlist'
+https://www.youtube.com/watch?v=P-6XXUgvqng&list=PL9fPq3eQfaaDweqlqnHR9z05q7bf_5TbH

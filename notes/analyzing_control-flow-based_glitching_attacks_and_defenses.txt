@@ -47,3 +47,33 @@ and then tuning the glitching parameters (e.g., clock waveform, voltage modifica
 
 "What is the likelyhood that random bit flips will result in a skipped control-flow instruction?"
 
+Repvious litterature indicates that bit flips induced by glitching tend to be unidirectional (i.e., either
+flipping 1's to 0's or 0's to 1's but not both). 
+
+Bitmasking with AND resulted in more successful glitches than doing it with an OR, meaning that flipping from 
+1's to 0's is more effective. This is bad because this is the most common form of glitching(voltage or clock).
+
+Good quote for the project: 
+
+"Similarly, adding invalid instructions in between valid instructions would likely thwart many glitching attempts. 
+However, the only way to test these hypotheses against physical glitches would be to fabricate 
+a microchip with a modified ISA, which is out of scope for this work."
+
+* Glitching Defenses 
+
+- GlitchResistor can be used with RISC-V - 
+
+This paper mostly just talks about how GlitchResistor works, but this is seemingly only on a software 
+level and thus not very important. 
+
+* Effectiveness of Defenses 
+
+This paper introduces some artificial weaknesses in its code like making veriables 'volatile' such that 
+they can be modified from different places without the compiler having a full overview. This would immitate 
+most closely how hardware works I think. 
+
+Volatile variables cannot be read twice, which means that if the value was glitched successfully during the 
+first load it would pass all checks. 
+
+Citations to look at: 
+[27] [84] [80]

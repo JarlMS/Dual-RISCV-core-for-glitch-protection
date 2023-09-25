@@ -1,0 +1,50 @@
+- An Introduction to Fault Injection (Part 1/3) -
+
+A fault can occur within a processor that results in a skipped instruction or corrupt memory transactions. 
+
+* Types of glitches 
+
+> Voltage : Momentarily dropping suppyl voltages during execution of specific operations
+> Clock : Altering clock timing to violate setup and hold time requirements of the hardware, such as 
+through the insertion of clock glitch pulses in between normally timed clock pulses. 
+> Electromagnetic : Generating a localized short-duration high-intensity electromagnetic pulse that induces 
+currents within the internal chip circuitry. 
+> Optical : Uses infrared laser, and usually requires chip decapsulation to expose the silicon die. 
+
+* Effects of glitching 
+
+Skipped or repeated CPU instructions, incorrect evaluation of CPU instructions, or corrupt read from memory 
+devices. 
+
+In general, single insrtuction skips are easily achievable, though skips of multiple instructions are harder 
+to induce and control. 
+
+* Timing Constraints 
+
+All forms of fault injection require precise timing to target specific operations of interest without having 
+an excessive amount of undesiarable side effects, such as causing an entire chip to reset. 
+
+* Characterization 
+
+When developing a reliable fault injection exploit, an attacker must first characterize the effects 
+of voltage and clock variation on the processor. 
+
+They must then find a security critical event that they wish to bypass via an accurately timed fault.
+
+When the target operation has been found, the attacker needs to find out when this operation is 
+executed by the chip. 
+
+* Hardware mitigations 
+
+> Fast-reacting voltage monitoring or Brown-out Detection circuitry 
+> Tunable Replica Circuits can be used to detect both voltage and clock glitches and can detect 
+very fast glitches 
+> Phase Locked Loops can be used to detect EMFI since these tend to 'break' a PLL out of its 'locked' state. 
+> Comparison of external clocks to a high frequency ring oscillator based internal reference clock can detect clock glitches.
+> Optical sensors and wire meshes embedded within the semiconductor package can sense tamper events such as decapsulation, 
+which may mitigate optical fault injection.
+> Shadow registers can improve fault resiliency through data redundancy.
+> Hardware-based pointer authentication can mitigate certain classes of faults that influence software's 
+control-flow.
+
+
