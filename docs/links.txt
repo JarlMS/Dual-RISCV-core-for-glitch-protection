@@ -31,6 +31,7 @@ T. Trouchkine, G. Bouffard, and J. Clediere. Fault
 Injection Characterization on modern CPUs –
 From the ISA to the Micro-Architecture. In WISTP
 2019, Paris, France, 2019.
+https://hal.science/hal-03138010/document
 
 J. Balasch, B. Gierlichs, and I. Verbauwhede. An
 in-depth and black-box characterization of the ef-
