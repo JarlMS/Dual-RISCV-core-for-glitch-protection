@@ -1,71 +1,103 @@
-@phdthesis{powerbook,
- author = {Chao-Hung Cheng, A.},
- note = {Adviser-Tyson, G. S. and Adviser-Mudge, T. N.},
- title = {Application-specific architecture framework for high-performance low-power embedded computing},
- year = {2006},
- isbn = {0-542-56871-3},
- order_no = {AAI3208438},
- publisher = {University of Michigan},
- address = {Ann Arbor, MI, USA},
- }
 
-@book{tclbook,
- author = {Welch, B.B. and Jones, K. and Hobbs, J.},
- title = {Practical Programming in Tcl \& Tk},
- year = {2003},
- isbn = {0130385603},
- publisher = {Prentice Hall Professional Technical Reference},
- }
-
-@Article{digfil,
-	author = {Keselbrener, L. and Keselbrener, M. and Akselrod, S.},
-	title = {Nonlinear high pass filter for R-wave detection in ECG signal},
-	journal = {Medical engineering \& physics},
-	year = {1997},
-	abstract = {A simple and easily implemented method for R-wave detection from ECG signals is presented. The method is based on the subtraction of a filtered version of the signal. The filter we use is a nonlinear median filter. The median filter is applied to the ECG signal. It results in a smoothed version of the signal, without any reminder of the R waves. This smoothed signal is then subtracted from the original signal and the resulting signal presents undistorted R-waves, without baseline drift. A simple threshold detection can then be performed on the filtered signal. Results are presented for simulated signals, with sinusoidal and step baseline drifts, as well as ECG complex shape change. The detection is accurate and the average error we obtained for 300s length signals was of the order of 10−8s, for RR intervals of 1s. Results are also presented for a real experimental signal with strong baseline drift, and the accuracy of the detection can be observed.},
-OPTkey = {},
-	volume = {19},
-	number = {5},
-	pages = {481-484},
-	month = {1 June},
-OPTnote = {},
-OPTannote = {}
+@misc{intro_to_FI,
+    author    = "Jeremy Boone",
+    title     = "An Introduction to Fault Injection (Part 1/3)",
+    year      = "2021",
+    url       = "https://research.nccgroup.com/2021/07/07/an-introduction-to-fault-injection-part-1-3/",
+    note      = "Accessed: Sep 25, 2023"
 }
 
-@Misc{convdef,
-OPTkey = {},
-author = {Weisstein, E.W.},
-title = {Convolution},
-howpublished = {From MathWorld--A Wolfram Web Resource},
-OPTmonth = {},
-OPTyear = {},
-note = {http://mathworld.wolfram.com/Convolution.html on April 26, 2009},
-OPTannote = {}
+@misc{hole_in_soc,
+    author    = "Jeremy Boone",
+    title     = "There’s A Hole In Your SoC: Glitching The MediaTek BootROM",
+    year      = "2020",
+    url       = "https://research.nccgroup.com/2020/10/15/theres-a-hole-in-your-soc-glitching-the-mediatek-bootrom/",
+    note      = "Accessed: Sep 25, 2023"
 }
 
-@inproceedings{hwswMem,
- author = {Danckaert, K. and Catthoor, K. and De Man, H.},
- title = {System level memory optimization for hardware-software co-design},
- booktitle = {CODES '97: Proceedings of the 5th International Workshop on Hardware/Software Co-Design},
- year = {1997},
- isbn = {},
- pages = {55},
- publisher = {IEEE Computer Society},
- address = {Washington, DC, USA},
- }
-
-@Manual{msp430f1611,
-title = {MSP430 Ultra-Low-Power Microcontrollers},
-OPTkey = {},
-OPTauthor = {},
-organization = {Texas Instruments},
-OPTaddress = {},
-OPTedition = {},
-OPTmonth = {},
-year = {2009},
-OPTnote = {},
-OPTannote = {}
+@misc{reenable_debug,
+    author    = "LimitedResults",
+    title     = "nRF52 Debug Resurrection (APPROTECT Bypass) Part 1",
+    year      = "2020",
+    url       = "https://limitedresults.com/2020/06/nrf52-debug-resurrection-approtect-bypass/",
+    note      = "Accessed: Sep 25, 2023"
 }
 
+@misc{qualcom,
+    author    = "Raelize",
+    title     = "Qualcomm IPQ40xx: Breaking into QSEE using Fault Injection",
+    year      = "2021",
+    url       = "https://raelize.com/blog/qualcomm-ipq40xx-breaking-into-qsee-using-fault-injection/",
+    note      = "Accessed: Sep 25, 2023"
+}
 
+@manual{cv32e40s_manual,
+    author    = "OpenHW Group",
+    title     = "OpenHW Group CV32E40S User Manual",
+    year      = "2020",
+    url       = "https://docs.openhwgroup.org/projects/cv32e40s-user-manual/en/latest/",
+    note      = "Accessed: Sep 25, 2023"
+}
 
+@misc{isa_exploit,
+    author  = "Zabrocki A, Matrosov A",
+    title   = "Glitching RISC-V chips: MTVEC corruption for hardening ISA",
+    year    = "2021",
+    url     = "https://riscv.org/news/2021/08/video-glitching-risc-v-chips-mtvec-corruption-for-hardening-isa-adam-zabrocki-and-alex-matrosov-def-con-29/",
+    note    = "Accessed: Sep 28, 2023"
+}
+
+@misc{mtvec_corruption,
+    author  = "Zabrocki A, Matrosov A",
+    title   = "Glitching RISC-V chips: MTVEC corruption for hardening ISA",
+    year    = "2021",
+    url     = "https://hal.science/hal-03175704/document",
+    note    = 
+}
+
+@article{emfi_injection,
+    author    = "Thomas Trouchkine and Sébanjila Kevin K Bukasa and Mathieu Escouteloup and Ronan Lashermes and Guillaume Bouffard",
+    title     = "Electromagnetic fault injection against a complex CPU, toward new micro-architectural fault models",
+    journal   = "Journal of Cryptographic Engineering",
+    year      = "2021",
+    volume    = "11",
+    number    = "4",
+    pages     = "353--367",
+    doi       = "10.1007/s13389-021-00259-6",
+    note      = "hal-03175704"
+}
+
+@inproceedings{trouchkine2019fault,
+    author = {T. Trouchkine and G. Bouffard and J. Clediere},
+    title = {Fault Injection Characterization on modern CPUs – From the ISA to the Micro-Architecture},
+    booktitle = {WISTP 2019},
+    year = {2019},
+    address = {Paris, France}
+}
+
+@article{source2,
+    author = {S. Nashimoto1, D. Suzuki, R. Ueno and N Homma},
+    title = {Bypassing Isolated Execution on RISC-V with
+Fault Injection},
+    url = {https://eprint.iacr.org/2020/1193.pdf},
+    year = {2020}
+}
+
+@article{chipWhisperer,
+    author = "C. O'Flynn and Z. D. Chen",
+    title = "Chipwhisperer: An open-source platform for hardware embedded security research",
+    journal = "International Workshop on Constructive Side-Channel Analysis and Secure Design",
+    year = "2014",
+    number = "Springer",
+    pages = "243--260"
+}
+
+@article{glitchresistor,
+    author = "C. Spensky, A. Machiry, N. Burow, H. Okhravi, R. Housley, Z. Gu, H. Jamjoom, C. Kruegel, G. Vigna",
+    title = "Glitching Demystified: Analyzing
+Control-flow-based Glitching Attacks and Defenses",
+    journal = "51st Annual IEEE/IFIP International Conference on Dependable Systems and Networks (DSN)",
+    year = "2021", 
+    url = "https://sites.cs.ucsb.edu/~vigna/publications/2021_DSN_Glitching.pdf",
+    doi = "0.1109/DSN48987.2021.00051"
+}

@@ -1,13 +1,28 @@
 \chapter{Problem Definition}
 \label{chap2}
 
-\section{What are glitch attacks / fault injection}
-\label{sec:glitch}
+Modern integrated systems and other programmable electronics very often have several safety-measures built in to avoid unintended behaviour, whether it be accidental or from an external source. These safety measures are often only handled on the software or firmware level, but for a long time hardware induced faults, glitches, have been a concern that has gained less focus even though they are capable of bypassing software security measures given the right attacker. Interestingly, despite the relevance of glitch protection, it only started gaining attention after practical glitch attacks first made their appearance in 2002 through an optical fault attack\cite{trouchkine2019fault}. In the world of computer architecture, many aspects remain closely guarded secrets. This secrecy extends to preventive measures against such attacks, making them often inaccessible to the public. This paper aims to supply the public with a good understanding of a new way to do glitch protection, on the open source RISC-V instruction set architecture (ISA). 
 
-\subsection{Power glitching}
+The RISC-V architecture has gained a lot of traction in both academia and industry due to its modular design and adaptability\cite{source2}. However, due to the nature of open source resources, RISC-V systems are often more susceptible to glitch attacks as hackers can research the ISA in depth to find errors\cite{isa_exploit}\cite{trouchkine2019fault}. In addition to this, the actual chips made with the RISC-V architecture will still be susceptible to more common attacks like electromagnetic fault injection (EMFI) or voltage- and clock-glitching. 
 
-\subsection{Clock glitching}
+The openHW group has developed an instruction set extension (ISE) 'Xsecure' which contains several extra features aimed at stopping side-channel attacks as well as glitches. To prevent glitches the extensions introduces Error Correcting Code (ECC) for the registers and hardening of both the Program Counter (PC) and the Control and Status Registers (CSRs). These additions can slow down the performance of the CPU , increase the power usage and increase the over all complexity of the core. This paper researches the possibility of using dual RISC-V cores and comparing the entire state of both cores to provide redundancy and thereby glitch protection, without significantly impacting the power, performance and area (PPA) in a negative way. 
 
-\subsection{Electromagnetic fault injection}
+The current way of doing glitch protection that is used by 'Xsecure' also allows the user to sometimes get a specific error message saying where and what things went wrong. This feature is however not able to do this for all major alerts or errors. The proposed dual core setup might be able to give detailed errors every time as it is possible to know exactly which area of the cores that are not coinciding. 
 
-\subsection{Invasive / non-invasive glitching}
+Introducing a dual-core setup offers potential glitch protection via redundancy. However, the feasibility, overheads, synchronization mechanisms, and actual effectiveness of such a strategy needs thorough examination. In addition, the strategies for detection of a glitch, switch-over mechanisms, and potential recovery strategies need to be explored. An exploration of where and how glitches typically affect RISC-V cores is crucial. From other literature it is apparent that most glitches are induced outside of the CPU pipeline itself, and instead on larger area intensive components like data busses or register files/caches\cite{emfi_injection}. Because it is not feasible to validate the state of caches and register files at all times it is necessary to explore whether a dual core setup will be able to stop or register these types of glitches also.  
+%4. Scope of the Problem:
+
+%System Vulnerabilities: An in-depth understanding of where and how glitches typically affect RISC-V cores is crucial. This entails both functional and performance impacts.
+%Dual Core Strategy: Introducing a dual-core setup offers potential glitch protection via redundancy. However, the feasibility, overheads, synchronization mechanisms, and actual effectiveness of such a strategy need thorough examination.
+%Protection Mechanisms: Beyond the mere introduction of dual cores, the strategies for detection of a glitch, switch-over mechanisms, and potential recovery strategies need to be explored.
+%5. Objectives:
+
+%The primary objectives for this project include:
+
+%Conducting a vulnerability analysis of single-core RISC-V systems concerning glitches.
+%Designing a dual-core RISC-V system prototype aiming for glitch protection.
+%Evaluating the effectiveness of the dual-core setup in real-world scenarios and benchmark tests.
+%Proposing additional countermeasures or strategies, if needed, to enhance glitch protection further.
+%6. Significance:
+%By addressing the problem defined, this project aims not only to enhance the reliability of RISC-V based systems but also to contribute to the broader realm of glitch protection in electronics. With the ever-increasing adoption of RISC-V in various applications, ensuring its robustness against glitches will be paramount for many industries.
+
