@@ -1,5 +1,10 @@
 \chapter{Abstract}
-Abstract of the thesis.
+This project examines the viability of using a dual-core lock-step mechanism for glitch protection in a RISC-V core. As hardware-based glitch attacks emerge as a prevalent method of exploiting products, researching effective countermeasures becomes paramount. Several solutions have been implemented in the past; however, these often increase both power consumption and design complexity, while potentially compromising performance.
+
+To address this, I propose the use of a dual-core lock-step mechanism. This approach offers glitch protection comparable to prior designs, but with significantly reduced complexity. Furthermore, it promises enhanced performance and power efficiency at the cost of increased area. My research and simulations suggest that this method of glitch protection is as secure as earlier techniques, yet far simpler to implement. The improved performance and reduced power consumption indicate that RISC-V core developers might benefit from considering this approach for their products. Future research should delve into the fabrication of an actual chip with this proposed architecture, evaluating its resilience against glitch attacks—specifically, Electromagnetic fault injection, as well as voltage and clock glitching—in real-world scenarios. 
+
+\textbf{Proposed one-liner: }
+This project tests the viability of using a dual core lock-step mechanism in place of several complex security measures such as PC- and CSR-hardening for the purpose of glitch protection in a RISC-V core, showing that sacrificing area might yield great improvements in power usage and performance while ensuring secure execution.
 
 \chapter{Preface}
 I would like to thank....
