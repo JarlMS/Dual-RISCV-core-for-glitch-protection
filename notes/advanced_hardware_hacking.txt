@@ -1,0 +1,17 @@
+- BlueHat 2023: Advanced Hardware Hacking with Sick Codes - 
+
+This video shows various methods of doing hardware attacks
+
+Procedural vulnerability discovery
+
+Essential item: Something that reads serial 
+
+A lot of chips are reused (e.g., A usb stock and a SSD before 2010 will have the same chips inside)- You can use 
+the same attack vector for a lot of different hardware 
+
+Often times hacking the bootloader is the best way to go. 
+
+Things you can do if you have physical access to a chip: 
+    * Modify serial number 
+    * Bypass some later software check 
+    * Maybe boot from other media 
