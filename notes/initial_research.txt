@@ -41,3 +41,9 @@ No synthesis scrips are provided, but ecamples of synthesis constrains can be fo
 
 "The CV32E40S has security features that are logically redundant and likely to be optimised away in synthesis. 
 Special care is therefore needed in synthesis scripts to ensure these features are preserved in the implemented netlist."
+
+
+- Questions - 
+
+How many LUTs are needed for one core? Will I be able to simulate EMFI attacks on an FPGA that does not cost 
+too much? 

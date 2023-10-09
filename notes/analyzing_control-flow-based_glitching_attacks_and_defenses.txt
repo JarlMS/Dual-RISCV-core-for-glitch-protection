@@ -1,0 +1,79 @@
+- Glitching Demystified: Analyzing Control-flow-based Glitching Attacks and Defenses - 
+
+'ChipWhisperer' - microcontroller using open-source glitching hardware. 
+'GlitchResistor' - open-source, software-based glitching defense tool that can automatically insert glitching defenses into any 
+existing source code, in an architecture independent way. 
+
+Hardware-induced faults, glitches, are capable of corrupting the system state by modifying both instructions and data, and can be 
+levaraged to undermine software-based security mechanisms, even if the software security mechanisms are implemented with 
+no semantic vulnerabilities. 
+
+Malicius glitches have been used to compromise:
+    * Secure smart cards 
+    * Security-hardened gaming consoles
+    * Enterprise Internet Protocol (IP) phones
+    * Used to bypass Intel's Software Guard Extension (SGX) protections 
+    * Used to bypass ARM's Trust Zone 
+    * Extract hardware-embedded cryptographic keys. 
+
+Glitching attacks involve introducing a physical disturbance to a system that will ultimately corrupt the instructions 
+being executed or the data being manipulated. This corruption can be achieved by changing the supply voltage, optical probing with
+lasers, disrupting the clock or introducing an electromagnetic pulse (EMP). 
+
+To leverage these fautls in a successful way, the fault must be injected at a specific time in the execution pipeline. 
+
+* Background 
+
+Glitching can be done either invasively (e.g., decapsuling the chip) or non-invasively (e.g., through electromagnetic interference).
+Non-invasive attacks can go undetected, and often allows the attacker to repeat the attack indefinetly. 
+
+Voltage glitching and clock glithcing are the most common. 
+
+To inject a clock glitch, an attacker must simultaneously configure both the width and location in the clock cycle to inject a glitch,
+as well as the offset from an observable trigger. Similar paramters must be tuned for both voltage and EM glitches (e.g., the 
+duration and voltage of the attack or the location and intensity of the EMP). 
+
+Glitching could in theory be used to skip every defensive (software) instruction and even transform benign instructions 
+into malicious ones. Nevertheless, software based techniques are cheaper to implement and can be effective. 
+
+* Threat Model 
+
+A system must necessarily have some externally observable trigger to create a reliable glitch (e.g., a voltage drop, an 
+observable output, or a request for user input). In various high profile glitching attacks against gaming systems, the 
+exploits were crafted by first identifying the approximate area that appeared to be vulnerable (e.g., right before an error code)
+and then tuning the glitching parameters (e.g., clock waveform, voltage modification, or EM power and position). 
+
+* Glitching Effects in Emulation
+
+"What is the likelyhood that random bit flips will result in a skipped control-flow instruction?"
+
+Repvious litterature indicates that bit flips induced by glitching tend to be unidirectional (i.e., either
+flipping 1's to 0's or 0's to 1's but not both). 
+
+Bitmasking with AND resulted in more successful glitches than doing it with an OR, meaning that flipping from 
+1's to 0's is more effective. This is bad because this is the most common form of glitching(voltage or clock).
+
+Good quote for the project: 
+
+"Similarly, adding invalid instructions in between valid instructions would likely thwart many glitching attempts. 
+However, the only way to test these hypotheses against physical glitches would be to fabricate 
+a microchip with a modified ISA, which is out of scope for this work."
+
+* Glitching Defenses 
+
+- GlitchResistor can be used with RISC-V - 
+
+This paper mostly just talks about how GlitchResistor works, but this is seemingly only on a software 
+level and thus not very important. 
+
+* Effectiveness of Defenses 
+
+This paper introduces some artificial weaknesses in its code like making veriables 'volatile' such that 
+they can be modified from different places without the compiler having a full overview. This would immitate 
+most closely how hardware works I think. 
+
+Volatile variables cannot be read twice, which means that if the value was glitched successfully during the 
+first load it would pass all checks. 
+
+Citations to look at: 
+[27] [84] [80]

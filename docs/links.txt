@@ -26,7 +26,48 @@ https://research.nccgroup.com/2021/07/07/an-introduction-to-fault-injection-part
 
 ---------------------------------------------------------------------
 
+------------------ Should read --------------------------------------
 T. Trouchkine, G. Bouffard, and J. Clediere. Fault
 Injection Characterization on modern CPUs –
 From the ISA to the Micro-Architecture. In WISTP
 2019, Paris, France, 2019.
+https://hal.science/hal-03138010/document
+
+J. Balasch, B. Gierlichs, and I. Verbauwhede. An
+in-depth and black-box characterization of the ef-
+fects of clock glitches on 8-bit mcus. In 2011 Work-
+shop on Fault Diagnosis and Tolerance in Cryptog-
+raphy, FDTC 2011, Tokyo, Japan, September 29,
+2011, pages 105–114, 2011.
+
+H. Bar-El, H. Choukri, D. Naccache, M. Tunstall,
+and C. Whelan. The sorcerer’s apprentice guide to
+fault attacks. Proc. IEEE, 94(2):370–382, 2006.
+
+M. Dumont, M. Lisart, and P. Maurine. Electro-
+magnetic fault injection : How faults occur. In
+2019 Workshop on Fault Diagnosis and Tolerance
+in Cryptography, FDTC 2019, Atlanta, GA, USA,
+August 24, 2019, pages 9–16. IEEE, 2019.
+
+J. Proy, K. Heydemann, F. Majéric, A. Berzati, and
+A. Cohen. A first isa-level characterization of em
+pulse effects on superscalar microarchitectures – a
+secure software perspective. In ARES 2019, 2019.
+
+---------------------------------------------------------------------
+
+'Theres A Hole In Your SoC: Glitching The MediaTek BootROM'
+https://research.nccgroup.com/2020/10/15/theres-a-hole-in-your-soc-glitching-the-mediatek-bootrom/
+
+'chip.fail'
+https://chip.fail/chipfail.pdf
+
+'nRF52 Debug Resurrection (APPROTECT Bypass) Part 1'
+https://limitedresults.com/2020/06/nrf52-debug-resurrection-approtect-bypass/
+
+'Qualcomm IPQ40xx: Breaking into QSEE using Fault Injection'
+https://raelize.com/blog/qualcomm-ipq40xx-breaking-into-qsee-using-fault-injection/
+
+'DEFCON 29 HW hacking village playlist'
+https://www.youtube.com/watch?v=P-6XXUgvqng&list=PL9fPq3eQfaaDweqlqnHR9z05q7bf_5TbH

@@ -58,4 +58,34 @@ a 'return-oriented programming' (ROP) attack, among others.
 * Targeting the Memory Management Unit
 
 This fault is based on corrupting the virtual-to-physical memory mapping, albeit 'in an uncontrolled manner'. The faults presented in the paper 'always' crash the test program. 
-  
+
+A fault in the MMU can lead to:
+    * Pages being incorrectly mapped to 0x0
+    * Pages being shifted such that the virtual address does not correspond to the physical one. 
+
+If we invalidate the 'Translation Lookaside Buffer' (TLB) after a fault, nothing changes: Tha mappings are still modified. 
+The fault on the MMU shifts the page tables in memoy and inserts errors on it. The tables are still present, with small 
+modifications, but at another base address. 
+
+This fault shows that the cornerstone of the key security feature in any CPU, namely memory isolation, does not withstand 
+fault injection. 
+
+* Shifting data chunks in L2 
+
+Using the same injection parameters as when targeting the MMU, we can achieve a new reproducible faulted behaviour where
+the chip is trapped in an infinite loop. 
+
+A fault in the L2 cache can impact either the instructions or the data giving more power to the attacker. Nevertheless, 
+they do not control in what way the memory will be modified. 
+
+* Defence mechanisms 
+
+The paper has shown that the memory hierarchy and the MMU can easily be corrupted. However, other micro-architectual elements might 
+also be confused by the injected fault. 
+
+To ensure integrity and authenticity in cache memories, two strategies can be deployed. One way of doing this is with 
+error correcting codes (ECCs). They are efficient at detecting a limited number of random faults: this solution is 
+relatively low cost but assumes that the attacker has no control over the fault value and cannot inject a lot of faults. In the 
+other case the attacker would be able to inject random faults until one passes the ECC scheme. 
+
+Only considering fault injection though EMFI, this method is good enough as the attacker lacks control of the fault injection. 

@@ -1,0 +1,13 @@
+- Fault Injection Characterization on modern CPUs - From the ISA to the Micro-Architecture - 
+
+The underlying fault effect is usually unknown on modern cpus because of their complexity
+
+Practical fault attacks emerged in 2002 with an optical fault attack. 
+
+Attacks aim at breaking the implemented algorithm and therefore focus on obtaining a precise fault. 
+
+In 2015, 2016 several software countermeasures have een shown to be ineffective against certain class of fault attacks.
+
+"Even if their specification is public, another issue with CPUs is that their imlementation is not available. Moreover,
+most of the time, debug tools for these platforms are either only partially open or not available. Therefore the only way to
+retrieve information is through the ISA layer."

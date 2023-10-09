@@ -5,8 +5,8 @@
 
 \usepackage{hyperref}
 \usepackage[T1]{fontenc}
-\usepackage[latin1]{inputenc}
-\usepackage{babel}
+%\usepackage[latin1]{inputenc}
+\usepackage[english]{babel}
 \usepackage{appendix}
 \usepackage{textcomp}
 \usepackage[binary,squaren]{SIunits}
@@ -63,17 +63,17 @@ alsodigit={.},
 
 \frontmatter
 
-\title{THE VERY LONG TITLE OF YOUR THESIS \\ \\ IS WRITTEN HERE testing from machine}
+\title{Dual RISC-V cores for glitch protection}
 
-\author{ Your name }
-\degreetype{MSc in ..., Electronics}
+\author{ Jarl Magnus Sæbø }
+\degreetype{MSc in Electrical systems design}
 
 \maketitle
 %\includepdf{titlepage}
 %\includepdf{problemdes}
 % Insert page number
 \setcounter{page}{5}
-\input{abstract/abstract}
+\input{1abstract/abstract}
 \cleardoublepage
 
 % Remove parskip for toc
@@ -101,9 +101,12 @@ alsodigit={.},
 
 \mainmatter
 
-\input{chapter1/chap1}
-\input{chapter2/chap2}
-%\input{chapter3/chap3}
+\input{thesis/2introduction/chap1}
+\input{thesis/3problem/chap2}
+\input{thesis/4state/chap3}
+\input{thesis/5experimental/chap4}
+\input{thesis/6results/chap5}
+\input{thesis/7conclusion/chap6}
 
 % Must be set after each chapter exept the first one in appendix.
 \cleardoublepage
