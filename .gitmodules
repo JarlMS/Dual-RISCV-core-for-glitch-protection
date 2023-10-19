@@ -1,0 +1,3 @@
+[submodule "cv32e40s_dual_core"]
+	path = cv32e40s_dual_core
+	url = git@github.com:JarlMS/cv32e40s_dual_core.git
