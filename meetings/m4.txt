@@ -1,0 +1,15 @@
+Questions:
+
+Kan jeg bruke cv32e40p som benchmark for å sammenligne PPA med cv32e40s?
+Kan clock gating filen bare byttes ut med en fil som forwarder klokken rett gjennom? 
+
+Ting å gjøre:
+    Modifiser pkg fil for å kunne skru av og på Xsecure ting. 
+        * Start med å skru av pc-hardening 
+    Forward clock direkte dersom jeg ikke finner en clock-gate primitiv
+    Se etter primitiver for å forandre register initialisering
+
+Dagens TODO: 
+
+Rydd opp i mappestruktur 
+Modifiser koden for å gjøre det mulig å skru av og på Xsecure features
