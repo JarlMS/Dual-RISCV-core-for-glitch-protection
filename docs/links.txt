@@ -1,5 +1,8 @@
+cv32e40s Github:
+https://github.com/openhwgroup/cv32e40s
+
 cv32e40s Documentation:
-https://docs.openhwgroup.org/projects/cv32e40s-user-manual/en/latest/
+https://docs.openhwgroup.org/projects/cv32e40s-user-manual/en/latest/xsecure.html
 
 'Side-Channel Attacks on RISC-V Processors: Current Progress, Challenges, and Opportunities'
 https://arxiv.org/abs/2106.08877
