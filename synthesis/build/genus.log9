@@ -1,0 +1,439 @@
+Cadence Genus(TM) Synthesis Solution.
+Copyright 2023 Cadence Design Systems, Inc. All rights reserved worldwide.
+Cadence and the Cadence logo are registered trademarks and Genus is a trademark
+of Cadence Design Systems, Inc. in the United States and other countries.
+
+[13:18:55.023483] Configured Lic search path (21.01-s002): 1700@europa.tele.ntnu.no:5280@europa.tele.ntnu.no:1717@europa.tele.ntnu.no
+
+Version: 21.18-s082_1, built Tue Jul 18 04:08:41 PDT 2023
+Options: -files ../tcl/synth.tcl 
+Date:    Thu Oct 19 13:18:55 2023
+Host:    jupiter.tele.ntnu.no (x86_64 w/Linux 3.10.0-1160.99.1.el7.x86_64) (4cores*16cpus*1physical cpu*Intel(R) Xeon(R) CPU X5560 @ 2.80GHz 8192KB) (24508716KB)
+PID:     23191
+OS:      CentOS Linux release 7.9.2009 (Core)
+
+
+[13:18:56.076904] Periodic Lic check successful
+[13:18:56.076922] Feature usage summary:
+[13:18:56.076922] Genus_Synthesis
+Checking out license: Genus_Synthesis
+
+
+***********************************************************************************************************
+***********************************************************************************************************
+
+
+
+Loading tool scripts...
+Finished loading tool scripts (25 seconds elapsed).
+
+#@ Processing -files option
+@genus 1> source ../tcl/synth.tcl
+#@ Begin verbose source ../tcl/synth.tcl
+@file(synth.tcl) 1: source "../tcl/settings.tcl"
+Sourcing '../tcl/settings.tcl' (Thu Oct 19 13:19:21 CEST 2023)...
+#@ Begin verbose source ../tcl/settings.tcl
+@file(settings.tcl) 1: set DESIGN_NAME "cv32e40s"
+@file(settings.tcl) 2: set DESIGN_TOP_MODULE "cv32e40s_core"
+@file(settings.tcl) 5: set TIMING_CLOCK_PERIOD 5405
+@file(settings.tcl) 6: set TIMING_INPUT_DELAY 0.2
+@file(settings.tcl) 7: set TIMING_OUTPUT_DELAY 15
+@file(settings.tcl) 8: set LOAD 0.1
+@file(settings.tcl) 10: set PATH_LIB_BASE "/eda/kits/cadence/45nm/gsclib045_all_v4.4"
+@file(settings.tcl) 11: set PATH_TECHNOKIT "$PATH_LIB_BASE/gsclib045_tech/"
+@file(settings.tcl) 13: set LIB_FILES {}
+@file(settings.tcl) 14: lappend LIB_FILES ${PATH_LIB_BASE}/gsclib045/timing/fast_vdd1v0_basicCells.lib
+@file(settings.tcl) 15: lappend LIB_FILES ${PATH_LIB_BASE}/gsclib045/timing/fast_vdd1v0_extvdd1v0.lib
+@file(settings.tcl) 16: lappend LIB_FILES ${PATH_LIB_BASE}/gsclib045/timing/fast_vdd1v0_extvdd1v2.lib
+@file(settings.tcl) 17: lappend LIB_FILES ${PATH_LIB_BASE}/gsclib045/timing/fast_vdd1v0_multibitsDFF.lib
+@file(settings.tcl) 18: lappend LIB_FILES ${PATH_LIB_BASE}/gsclib045/timing/fast_vdd1v2_basicCells.lib
+@file(settings.tcl) 19: lappend LIB_FILES ${PATH_LIB_BASE}/gsclib045/timing/fast_vdd1v2_extvdd1v0.lib
+@file(settings.tcl) 20: lappend LIB_FILES ${PATH_LIB_BASE}/gsclib045/timing/fast_vdd1v2_extvdd1v2.lib
+@file(settings.tcl) 21: lappend LIB_FILES ${PATH_LIB_BASE}/gsclib045/timing/fast_vdd1v2_multibitsDFF.lib
+@file(settings.tcl) 23: lappend LIB_FILES ${PATH_LIB_BASE}/gsclib045/timing/slow_vdd1v0_basicCells.lib
+@file(settings.tcl) 24: lappend LIB_FILES ${PATH_LIB_BASE}/gsclib045/timing/slow_vdd1v0_extvdd1v0.lib
+@file(settings.tcl) 25: lappend LIB_FILES ${PATH_LIB_BASE}/gsclib045/timing/slow_vdd1v0_extvdd1v2.lib
+@file(settings.tcl) 26: lappend LIB_FILES ${PATH_LIB_BASE}/gsclib045/timing/slow_vdd1v0_multibitsDFF.lib
+@file(settings.tcl) 27: lappend LIB_FILES ${PATH_LIB_BASE}/gsclib045/timing/slow_vdd1v2_basicCells.lib
+@file(settings.tcl) 28: lappend LIB_FILES ${PATH_LIB_BASE}/gsclib045/timing/slow_vdd1v2_extvdd1v0.lib
+@file(settings.tcl) 29: lappend LIB_FILES ${PATH_LIB_BASE}/gsclib045/timing/slow_vdd1v2_extvdd1v2.lib
+@file(settings.tcl) 30: lappend LIB_FILES ${PATH_LIB_BASE}/gsclib045/timing/slow_vdd1v2_multibitsDFF.lib
+@file(settings.tcl) 32: set slow_libs {}
+@file(settings.tcl) 33: lappend slow_libs ${PATH_LIB_BASE}/gsclib045_lvt/timingfast_vdd1v0_basicCells_lvt.lib
+@file(settings.tcl) 34: lappend slow_libs ${PATH_LIB_BASE}/gsclib045_lvt/timingfast_vdd1v2_basicCells_lvt.lib
+@file(settings.tcl) 35: lappend slow_libs ${PATH_LIB_BASE}/gsclib045_lvt/timingslow_vdd1v0_basicCells_lvt.lib
+@file(settings.tcl) 36: lappend slow_libs ${PATH_LIB_BASE}/gsclib045_lvt/timingslow_vdd1v2_basicCells_lvt.lib
+@file(settings.tcl) 38: set fast_libs {}
+@file(settings.tcl) 39: lappend fast_libs ${PATH_LIB_BASE}/gsclib045_hvt/timing/fast_vdd1v0_basicCells_hvt.lib
+@file(settings.tcl) 40: lappend fast_libs ${PATH_LIB_BASE}/gsclib045_hvt/timing/fast_vdd1v2_basicCells_hvt.lib
+@file(settings.tcl) 41: lappend fast_libs ${PATH_LIB_BASE}/gsclib045_hvt/timing/slow_vdd1v0_basicCells_hvt.lib
+@file(settings.tcl) 42: lappend fast_libs ${PATH_LIB_BASE}/gsclib045_hvt/timing/slow_vdd1v2_basicCells_hvt.lib
+@file(settings.tcl) 44: set LEF_FILES {}
+@file(settings.tcl) 45: lappend LEF_FILES $PATH_TECHNOKIT/lef/gsclib045_tech.lef
+@file(settings.tcl) 46: lappend LEF_FILES $PATH_LIB_BASE/gsclib045/lef/gsclib045_macro.lef
+@file(settings.tcl) 47: lappend LEF_FILES $PATH_LIB_BASE/gsclib045/lef/gsclib045_multibitsDFF.lef
+@file(settings.tcl) 48: lappend LEF_FILES $PATH_LIB_BASE/gsclib045/lef/gsclib045_tech.lef
+@file(settings.tcl) 49: lappend LEF_FILES $PATH_LIB_BASE/gsclib045_backbias/lef/gsclib045_backbias_macro.lef
+@file(settings.tcl) 50: lappend LEF_FILES $PATH_LIB_BASE/gsclib045_hvt/lef/gsclib045_hvt_macro.lef
+@file(settings.tcl) 51: lappend LEF_FILES $PATH_LIB_BASE/gsclib045_lvt/lef/gsclib045_lvt_macro.lef
+@file(settings.tcl) 53: set QRC_FILES {}
+@file(settings.tcl) 54: lappend QRC_FILES $PATH_TECHNOKIT/qrc/qx/gpdk045.tch
+#@ End verbose source ../tcl/settings.tcl
+@file(synth.tcl) 3: set TIMING_CLOCK_PORT "clk"
+@file(synth.tcl) 6: set_db / .library $LIB_FILES
+
+Threads Configured:8
+
+Reading library /eda/kits/cadence/45nm/gsclib045_all_v4.4/gsclib045/timing/fast_vdd1v0_multibitsDFF.lib
+Reading library /eda/kits/cadence/45nm/gsclib045_all_v4.4/gsclib045/timing/fast_vdd1v2_multibitsDFF.lib
+Reading library /eda/kits/cadence/45nm/gsclib045_all_v4.4/gsclib045/timing/slow_vdd1v0_multibitsDFF.lib
+Reading library /eda/kits/cadence/45nm/gsclib045_all_v4.4/gsclib045/timing/slow_vdd1v2_multibitsDFF.lib
+  Message Summary for Library all 16 libraries:
+  *********************************************
+  Missing a function attribute in the output pin definition. [LBR-518]: 196
+  Appending library. [LBR-3]: 4
+  *********************************************
+ 
+Warning : Libraries have inconsistent nominal operating conditions. In the Liberty library, there are attributes called nom_voltage, nom_process and nom_temperature. Genus reports the message, if the respective values of the 2 given .libs differ. [LBR-38]
+        : The libraries are 'fast_vdd1v0' and 'fast_vdd1v2'.
+        : This is a common source of delay calculation confusion and should be avoided.
+Warning : Libraries have inconsistent nominal operating conditions. In the Liberty library, there are attributes called nom_voltage, nom_process and nom_temperature. Genus reports the message, if the respective values of the 2 given .libs differ. [LBR-38]
+        : The libraries are 'fast_vdd1v0' and 'fast_vdd1v2_extvdd1v0'.
+Warning : Libraries have inconsistent nominal operating conditions. In the Liberty library, there are attributes called nom_voltage, nom_process and nom_temperature. Genus reports the message, if the respective values of the 2 given .libs differ. [LBR-38]
+        : The libraries are 'fast_vdd1v0' and 'fast_vdd1v2_extvdd1v2'.
+Warning : Libraries have inconsistent nominal operating conditions. In the Liberty library, there are attributes called nom_voltage, nom_process and nom_temperature. Genus reports the message, if the respective values of the 2 given .libs differ. [LBR-38]
+        : The libraries are 'fast_vdd1v0' and 'fast_vdd1v2'.
+Warning : Libraries have inconsistent nominal operating conditions. In the Liberty library, there are attributes called nom_voltage, nom_process and nom_temperature. Genus reports the message, if the respective values of the 2 given .libs differ. [LBR-38]
+        : The libraries are 'fast_vdd1v0' and 'slow_vdd1v0'.
+Warning : Libraries have inconsistent nominal operating conditions. In the Liberty library, there are attributes called nom_voltage, nom_process and nom_temperature. Genus reports the message, if the respective values of the 2 given .libs differ. [LBR-38]
+        : The libraries are 'fast_vdd1v0' and 'slow_vdd1v0_extvdd1v0'.
+Warning : Libraries have inconsistent nominal operating conditions. In the Liberty library, there are attributes called nom_voltage, nom_process and nom_temperature. Genus reports the message, if the respective values of the 2 given .libs differ. [LBR-38]
+        : The libraries are 'fast_vdd1v0' and 'slow_vdd1v0_extvdd1v2'.
+Warning : Libraries have inconsistent nominal operating conditions. In the Liberty library, there are attributes called nom_voltage, nom_process and nom_temperature. Genus reports the message, if the respective values of the 2 given .libs differ. [LBR-38]
+        : The libraries are 'fast_vdd1v0' and 'slow_vdd1v0'.
+Warning : Libraries have inconsistent nominal operating conditions. In the Liberty library, there are attributes called nom_voltage, nom_process and nom_temperature. Genus reports the message, if the respective values of the 2 given .libs differ. [LBR-38]
+        : The libraries are 'fast_vdd1v0' and 'slow_vdd1v2'.
+Warning : Libraries have inconsistent nominal operating conditions. In the Liberty library, there are attributes called nom_voltage, nom_process and nom_temperature. Genus reports the message, if the respective values of the 2 given .libs differ. [LBR-38]
+        : The libraries are 'fast_vdd1v0' and 'slow_vdd1v2_extvdd1v0'.
+Warning : Libraries have inconsistent nominal operating conditions. In the Liberty library, there are attributes called nom_voltage, nom_process and nom_temperature. Genus reports the message, if the respective values of the 2 given .libs differ. [LBR-38]
+        : The libraries are 'fast_vdd1v0' and 'slow_vdd1v2_extvdd1v2'.
+Warning : Libraries have inconsistent nominal operating conditions. In the Liberty library, there are attributes called nom_voltage, nom_process and nom_temperature. Genus reports the message, if the respective values of the 2 given .libs differ. [LBR-38]
+        : The libraries are 'fast_vdd1v0' and 'slow_vdd1v2'.
+Info    : Created nominal operating condition. [LBR-412]
+        : Operating condition '_nominal_' was created for the PVT values (1.000000, 1.100000, 0.000000) in library 'fast_vdd1v0_multibitsDFF.lib'.
+        : The nominal operating condition is represented, either by the nominal PVT values specified in the library source (via nom_process,nom_voltage and nom_temperature respectively), or by the default PVT values (1.0,1.0,1.0).
+Warning : Ignoring unsupported lu_table_template. [LBR-403]
+        : Ignoring lu_table_template index type (input_voltage).
+        : LBR-403 is issued when an unsupported lu_table_template is encountered by GENUS.
+Info    : Created nominal operating condition. [LBR-412]
+        : Operating condition '_nominal_' was created for the PVT values (1.000000, 1.100000, 0.000000) in library 'fast_vdd1v0_extvdd1v0.lib'.
+Info    : Created nominal operating condition. [LBR-412]
+        : Operating condition '_nominal_' was created for the PVT values (1.000000, 1.100000, 0.000000) in library 'fast_vdd1v0_extvdd1v2.lib'.
+Info    : Created nominal operating condition. [LBR-412]
+        : Operating condition '_nominal_' was created for the PVT values (1.000000, 1.320000, 0.000000) in library 'fast_vdd1v2_multibitsDFF.lib'.
+Info    : Created nominal operating condition. [LBR-412]
+        : Operating condition '_nominal_' was created for the PVT values (1.000000, 1.320000, 0.000000) in library 'fast_vdd1v2_extvdd1v0.lib'.
+Warning : Ignoring unsupported lu_table_template. [LBR-403]
+        : Ignoring lu_table_template index type (input_voltage).
+Info    : Created nominal operating condition. [LBR-412]
+        : Operating condition '_nominal_' was created for the PVT values (1.000000, 1.320000, 0.000000) in library 'fast_vdd1v2_extvdd1v2.lib'.
+Info    : Created nominal operating condition. [LBR-412]
+        : Operating condition '_nominal_' was created for the PVT values (1.000000, 0.900000, 125.000000) in library 'slow_vdd1v0_multibitsDFF.lib'.
+Warning : Ignoring unsupported lu_table_template. [LBR-403]
+        : Ignoring lu_table_template index type (input_voltage).
+Info    : Created nominal operating condition. [LBR-412]
+        : Operating condition '_nominal_' was created for the PVT values (1.000000, 0.900000, 125.000000) in library 'slow_vdd1v0_extvdd1v0.lib'.
+Info    : Created nominal operating condition. [LBR-412]
+        : Operating condition '_nominal_' was created for the PVT values (1.000000, 0.900000, 125.000000) in library 'slow_vdd1v0_extvdd1v2.lib'.
+Info    : Created nominal operating condition. [LBR-412]
+        : Operating condition '_nominal_' was created for the PVT values (1.000000, 1.080000, 125.000000) in library 'slow_vdd1v2_multibitsDFF.lib'.
+Info    : Created nominal operating condition. [LBR-412]
+        : Operating condition '_nominal_' was created for the PVT values (1.000000, 1.080000, 125.000000) in library 'slow_vdd1v2_extvdd1v0.lib'.
+Warning : Ignoring unsupported lu_table_template. [LBR-403]
+        : Ignoring lu_table_template index type (input_voltage).
+Info    : Created nominal operating condition. [LBR-412]
+        : Operating condition '_nominal_' was created for the PVT values (1.000000, 1.080000, 125.000000) in library 'slow_vdd1v2_extvdd1v2.lib'.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'ANTENNA' must have an output pin.
+        : Add the missing output pin(s), then reload the library. Else the library cell will be marked as timing model i.e. unusable. Timing_model means that the cell does not have any defined function. If there is no output pin, Genus will mark library cell as unusable i.e. the attribute 'usable' will be marked to 'false' on the libcell. Therefore, the cell is not used for mapping and it will not be picked up from the library for synthesis. If you query the attribute 'unusable_reason' on the libcell; result will be: 'Library cell has no output pins.'Note: The message LBR-9 is only for the logical pins and not for the power_ground pins. Genus will depend upon the output function defined in the pin group (output pin) of the cell, to use it for mapping. The pg_pin will not have any function defined.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'ANTENNA' must have an output pin.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'DECAP10' must have an output pin.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'DECAP10' must have an output pin.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'DECAP2' must have an output pin.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'DECAP2' must have an output pin.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'DECAP3' must have an output pin.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'DECAP3' must have an output pin.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'DECAP4' must have an output pin.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'DECAP4' must have an output pin.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'DECAP5' must have an output pin.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'DECAP5' must have an output pin.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'DECAP6' must have an output pin.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'DECAP6' must have an output pin.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'DECAP7' must have an output pin.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'DECAP7' must have an output pin.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'DECAP8' must have an output pin.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'DECAP8' must have an output pin.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'DECAP9' must have an output pin.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'DECAP9' must have an output pin.
+Warning : Maximum message print count reached. [MESG-11]
+        : Maximum print count of '20' reached for message 'LBR-9'.
+Warning : Multiply-defined library cell. [LBR-22]
+        : Library-cell name collision (fast_vdd1v0/ACHCONX2 and fast_vdd1v2/ACHCONX2).  Deleting (fast_vdd1v2/ACHCONX2).
+        : Library cell names must be unique.  Any duplicates will be deleted.  Only the first (as determined by the order of libraries) will be retained.
+Warning : Multiply-defined library cell. [LBR-22]
+        : Library-cell name collision (fast_vdd1v0/ADDFHX1 and fast_vdd1v2/ADDFHX1).  Deleting (fast_vdd1v2/ADDFHX1).
+Warning : Multiply-defined library cell. [LBR-22]
+        : Library-cell name collision (fast_vdd1v0/ADDFHX2 and fast_vdd1v2/ADDFHX2).  Deleting (fast_vdd1v2/ADDFHX2).
+Warning : Multiply-defined library cell. [LBR-22]
+        : Library-cell name collision (fast_vdd1v0/ADDFHX4 and fast_vdd1v2/ADDFHX4).  Deleting (fast_vdd1v2/ADDFHX4).
+Warning : Multiply-defined library cell. [LBR-22]
+        : Library-cell name collision (fast_vdd1v0/ADDFHXL and fast_vdd1v2/ADDFHXL).  Deleting (fast_vdd1v2/ADDFHXL).
+Warning : Multiply-defined library cell. [LBR-22]
+        : Library-cell name collision (fast_vdd1v0/ADDFX1 and fast_vdd1v2/ADDFX1).  Deleting (fast_vdd1v2/ADDFX1).
+Warning : Multiply-defined library cell. [LBR-22]
+        : Library-cell name collision (fast_vdd1v0/ADDFX2 and fast_vdd1v2/ADDFX2).  Deleting (fast_vdd1v2/ADDFX2).
+Warning : Multiply-defined library cell. [LBR-22]
+        : Library-cell name collision (fast_vdd1v0/ADDFX4 and fast_vdd1v2/ADDFX4).  Deleting (fast_vdd1v2/ADDFX4).
+Warning : Multiply-defined library cell. [LBR-22]
+        : Library-cell name collision (fast_vdd1v0/ADDFXL and fast_vdd1v2/ADDFXL).  Deleting (fast_vdd1v2/ADDFXL).
+Warning : Multiply-defined library cell. [LBR-22]
+        : Library-cell name collision (fast_vdd1v0/ADDHX1 and fast_vdd1v2/ADDHX1).  Deleting (fast_vdd1v2/ADDHX1).
+Warning : Multiply-defined library cell. [LBR-22]
+        : Library-cell name collision (fast_vdd1v0/ADDHX2 and fast_vdd1v2/ADDHX2).  Deleting (fast_vdd1v2/ADDHX2).
+Warning : Multiply-defined library cell. [LBR-22]
+        : Library-cell name collision (fast_vdd1v0/ADDHX4 and fast_vdd1v2/ADDHX4).  Deleting (fast_vdd1v2/ADDHX4).
+Warning : Multiply-defined library cell. [LBR-22]
+        : Library-cell name collision (fast_vdd1v0/ADDHXL and fast_vdd1v2/ADDHXL).  Deleting (fast_vdd1v2/ADDHXL).
+Warning : Multiply-defined library cell. [LBR-22]
+        : Library-cell name collision (fast_vdd1v0/AND2X1 and fast_vdd1v2/AND2X1).  Deleting (fast_vdd1v2/AND2X1).
+Warning : Multiply-defined library cell. [LBR-22]
+        : Library-cell name collision (fast_vdd1v0/AND2X2 and fast_vdd1v2/AND2X2).  Deleting (fast_vdd1v2/AND2X2).
+Warning : Multiply-defined library cell. [LBR-22]
+        : Library-cell name collision (fast_vdd1v0/AND2X4 and fast_vdd1v2/AND2X4).  Deleting (fast_vdd1v2/AND2X4).
+Warning : Multiply-defined library cell. [LBR-22]
+        : Library-cell name collision (fast_vdd1v0/AND2X6 and fast_vdd1v2/AND2X6).  Deleting (fast_vdd1v2/AND2X6).
+Warning : Multiply-defined library cell. [LBR-22]
+        : Library-cell name collision (fast_vdd1v0/AND2X8 and fast_vdd1v2/AND2X8).  Deleting (fast_vdd1v2/AND2X8).
+Warning : Multiply-defined library cell. [LBR-22]
+        : Library-cell name collision (fast_vdd1v0/AND2XL and fast_vdd1v2/AND2XL).  Deleting (fast_vdd1v2/AND2XL).
+Warning : Multiply-defined library cell. [LBR-22]
+        : Library-cell name collision (fast_vdd1v0/AND3X1 and fast_vdd1v2/AND3X1).  Deleting (fast_vdd1v2/AND3X1).
+Warning : Maximum message print count reached. [MESG-11]
+        : Maximum print count of '20' reached for message 'LBR-22'.
+  Setting attribute of root '/': 'library' = /eda/kits/cadence/45nm/gsclib045_all_v4.4/gsclib045/timing/fast_vdd1v0_basicCells.lib /eda/kits/cadence/45nm/gsclib045_all_v4.4/gsclib045/timing/fast_vdd1v0_extvdd1v0.lib /eda/kits/cadence/45nm/gsclib045_all_v4.4/gsclib045/timing/fast_vdd1v0_extvdd1v2.lib /eda/kits/cadence/45nm/gsclib045_all_v4.4/gsclib045/timing/fast_vdd1v0_multibitsDFF.lib /eda/kits/cadence/45nm/gsclib045_all_v4.4/gsclib045/timing/fast_vdd1v2_basicCells.lib /eda/kits/cadence/45nm/gsclib045_all_v4.4/gsclib045/timing/fast_vdd1v2_extvdd1v0.lib /eda/kits/cadence/45nm/gsclib045_all_v4.4/gsclib045/timing/fast_vdd1v2_extvdd1v2.lib /eda/kits/cadence/45nm/gsclib045_all_v4.4/gsclib045/timing/fast_vdd1v2_multibitsDFF.lib /eda/kits/cadence/45nm/gsclib045_all_v4.4/gsclib045/timing/slow_vdd1v0_basicCells.lib /eda/kits/cadence/45nm/gsclib045_all_v4.4/gsclib045/timing/slow_vdd1v0_extvdd1v0.lib /eda/kits/cadence/45nm/gsclib045_all_v4.4/gsclib045/timing/slow_vdd1v0_extvdd1v2.lib /eda/kits/cadence/45nm/gsclib045_all_v4.4/gsclib045/timing/slow_vdd1v0_multibitsDFF.lib /eda/kits/cadence/45nm/gsclib045_all_v4.4/gsclib045/timing/slow_vdd1v2_basicCells.lib /eda/kits/cadence/45nm/gsclib045_all_v4.4/gsclib045/timing/slow_vdd1v2_extvdd1v0.lib /eda/kits/cadence/45nm/gsclib045_all_v4.4/gsclib045/timing/slow_vdd1v2_extvdd1v2.lib /eda/kits/cadence/45nm/gsclib045_all_v4.4/gsclib045/timing/slow_vdd1v2_multibitsDFF.lib
+@file(synth.tcl) 7: set_db / .lef_library $LEF_FILES
+Info    : Via with no resistance will have a value of '0.0' assigned for resistance value. [PHYS-129]
+        : Via 'M2_M1_HV' has no resistance value.
+        : If this is the expected behavior, this message can be ignored.
+Info    : Via with no resistance will have a value of '0.0' assigned for resistance value. [PHYS-129]
+        : Via 'M2_M1_VV' has no resistance value.
+Info    : Via with no resistance will have a value of '0.0' assigned for resistance value. [PHYS-129]
+        : Via 'M2_M1_VH' has no resistance value.
+Info    : Via with no resistance will have a value of '0.0' assigned for resistance value. [PHYS-129]
+        : Via 'M2_M1_HH' has no resistance value.
+Info    : Via with no resistance will have a value of '0.0' assigned for resistance value. [PHYS-129]
+        : Via 'M2_M1_2x1_HV_E' has no resistance value.
+Info    : Via with no resistance will have a value of '0.0' assigned for resistance value. [PHYS-129]
+        : Via 'M2_M1_2x1_HV_W' has no resistance value.
+Info    : Via with no resistance will have a value of '0.0' assigned for resistance value. [PHYS-129]
+        : Via 'M2_M1_1x2_HV_N' has no resistance value.
+Info    : Via with no resistance will have a value of '0.0' assigned for resistance value. [PHYS-129]
+        : Via 'M2_M1_1x2_HV_S' has no resistance value.
+Info    : Via with no resistance will have a value of '0.0' assigned for resistance value. [PHYS-129]
+        : Via 'M3_M2_VH' has no resistance value.
+Info    : Via with no resistance will have a value of '0.0' assigned for resistance value. [PHYS-129]
+        : Via 'M3_M2_HH' has no resistance value.
+Info    : Via with no resistance will have a value of '0.0' assigned for resistance value. [PHYS-129]
+        : Via 'M3_M2_HV' has no resistance value.
+Info    : Via with no resistance will have a value of '0.0' assigned for resistance value. [PHYS-129]
+        : Via 'M3_M2_VV' has no resistance value.
+Info    : Via with no resistance will have a value of '0.0' assigned for resistance value. [PHYS-129]
+        : Via 'M3_M2_M_NH' has no resistance value.
+Info    : Via with no resistance will have a value of '0.0' assigned for resistance value. [PHYS-129]
+        : Via 'M3_M2_M_SH' has no resistance value.
+Info    : Via with no resistance will have a value of '0.0' assigned for resistance value. [PHYS-129]
+        : Via 'M3_M2_2x1_VH_E' has no resistance value.
+Info    : Via with no resistance will have a value of '0.0' assigned for resistance value. [PHYS-129]
+        : Via 'M3_M2_2x1_VH_W' has no resistance value.
+Info    : Via with no resistance will have a value of '0.0' assigned for resistance value. [PHYS-129]
+        : Via 'M3_M2_1x2_VH_N' has no resistance value.
+Info    : Via with no resistance will have a value of '0.0' assigned for resistance value. [PHYS-129]
+        : Via 'M3_M2_1x2_VH_S' has no resistance value.
+Info    : Via with no resistance will have a value of '0.0' assigned for resistance value. [PHYS-129]
+        : Via 'M4_M3_HV' has no resistance value.
+Info    : Via with no resistance will have a value of '0.0' assigned for resistance value. [PHYS-129]
+        : Via 'M4_M3_VV' has no resistance value.
+Warning : Maximum message print count reached. [MESG-11]
+        : Maximum print count of '20' reached for message 'PHYS-129'.
+Warning : Duplicate macro definition. [PHYS-107]
+        : Macro 'DFF2RX1' is already defined. Ignoring this definition in file '/eda/kits/cadence/45nm/gsclib045_all_v4.4/gsclib045/lef/gsclib045_multibitsDFF.lef'.
+Warning : Duplicate macro definition. [PHYS-107]
+        : Macro 'DFF2RX2' is already defined. Ignoring this definition in file '/eda/kits/cadence/45nm/gsclib045_all_v4.4/gsclib045/lef/gsclib045_multibitsDFF.lef'.
+Warning : Duplicate macro definition. [PHYS-107]
+        : Macro 'DFF2X1' is already defined. Ignoring this definition in file '/eda/kits/cadence/45nm/gsclib045_all_v4.4/gsclib045/lef/gsclib045_multibitsDFF.lef'.
+Warning : Duplicate macro definition. [PHYS-107]
+        : Macro 'DFF2X2' is already defined. Ignoring this definition in file '/eda/kits/cadence/45nm/gsclib045_all_v4.4/gsclib045/lef/gsclib045_multibitsDFF.lef'.
+Warning : Duplicate macro definition. [PHYS-107]
+        : Macro 'DFF4RX1' is already defined. Ignoring this definition in file '/eda/kits/cadence/45nm/gsclib045_all_v4.4/gsclib045/lef/gsclib045_multibitsDFF.lef'.
+Warning : Duplicate macro definition. [PHYS-107]
+        : Macro 'DFF4RX2' is already defined. Ignoring this definition in file '/eda/kits/cadence/45nm/gsclib045_all_v4.4/gsclib045/lef/gsclib045_multibitsDFF.lef'.
+Warning : Duplicate macro definition. [PHYS-107]
+        : Macro 'DFF4X1' is already defined. Ignoring this definition in file '/eda/kits/cadence/45nm/gsclib045_all_v4.4/gsclib045/lef/gsclib045_multibitsDFF.lef'.
+Warning : Duplicate macro definition. [PHYS-107]
+        : Macro 'DFF4X2' is already defined. Ignoring this definition in file '/eda/kits/cadence/45nm/gsclib045_all_v4.4/gsclib045/lef/gsclib045_multibitsDFF.lef'.
+Warning : Duplicate macro definition. [PHYS-107]
+        : Macro 'SDFF2RX1' is already defined. Ignoring this definition in file '/eda/kits/cadence/45nm/gsclib045_all_v4.4/gsclib045/lef/gsclib045_multibitsDFF.lef'.
+Warning : Duplicate macro definition. [PHYS-107]
+        : Macro 'SDFF2RX2' is already defined. Ignoring this definition in file '/eda/kits/cadence/45nm/gsclib045_all_v4.4/gsclib045/lef/gsclib045_multibitsDFF.lef'.
+Warning : Duplicate macro definition. [PHYS-107]
+        : Macro 'SDFF4RX1' is already defined. Ignoring this definition in file '/eda/kits/cadence/45nm/gsclib045_all_v4.4/gsclib045/lef/gsclib045_multibitsDFF.lef'.
+Warning : Duplicate macro definition. [PHYS-107]
+        : Macro 'SDFF4RX2' is already defined. Ignoring this definition in file '/eda/kits/cadence/45nm/gsclib045_all_v4.4/gsclib045/lef/gsclib045_multibitsDFF.lef'.
+Warning : Duplicate macro definition. [PHYS-107]
+        : Macro 'SPDFF2RX1' is already defined. Ignoring this definition in file '/eda/kits/cadence/45nm/gsclib045_all_v4.4/gsclib045/lef/gsclib045_multibitsDFF.lef'.
+Warning : Duplicate macro definition. [PHYS-107]
+        : Macro 'SPDFF2RX2' is already defined. Ignoring this definition in file '/eda/kits/cadence/45nm/gsclib045_all_v4.4/gsclib045/lef/gsclib045_multibitsDFF.lef'.
+Warning : Duplicate macro definition. [PHYS-107]
+        : Macro 'SPDFF4RX1' is already defined. Ignoring this definition in file '/eda/kits/cadence/45nm/gsclib045_all_v4.4/gsclib045/lef/gsclib045_multibitsDFF.lef'.
+Warning : Duplicate macro definition. [PHYS-107]
+        : Macro 'SPDFF4RX2' is already defined. Ignoring this definition in file '/eda/kits/cadence/45nm/gsclib045_all_v4.4/gsclib045/lef/gsclib045_multibitsDFF.lef'.
+Warning : MASTERSLICE layer found after ROUTING or CUT layer. [PHYS-120]
+        : MASTERSLICE layer 'PWdummy' is defined after ROUTING layer 'Metal11'.
+        : Masterslice layers are typically polysilicon layers. You must define layers in process order from bottom to top. Correct the layer order in the LEF file.
+Warning : MASTERSLICE layer found after ROUTING or CUT layer. [PHYS-120]
+        : MASTERSLICE layer 'Nwell' is defined after ROUTING layer 'Metal11'.
+Warning : MASTERSLICE layer found after ROUTING or CUT layer. [PHYS-120]
+        : MASTERSLICE layer 'Oxide' is defined after ROUTING layer 'Metal11'.
+Warning : MASTERSLICE layer found after ROUTING or CUT layer. [PHYS-120]
+        : MASTERSLICE layer 'Poly' is defined after ROUTING layer 'Metal11'.
+Warning : Routing layers are defined in previous LEF file already. [PHYS-109]
+        : Routing layers are defined already, this layer 'Metal1' in file '/eda/kits/cadence/45nm/gsclib045_all_v4.4/gsclib045/lef/gsclib045_tech.lef' is ignored.
+Warning : Routing layers are defined in previous LEF file already. [PHYS-109]
+        : Routing layers are defined already, this layer 'Metal2' in file '/eda/kits/cadence/45nm/gsclib045_all_v4.4/gsclib045/lef/gsclib045_tech.lef' is ignored.
+Warning : Routing layers are defined in previous LEF file already. [PHYS-109]
+        : Routing layers are defined already, this layer 'Metal3' in file '/eda/kits/cadence/45nm/gsclib045_all_v4.4/gsclib045/lef/gsclib045_tech.lef' is ignored.
+Warning : Routing layers are defined in previous LEF file already. [PHYS-109]
+        : Routing layers are defined already, this layer 'Metal4' in file '/eda/kits/cadence/45nm/gsclib045_all_v4.4/gsclib045/lef/gsclib045_tech.lef' is ignored.
+Warning : Routing layers are defined in previous LEF file already. [PHYS-109]
+        : Routing layers are defined already, this layer 'Metal5' in file '/eda/kits/cadence/45nm/gsclib045_all_v4.4/gsclib045/lef/gsclib045_tech.lef' is ignored.
+Warning : Routing layers are defined in previous LEF file already. [PHYS-109]
+        : Routing layers are defined already, this layer 'Metal6' in file '/eda/kits/cadence/45nm/gsclib045_all_v4.4/gsclib045/lef/gsclib045_tech.lef' is ignored.
+Warning : Routing layers are defined in previous LEF file already. [PHYS-109]
+        : Routing layers are defined already, this layer 'Metal7' in file '/eda/kits/cadence/45nm/gsclib045_all_v4.4/gsclib045/lef/gsclib045_tech.lef' is ignored.
+Warning : Routing layers are defined in previous LEF file already. [PHYS-109]
+        : Routing layers are defined already, this layer 'Metal8' in file '/eda/kits/cadence/45nm/gsclib045_all_v4.4/gsclib045/lef/gsclib045_tech.lef' is ignored.
+Warning : Routing layers are defined in previous LEF file already. [PHYS-109]
+        : Routing layers are defined already, this layer 'Metal9' in file '/eda/kits/cadence/45nm/gsclib045_all_v4.4/gsclib045/lef/gsclib045_tech.lef' is ignored.
+Warning : Routing layers are defined in previous LEF file already. [PHYS-109]
+        : Routing layers are defined already, this layer 'Metal10' in file '/eda/kits/cadence/45nm/gsclib045_all_v4.4/gsclib045/lef/gsclib045_tech.lef' is ignored.
+Warning : Routing layers are defined in previous LEF file already. [PHYS-109]
+        : Routing layers are defined already, this layer 'Metal11' in file '/eda/kits/cadence/45nm/gsclib045_all_v4.4/gsclib045/lef/gsclib045_tech.lef' is ignored.
+Warning : Site already defined before, duplicated site will be ignored. [PHYS-106]
+        : Site 'CoreSite' read already, this site in file '/eda/kits/cadence/45nm/gsclib045_all_v4.4/gsclib045/lef/gsclib045_tech.lef' is ignored.
+Warning : Site already defined before, duplicated site will be ignored. [PHYS-106]
+        : Site 'IOSite' read already, this site in file '/eda/kits/cadence/45nm/gsclib045_all_v4.4/gsclib045/lef/gsclib045_tech.lef' is ignored.
+Warning : Site already defined before, duplicated site will be ignored. [PHYS-106]
+        : Site 'CornerSite' read already, this site in file '/eda/kits/cadence/45nm/gsclib045_all_v4.4/gsclib045/lef/gsclib045_tech.lef' is ignored.
+Warning : Site already defined before, duplicated site will be ignored. [PHYS-106]
+        : Site 'CoreSiteDouble' read already, this site in file '/eda/kits/cadence/45nm/gsclib045_all_v4.4/gsclib045/lef/gsclib045_tech.lef' is ignored.
+Warning : Duplicate macro definition. [PHYS-107]
+        : Macro 'ACHCONX2' is already defined. Ignoring this definition in file '/eda/kits/cadence/45nm/gsclib045_all_v4.4/gsclib045_backbias/lef/gsclib045_backbias_macro.lef'.
+Warning : Duplicate macro definition. [PHYS-107]
+        : Macro 'ADDFHX1' is already defined. Ignoring this definition in file '/eda/kits/cadence/45nm/gsclib045_all_v4.4/gsclib045_backbias/lef/gsclib045_backbias_macro.lef'.
+Warning : Duplicate macro definition. [PHYS-107]
+        : Macro 'ADDFHX2' is already defined. Ignoring this definition in file '/eda/kits/cadence/45nm/gsclib045_all_v4.4/gsclib045_backbias/lef/gsclib045_backbias_macro.lef'.
+Warning : Duplicate macro definition. [PHYS-107]
+        : Macro 'ADDFHX4' is already defined. Ignoring this definition in file '/eda/kits/cadence/45nm/gsclib045_all_v4.4/gsclib045_backbias/lef/gsclib045_backbias_macro.lef'.
+Warning : Maximum message print count reached. [MESG-11]
+        : Maximum print count of '20' reached for message 'PHYS-107'.
+
+  According to lef_library, there are total 11 routing layers [ V(5) / H(6) ]
+
+  Libraries have 330 usable logic and 163 usable sequential lib-cells.
+Warning : Physical cell not defined in library. [PHYS-279]
+        : The physical (LEF) cell FILL1 cannot be found in library.
+        : Ensure that the proper library files are available and have been imported.
+Warning : Physical cell not defined in library. [PHYS-279]
+        : The physical (LEF) cell FILL16 cannot be found in library.
+Warning : Physical cell not defined in library. [PHYS-279]
+        : The physical (LEF) cell FILL2 cannot be found in library.
+Warning : Physical cell not defined in library. [PHYS-279]
+        : The physical (LEF) cell FILL32 cannot be found in library.
+Warning : Physical cell not defined in library. [PHYS-279]
+        : The physical (LEF) cell FILL4 cannot be found in library.
+Warning : Physical cell not defined in library. [PHYS-279]
+        : The physical (LEF) cell FILL64 cannot be found in library.
+Warning : Physical cell not defined in library. [PHYS-279]
+        : The physical (LEF) cell FILL8 cannot be found in library.
+Warning : Physical cell not defined in library. [PHYS-279]
+        : The physical (LEF) cell NWELLTAP cannot be found in library.
+Warning : Physical cell not defined in library. [PHYS-279]
+        : The physical (LEF) cell ACHCONX2HVT cannot be found in library.
+Warning : Physical cell not defined in library. [PHYS-279]
+        : The physical (LEF) cell ADDFHX1HVT cannot be found in library.
+Warning : Physical cell not defined in library. [PHYS-279]
+        : The physical (LEF) cell ADDFHX2HVT cannot be found in library.
+Warning : Physical cell not defined in library. [PHYS-279]
+        : The physical (LEF) cell ADDFHX4HVT cannot be found in library.
+Warning : Physical cell not defined in library. [PHYS-279]
+        : The physical (LEF) cell ADDFHXLHVT cannot be found in library.
+Warning : Physical cell not defined in library. [PHYS-279]
+        : The physical (LEF) cell ADDFX1HVT cannot be found in library.
+Warning : Physical cell not defined in library. [PHYS-279]
+        : The physical (LEF) cell ADDFX2HVT cannot be found in library.
+Warning : Physical cell not defined in library. [PHYS-279]
+        : The physical (LEF) cell ADDFX4HVT cannot be found in library.
+Warning : Physical cell not defined in library. [PHYS-279]
+        : The physical (LEF) cell ADDFXLHVT cannot be found in library.
+Warning : Physical cell not defined in library. [PHYS-279]
+        : The physical (LEF) cell ADDHX1HVT cannot be found in library.
+Warning : Physical cell not defined in library. [PHYS-279]
+        : The physical (LEF) cell ADDHX2HVT cannot be found in library.
+Warning : Physical cell not defined in library. [PHYS-279]
+        : The physical (LEF) cell ADDHX4HVT cannot be found in library.
+Warning : Maximum message print count reached. [MESG-11]
+        : Maximum print count of '20' reached for message 'PHYS-279'.
+  Setting attribute of root '/': 'lef_library' = /eda/kits/cadence/45nm/gsclib045_all_v4.4/gsclib045_tech//lef/gsclib045_tech.lef /eda/kits/cadence/45nm/gsclib045_all_v4.4/gsclib045/lef/gsclib045_macro.lef /eda/kits/cadence/45nm/gsclib045_all_v4.4/gsclib045/lef/gsclib045_multibitsDFF.lef /eda/kits/cadence/45nm/gsclib045_all_v4.4/gsclib045/lef/gsclib045_tech.lef /eda/kits/cadence/45nm/gsclib045_all_v4.4/gsclib045_backbias/lef/gsclib045_backbias_macro.lef /eda/kits/cadence/45nm/gsclib045_all_v4.4/gsclib045_hvt/lef/gsclib045_hvt_macro.lef /eda/kits/cadence/45nm/gsclib045_all_v4.4/gsclib045_lvt/lef/gsclib045_lvt_macro.lef
+@file(synth.tcl) 8: set_db / .qrc_tech_file $QRC_FILES
+
+  According to qrc_tech_file, there are total 11 routing layers [ V(5) / H(6) ]
+
+  Setting attribute of root '/': 'qrc_tech_file' = /eda/kits/cadence/45nm/gsclib045_all_v4.4/gsclib045_tech//qrc/qx/gpdk045.tch
+@file(synth.tcl) 10: set_db / .design_process_node 45
+  Setting attribute of root '/': 'design_process_node' = 45
+@file(synth.tcl) 12: set_db auto_ungroup both
+  Setting attribute of root '/': 'auto_ungroup' = both
+@file(synth.tcl) 15: set_attribute search_path ./include
+Error   : The tool is running in common ui mode. [TUI-509] [::unknown]
+        : Command 'set_attribute' is a legacy ui command.
+        : Use set_db/get_db instead or do set_db common_ui false at start of the run.
+#@ End verbose source ../tcl/synth.tcl
+
+Encountered problems processing file: ../tcl/synth.tcl
+@genus:root: 2> exit
+
+Lic Summary:
+[13:19:39.315697] Cdslmd servers: europa
+[13:19:39.315713] Feature usage summary:
+[13:19:39.315714] Genus_Synthesis
+
+Normal exit.

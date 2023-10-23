@@ -1,0 +1,82 @@
+Cadence Genus(TM) Synthesis Solution.
+Copyright 2023 Cadence Design Systems, Inc. All rights reserved worldwide.
+Cadence and the Cadence logo are registered trademarks and Genus is a trademark
+of Cadence Design Systems, Inc. in the United States and other countries.
+
+[10:50:23.023387] Configured Lic search path (21.01-s002): 1700@europa.tele.ntnu.no:5280@europa.tele.ntnu.no:1717@europa.tele.ntnu.no
+
+Version: 21.18-s082_1, built Tue Jul 18 04:08:41 PDT 2023
+Options: -files ../tcl/synth.tcl 
+Date:    Thu Oct 19 10:50:24 2023
+Host:    jupiter.tele.ntnu.no (x86_64 w/Linux 3.10.0-1160.99.1.el7.x86_64) (4cores*16cpus*1physical cpu*Intel(R) Xeon(R) CPU X5560 @ 2.80GHz 8192KB) (24508716KB)
+PID:     30182
+OS:      CentOS Linux release 7.9.2009 (Core)
+
+
+[10:50:24.148792] Periodic Lic check successful
+[10:50:24.148803] Feature usage summary:
+[10:50:24.148808] Genus_Synthesis
+Checking out license: Genus_Synthesis
+
+
+***********************************************************************************************************
+***********************************************************************************************************
+
+
+
+Loading tool scripts...
+Finished loading tool scripts (29 seconds elapsed).
+
+#@ Processing -files option
+@genus 1> source ../tcl/synth.tcl
+#@ Begin verbose source ../tcl/synth.tcl
+@file(synth.tcl) 1: source "../tcl/settings.tcl"
+Sourcing '../tcl/settings.tcl' (Thu Oct 19 10:50:53 CEST 2023)...
+#@ Begin verbose source ../tcl/settings.tcl
+@file(settings.tcl) 1: set DESIGN_NAME "cv32e40s"
+@file(settings.tcl) 2: set DESIGN_TOP_MODULE "cv32e40s_core"
+@file(settings.tcl) 5: set TIMING_CLOCK_PERIOD 5405
+@file(settings.tcl) 6: set TIMING_INPUT_DELAY 0.2
+@file(settings.tcl) 7: set TIMING_OUTPUT_DELAY 15
+@file(settings.tcl) 8: set LOAD 0.1
+@file(settings.tcl) 10: set PATH_LIB_BASE "/eda/kits/cadence/45nm/gsclib045_all_v4.4"
+@file(settings.tcl) 11: set PATH_TECHNOKIT "$PATH_LIB_BASE/gsclib045_tech/"
+@file(settings.tcl) 13: set LIB_FILES {}
+@file(settings.tcl) 15: lappend LIB_FILES ${PATH_LIB_BASE}/gsclib045/oa22/gsclib045
+@file(settings.tcl) 17: set slow_libs {}
+@file(settings.tcl) 18: lappend slow_libs ${PATH_LIB_BASE}/gsclib045_lvt/cds.lib
+@file(settings.tcl) 20: set fast_libs {}
+@file(settings.tcl) 21: lappend fast_libs ${PATH_LIB_BASE}/gsclib045_hvt/cds.lib
+@file(settings.tcl) 23: set LEF_FILES {}
+@file(settings.tcl) 24: lappend LEF_FILES $PATH_TECHNOKIT/lef/gsclib045_tech.lef
+@file(settings.tcl) 25: lappend LEF_FILES $PATH_LIB_BASE/gsclib045/lef/gsclib045_macro.lef
+@file(settings.tcl) 26: lappend LEF_FILES $PATH_LIB_BASE/gsclib045/lef/gsclib045_multibitsDFF.lef
+@file(settings.tcl) 27: lappend LEF_FILES $PATH_LIB_BASE/gsclib045/lef/gsclib045_tech.lef
+@file(settings.tcl) 28: lappend LEF_FILES $PATH_LIB_BASE/gsclib045_backbias/lef/gsclib045_backbias_macro.lef
+@file(settings.tcl) 29: lappend LEF_FILES $PATH_LIB_BASE/gsclib045_hvt/lef/gsclib045_hvt_macro.lef
+@file(settings.tcl) 30: lappend LEF_FILES $PATH_LIB_BASE/gsclib045_lvt/lef/gsclib045_lvt_macro.lef
+@file(settings.tcl) 32: set QRC_FILES {}
+@file(settings.tcl) 33: lappend QRC_FILES $PATH_TECHNOKIT/qrc/qx/gpdk045.tch
+#@ End verbose source ../tcl/settings.tcl
+@file(synth.tcl) 3: set TIMING_CLOCK_PORT "clk"
+@file(synth.tcl) 6: set_db / .library $LIB_FILES
+Error   : File error. [FILE-100] [set_db]
+        : Cannot open file '/eda/kits/cadence/45nm/gsclib045_all_v4.4/gsclib045/oa22/gsclib045'. File must not be a directory.
+        : Make sure that the file is a readable regular file and has the specified name.
+Error   : A library file does not exist. [LBR-68] [set_db]
+        : File '/eda/kits/cadence/45nm/gsclib045_all_v4.4/gsclib045/oa22/gsclib045' could not be found. File '<none>' was the last file that was successfully read in.
+        : Make sure that the library file exists or check for a typo in the file name.
+Error   : The data value for this attribute is invalid. [TUI-24] [set_db]
+        : The value '/eda/kits/cadence/45nm/gsclib045_all_v4.4/gsclib045/oa22/gsclib045' cannot be set for attribute 'library'.
+        : To see the usage/description for this attribute, type '::legacy::set_attribute -h <attr_name> *' (in legacy UI mode) or 'help * <attr_name> -detail' (in CUI mode).
+#@ End verbose source ../tcl/synth.tcl
+1
+Encountered problems processing file: ../tcl/synth.tcl
+@genus:root: 2> exit
+
+Lic Summary:
+[10:56:54.246713] Cdslmd servers: europa
+[10:56:54.246729] Feature usage summary:
+[10:56:54.246730] Genus_Synthesis
+
+Normal exit.
