@@ -11,5 +11,5 @@ Ting å gjøre:
 
 Dagens TODO: 
 
-Rydd opp i mappestruktur 
-Modifiser koden for å gjøre det mulig å skru av og på Xsecure features
+[] Rydd opp i mappestruktur 
+[] Modifiser koden for å gjøre det mulig å skru av og på Xsecure features
