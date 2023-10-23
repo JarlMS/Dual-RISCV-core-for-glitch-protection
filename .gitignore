@@ -1,1 +1,4 @@
 build/
+synthesis/constraints
+synthesis/src
+synthesis/libs
