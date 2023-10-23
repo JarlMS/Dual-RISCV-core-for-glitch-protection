@@ -55,7 +55,9 @@ Voltage-glitching is performed by momentarily dropping the supply voltage during
 
 \section{The need for glitch protection}
 
-For many years the world of CPU design has been hidden from the public due to the strict secrecy producers have around their products. While this limits what the general public can know, it also means that a potential hacker would have a much harder time if they wished to exploit how the ISA of a chip is designed. Due to the nature of open source projects, this is a larger vulnerability for products based on a RISC-V architecture. An example of direct exploitation of the architecture was shown during the 'DEFCON' conference in 2019\cite{isa_exploit}. Here it was demonstrated that triggering an exception during boot of a RISC-V chip would lead to an 'exception loop'. This was because the Machine Trap Vector (MTVEC) had no base address before boot (e.g., it was set to 0x0). Pointing to this address is permitted in the ISA, and doing so will trigger an exception. This means that triggering an exception before boot leads to the exception handler pointing to an illegal address, which again triggers an exception and this continues forever. Handling of exceptions happens first at the highest privilege mode (Machine mode), which means that the chip is also stuck in this mode. 
+Within the world of CPU design the two biggest architectures are ARM and x86 (produced by Intel and AMD). Most of the devices we us every day has one of these types of chips inside them, and because of this they also implement several security features to prevent glitch attacks. For ARM processors this includes among other things the \textit{TrustZone} which provides hardware-enforced isolateion between trusted and non-trusted software, as well as built in physical attack protection\cite{arm}. The 12th gen x86 processors produced by Intel have a Tunable Replica Circuit (TRC), which uses hardware-based sensors to explicitly detect circuit-based timing failures that occur as the result of an attack\cite{intel}.  
+
+Unfortunately, for many years the world of CPU design has been hidden from the public due to the strict secrecy producers have around their products. While this limits what the general public can know, it also means that a potential hacker would have a much harder time if they wished to exploit how the ISA of a chip is designed. Due to the nature of open source projects, this is a larger vulnerability for products based on a RISC-V architecture. An example of direct exploitation of the architecture was shown during the 'DEFCON' conference in 2019\cite{isa_exploit}. Here it was demonstrated that triggering an exception during boot of a RISC-V chip would lead to an 'exception loop'. This was because the Machine Trap Vector (MTVEC) had no base address before boot (e.g., it was set to 0x0). Pointing to this address is permitted in the ISA, and doing so will trigger an exception. This means that triggering an exception before boot leads to the exception handler pointing to an illegal address, which again triggers an exception and this continues forever. Handling of exceptions happens first at the highest privilege mode (Machine mode), which means that the chip is also stuck in this mode. 
 
 The RISC-V architecture is designed with some key security features in mind. One of these are the previously mentioned privilege levels. These are in descending order: machine (M-mode), hypervisor (H-mode), supervisor (S-mode) and user mode (U-mode). A higher privilege mode can access all the functions used in a lower privilege mode\cite{source2}. Other key security features in the RISC-V architecture are the physical memory protection (PMP), which controls memory accesses, and the use of a trusted execution environment (TEE). The TEE is meant to ensure that code and data loaded into this environment are protected with respect to confidentiality and integrity. However, as shown in (Nashimoto et al. 2020) the integrity of TEEs can also be bypassed using clock-glitching\cite{source2}.
 
@@ -63,11 +65,67 @@ The RISC-V architecture is designed with some key security features in mind. One
 \section{CV32E40S by the OpenHW group}
 \label{sec:cv32}
 
-The previously mentioned security measures do a decent job at protecting hardware against malicious attacks. However, the need for more security features has been required and therefore the \textit{OpenHW} group developed the \textit{CV32E40S}. This is a 4-stage in-order 32-bit RISC-V processor core with the main intention of ensuring secure operation\cite{cv32e40s_manual}. This core has the same privilege modes and PMP as described to ensure a TEE. There are however implemented extra security features and an Instruction Set Extension (ISE), \textit{Xsecure}. The CV32E40S started out as a fork of the CV32E40P which is another RISC-V processor made by the OpenHW group. The  
+The previously mentioned security measures do a decent job at protecting hardware against malicious attacks. However, the need for more security features has been required and therefore the \textit{OpenHW} group developed the \textit{CV32E40S}. This is a 4-stage in-order 32-bit RISC-V processor core with the main intention of ensuring secure operation\cite{cv32e40s_manual}. This core has the same privilege modes and PMP as described to ensure a TEE. There are however implemented extra security features and an Instruction Set Extension (ISE), \textit{Xsecure}. The CV32E40S started out as a fork of the CV32E40P which is another RISC-V processor made by the OpenHW group. The top-level block diagram of the cores is shown in \autoref{fig:core_comparison_block}. From the figure we can see that the main difference on the top level is the PMP and the Physical Memory Attribution (PMA), which allows for compile time attribution of the physical memory map.
 
+\begin{figure}[h!]
+\centering
+    \subfigure[CV32E40P\cite{cv32e40p_manual}.]{%
+    \label{fig:cv32e40p_block}%
+    \includegraphics[width=0.47\textwidth]{docs/images/CV32E40P_Block_Diagram.png}}%
+    \qquad
+    \subfigure[CV32E40S\cite{cv32e40s_manual}.]{%
+    \label{fig:cv32e40s_block}%
+    \includegraphics[width=0.47\textwidth]{docs/images/CV32E40S_Block_Diagram.png}}%
+    \caption{Comparison of Top-Level Block Diagram for CV32E40S and CV32E40P.}
+    \label{fig:core_comparison_block}
+\end{figure}
 
 \subsection{Xsecure Extension}
-\subsubsection{Hardened PC}
+
+\textit{Xsecure} is an ISE that adds extra security functionality within many of the different sub modules of the core. These security features are meant to deter side-channel attacks through the use of \textit{data independent timing}, \textit{dummy instruction insertion} and \textit{random instructions}\cite{cv32e40s_manual}. While these features will increase execution time, they cannot easily be removed with the use of a dual core setup. This is because preventing side-channel attacks is less about redundancy and more about making the power usage or execution time of a processor unpredictable. 
+
+The extension also adds specific security features to prevent glitch attacks. These include: \textit{Register file ECC}, \textit{Hardened PC} and \textit{Hardened CSRs} among other things. These features can potentially be removed in favour of a dual core lock-step mechanism. Removing only these features without also affecting the core as a whole i squite complicated. Because of this simulation and synthesis of the core is shown in \textbf{FIGURE A} and \textbf{FIGURE B} with only the \textit{PC Hardening reomved}. 
+
+%One of the implemented features is the \textit{Hardened Program Counter} (Hardened PC). The main idea behind this feature is to check that during sequential operation, the PC in the Instruction Fetch (IF) stage has the correct value as the one determined by the compressed/uncompressed state of the instruction in the Instruction Decode stage. In addition to this it checks that the target for a branch or jump instruction is correct during non-sequential operation. 
+
+% \textbf{PC hardening step by step}
+% \begin{itemize}
+%     \item Set expected address for sequential updates based on address in ID and type of instruction (compressed + 2 / uncompressed + 4)
+%     \begin{itemize}
+%         \item \textbf{Uncompressed instructions}: Standard RISC-V instructions are 32 bits long. These ar eoften refferd to as uncompressed and adhere to the base integer instruction format. 
+%         \item \textbf{Compressed instructions}: Compressed instructions are 16 bits. These often represent frequently used instructions at half the space. 
+%     \end{itemize}
+%     \item The control flow address is chosen based on flopped value comping from the PC-MUX. If the PC-MUX is glitched, this mux may choose the wrong address and an address comparison error is likely to happen. 
+%     \item Choose which address to check vs the IF PC: Sequential or Control flow.
+%     \item Instructions are 16-bit aligned since the core supports compressed instructions. 
+%     \item Address comparison is only valid the cycle after the PC is set or the cycle after an instruction goes from IF to ID. 
+% \end{itemize}
+
+\textbf{I NEED TO SIMULATE THE CORE WITH AND WITHOUT PC-HARDENING AND CSR-HARDENING TO SEE THE DIFFERENCE IN PPA}
+\textbf{I need to create a c program that has some code that is easily glitchable that represents a real world safety feature. This could be an infinite while loop, where the aim is to break out of this loop using a glitch. To achieve this I can either make a module whose sole purpose is to glitch a register and then make this glitchin happen radomly. Or i can induce som form of clock-glitching. This might not be possible in simulation as the setup / hold times will not be realistic. Voltag eglitching is also not possible as I dont havee access to the supply voltage of the system.}
+
+\textbf{TODO:}
+\begin{itemize}
+    \item Run simulation of core with and without xsecure extension 
+    \begin{itemize}
+        \item Find out where the Xsecure extension is being enabled from. Maybe this is in the documentation. 
+    \end{itemize}
+    \item Run synthesis of core (with and without xsecure extension) 
+    \begin{itemize}
+        \item Power estimation 
+        \item LUTs and Area 
+    \end{itemize}
+    Detail the program that is running when these tests are performed(mostly for simulation)
+    \item Detail how dual cores could work in theory to improve things 
+    \item Describe the tests that will be performed to simulate glitching
+    \item Describe test program that will be running on the core (an infinite while loop to simulate some form of security check)
+    \item Describe the odule that will be implemented to simulate a glitch attack.
+\end{itemize}
+
+\section{Simulation data}
+\subsection{Clock cycles}
+With PC hardening disabled: 6 cycles
+
 \subsubsection{Hardened CSR}
 \section{Limitations of glitch protection}
 \label{sec:limits}
