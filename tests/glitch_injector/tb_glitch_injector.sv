@@ -4,17 +4,17 @@
 // Function: Test bench for glitch injector 
 // Coder: JarlMS
 //--------------------------------
-
-module tb_up_counter();
+`timescale 1ns/1ps
+module tb_glitch_injector();
     reg enable;
     reg enable_specific;
     reg clk;
     reg reset;
     wire [7:0] out;
-    wire [7:0] in;
+    reg [7:0] in;
 
     // Instantiate the DUT
-    glitch_injector u0 (8,17)(
+    glitch_injector #(8,8'b10101010) u0(
         .enable(enable),
         .enable_specific(enable_specific),
         .clk(clk),

@@ -13,23 +13,19 @@ module glitch_injector #(parameter BIT_LENGTH = 1, parameter SPECIFIC = {BIT_LEN
     input   wire                    enable,
     input   wire                    enable_specific    
 );
-rand bit [BIT_LENGTH-1:0] random_out;
 
-// Constraint for the random output 
-constraint random_out_constraint {
-    random_out inside {[{BIT_LENGTH{1'b0}}:{BIT_LENGTH{1'b1}}]}; 
-}
-
-always_ff @ (posedge clk)
+always
     if (reset) begin 
-        out <= BIT_LENGTH'b0;
-    end else begin 
-        if (enable_specific) begin                              // Set output of module to a specific predefined value
+        out <= 0;
+    end else begin
+        reg [BIT_LENGTH-1:0] random_out; // Declare 'random_out' as a register
+
+        if (enable_specific) begin
             out <= SPECIFIC;
-        end else if (enable && !enable_specific) begin          // Set output to random value  
-            randomize(random_out) with {random_out_constraint;}
+        end else if (enable && !enable_specific) begin
+            randomize(random_out);
             out <= random_out; 
-        end else                                                // Forward input value 
+        end else
             out <= in;  
     end
 endmodule
