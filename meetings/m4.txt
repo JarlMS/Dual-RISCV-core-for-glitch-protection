@@ -8,8 +8,9 @@ Ting å gjøre:
         * Start med å skru av pc-hardening 
     Forward clock direkte dersom jeg ikke finner en clock-gate primitiv
     Se etter primitiver for å forandre register initialisering
+    Potensielt skrive formell verifikasjonsmetoder
 
 Dagens TODO: 
 
-[] Rydd opp i mappestruktur 
-[] Modifiser koden for å gjøre det mulig å skru av og på Xsecure features
+[x] Rydd opp i mappestruktur 
+[\] Modifiser koden for å gjøre det mulig å skru av og på Xsecure features
