@@ -2,3 +2,10 @@ build/
 synthesis/constraints
 synthesis/src
 synthesis/libs
+synthesis/out
+*.mti
+*.mpf
+*.bak
+transcript
+vsim.wlf
+work/
