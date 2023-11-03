@@ -49,7 +49,24 @@ Voltage- or clock-glitching can be performed as long as there is some way to acc
     \label{fig:emfi_map}
 \end{figure}
 
-Voltage-glitching is performed by momentarily dropping the supply voltage during execution of critical operations. Clock-glitching is performed by altering clock timing to violate setup and hold time requirements of the hardware\cite{intro_to_FI}. The results of glitching cannot always be predicted, however they mainly result in skipped or repeated CPU instructions, incorrect evaluation of CPU instructions or corrupt reads from memory devices\cite{intro_to_FI}. In general these faults can occur at any stage in the execution pipeline. 
+Voltage-glitching is performed by momentarily dropping the supply voltage during execution of critical operations. Clock-glitching is performed by altering clock timing to violate setup and hold time requirements of the hardware\cite{intro_to_FI}. The results of glitching cannot always be predicted, however they mainly result in skipped or repeated CPU instructions, incorrect evaluation of CPU instructions or corrupt reads from memory devices\cite{intro_to_FI}. In general these faults can occur at any stage in the execution pipeline. A typical application for these types of glitches is to skip some sort of signature verification in a bootloader or other security module. The code snippet in \autoref{fig:glitch_code} shows how it could be used to bypass secure-boot.
+
+\begin{figure}
+\begin{lstlisting}[language=C]
+...
+if (signature_match) // <- Glitch here
+{
+    load_runtime_firmware();
+}
+else 
+{
+    do_not_load_runtime_firmware();
+}
+...
+\end{lstlisting}
+\caption{Glitching past signature validation in secure-boot.}
+\label{fig:glitch_code}
+\end{figure}
 
 % Glitch attacks have over recent years become a more common and greater threat. Due to the nature of how these attacks are carried out, they are often a very affordable way to exploit hardware. Attackers have easy access to open source resources like the the 'ChipWhisperer Lite' which allows for easy access to hardware glitching tools as well as side channel analysis\cite{chipWhisperer}. In addition to this, FPGAs can be used to inject precisely timed faults as long as an attacker has access to the supply voltage or clock on a chip\cite{hole_in_soc}. 
 
@@ -84,7 +101,46 @@ The previously mentioned security measures do a decent job at protecting hardwar
 
 \textit{Xsecure} is an ISE that adds extra security functionality within many of the different sub modules of the core. These security features are meant to deter side-channel attacks through the use of \textit{data independent timing}, \textit{dummy instruction insertion} and \textit{random instructions}\cite{cv32e40s_manual}. While these features will increase execution time, they cannot easily be removed with the use of a dual core setup. This is because preventing side-channel attacks is less about redundancy and more about making the power usage or execution time of a processor unpredictable. 
 
-The extension also adds specific security features to prevent glitch attacks. These include: \textit{Register file ECC}, \textit{Hardened PC} and \textit{Hardened CSRs} among other things. These features can potentially be removed in favour of a dual core lock-step mechanism. Removing only these features without also affecting the core as a whole i squite complicated. Because of this simulation and synthesis of the core is shown in \textbf{FIGURE A} and \textbf{FIGURE B} with only the \textit{PC Hardening reomved}. 
+The extension also adds specific security features to prevent glitch attacks. These include: \textit{Register file ECC}, \textit{Hardened PC} and \textit{Hardened CSRs} among other things. These features can potentially be removed in favour of a dual core lock-step mechanism. Removing only these features without also affecting the core as a whole is quite complicated. However, to give some insight into the resource usage and added execution time for these sub-modules, the core has been simulated and synthesized both with and without \textit{PC Hardening}. When simulation of the core is done, a simple \textit{hello-world} example is run, shown in \autoref{app:helloworldC}. From simulation of both cores it is shown that the core requires \textbf{9} extra clock cycles when using \textit{PC-hardening} as can be seen in \autoref{tab:simulation_cc}. The generated assembly code for this program consists of \textit{11875} instructions. From the documentation about the core, it is explained that \textit{jumps} as well as \textit{branches} that are not taken will require one extra clock cycle due to \textit{PC-hardening}. 
+
+\begin{table}[h]
+\centering
+\caption{Number of clock cycles needed to simulate the program in \autoref{app:helloworldC} with and without \textit{PC-Hardening}.}
+\label{tab:simulation_cc}
+\begin{tabular}{cc}
+\toprule 
+With PC-Hardening & Without PC-Hardening \\
+\midrule
+\rowcolor{black!20} 18289 & 18280 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}
+    \centering
+    \includegraphics{}
+    \caption{Caption}
+    \label{fig:enter-label}
+\end{figure}
+
+From synthesis of both cores it can also be seen that the \textit{PC-Hardening} will add a bit to the total resource usage. The results of synthesis can be seen in \autoref{tab:synth_ppa}.
+
+\begin{table}[h]
+\centering
+\caption{Synthesized resource usage with and without \textit{PC-Hardening}.}
+\label{tab:synth_ppa}
+\begin{tabular}{ccc}
+\toprule 
+& With PC-Hardening & Without PC-Hardening \\
+\midrule
+\rowcolor{black!20} \textbf{area[$pm^2$]} & 63164.38 & 61757.916 \\
+\textbf{power[$W$]} & 1.12163mW & 1.10450mW \\
+\rowcolor{black!20} \textbf{LUTs} & -- & -- \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
 
 %One of the implemented features is the \textit{Hardened Program Counter} (Hardened PC). The main idea behind this feature is to check that during sequential operation, the PC in the Instruction Fetch (IF) stage has the correct value as the one determined by the compressed/uncompressed state of the instruction in the Instruction Decode stage. In addition to this it checks that the target for a branch or jump instruction is correct during non-sequential operation. 
 
@@ -100,6 +156,23 @@ The extension also adds specific security features to prevent glitch attacks. Th
 %     \item Instructions are 16-bit aligned since the core supports compressed instructions. 
 %     \item Address comparison is only valid the cycle after the PC is set or the cycle after an instruction goes from IF to ID. 
 % \end{itemize}
+
+\section{Limitations of glitch protection and proposed solution}
+\label{sec:limits}
+
+Because glitch protection has gained more attention over recent years, several methods are implemented by different CPU producers. However, many of these security features all have some common limitations. For instance the coverage of protection can often be incomplete. This means that designers often only focus on the most critical glitches, and can therefore sometimes overlook seemingly insignificant glitches that might break the system. For instance, a designer could implement a robust check to see whether the program counter has been modified during execution. However if an attacker glitches the program counter on boot, it could go undetected by the checker mechanism. 
+
+In general glitch protection mechanisms will add to both the area and power consumption of a chip. Often the added area also comes from components that are logically redundant. In addition there will be a lot of latency added to the system. 
+
+
+\begin{itemize}
+    \item High logic cost 
+    \item Slower execution of certain pipeline stages
+    \item Lower throughput 
+    \item A typical way of doing fault injection is though EMFI attacks which target larger components like caches or other memory components.
+    How can we prevent these? Comparing the state of the entire chache is not viable, and thus we must allow a fault to persist in 
+    memory untill it is read or used in one of the cores.
+\end{itemize}
 
 \textbf{I NEED TO SIMULATE THE CORE WITH AND WITHOUT PC-HARDENING AND CSR-HARDENING TO SEE THE DIFFERENCE IN PPA}
 \textbf{I need to create a c program that has some code that is easily glitchable that represents a real world safety feature. This could be an infinite while loop, where the aim is to break out of this loop using a glitch. To achieve this I can either make a module whose sole purpose is to glitch a register and then make this glitchin happen radomly. Or i can induce som form of clock-glitching. This might not be possible in simulation as the setup / hold times will not be realistic. Voltag eglitching is also not possible as I dont havee access to the supply voltage of the system.}
@@ -127,17 +200,7 @@ The extension also adds specific security features to prevent glitch attacks. Th
 With PC hardening disabled: 6 cycles
 
 \subsubsection{Hardened CSR}
-\section{Limitations of glitch protection}
-\label{sec:limits}
 
-\begin{itemize}
-    \item High logic cost 
-    \item Slower execution of certain pipeline stages
-    \item Lower throughput 
-    \item A typical way of doing fault injection is though EMFI attacks which target larger components like caches or other memory components.
-    How can we prevent these? Comparing the state of the entire chache is not viable, and thus we must allow a fault to persist in 
-    memory untill it is read or used in one of the cores.
-\end{itemize}
 \section{The dual core proposition}
 \section{Rationale for this study}
 
