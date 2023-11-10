@@ -82,48 +82,60 @@ The RISC-V architecture is designed with some key security features in mind. One
 \section{CV32E40S by the OpenHW group}
 \label{sec:cv32}
 
-The previously mentioned security measures do a decent job at protecting hardware against malicious attacks. However, the need for more security features has been required and therefore the \textit{OpenHW} group developed the \textit{CV32E40S}. This is a 4-stage in-order 32-bit RISC-V processor core with the main intention of ensuring secure operation\cite{cv32e40s_manual}. This core has the same privilege modes and PMP as described to ensure a TEE. There are however implemented extra security features and an Instruction Set Extension (ISE), \textit{Xsecure}. The CV32E40S started out as a fork of the CV32E40P which is another RISC-V processor made by the OpenHW group. The top-level block diagram of the cores is shown in \autoref{fig:core_comparison_block}. From the figure we can see that the main difference on the top level is the PMP and the Physical Memory Attribution (PMA), which allows for compile time attribution of the physical memory map.
+The previously mentioned security measures do a decent job at protecting hardware against malicious attacks. However, the need for more security features has been required and therefore the \textit{OpenHW} group developed the \textit{CV32E40S}. This is a 4-stage in-order 32-bit RISC-V processor core with the main intention of ensuring secure operation\cite{cv32e40s_manual}. This core has the same privilege modes and PMP as described to ensure a TEE. There are however implemented extra security features and an Instruction Set Extension (ISE), \textit{Xsecure}. The CV32E40S started out as a fork of the CV32E40P which is another RISC-V processor made by the OpenHW group. The top-level block diagram of the CV32E40S core is shown in \autoref{fig:cv32e40s_block}.
+
+%The top-level block diagram of the cores is shown in \autoref{fig:core_comparison_block}. From the figure we can see that the main difference on the top level is the PMP and the Physical Memory Attribution (PMA), which allows for compile time attribution of the physical memory map.
+
+% \begin{figure}[h!]
+% \centering
+%     \subfigure[CV32E40P\cite{cv32e40p_manual}.]{%
+%     \label{fig:cv32e40p_block}%
+%     \includegraphics[width=0.47\textwidth]{docs/images/CV32E40P_Block_Diagram.png}}%
+%     \qquad
+%     \subfigure[CV32E40S\cite{cv32e40s_manual}.]{%
+%     \label{fig:cv32e40s_block}%
+%     \includegraphics[width=0.47\textwidth]{docs/images/CV32E40S_Block_Diagram.png}}%
+%     \caption{Comparison of Top-Level Block Diagram for CV32E40S and CV32E40P.}
+%     \label{fig:core_comparison_block}
+% \end{figure}
 
 \begin{figure}[h!]
-\centering
-    \subfigure[CV32E40P\cite{cv32e40p_manual}.]{%
-    \label{fig:cv32e40p_block}%
-    \includegraphics[width=0.47\textwidth]{docs/images/CV32E40P_Block_Diagram.png}}%
-    \qquad
-    \subfigure[CV32E40S\cite{cv32e40s_manual}.]{%
-    \label{fig:cv32e40s_block}%
-    \includegraphics[width=0.47\textwidth]{docs/images/CV32E40S_Block_Diagram.png}}%
-    \caption{Comparison of Top-Level Block Diagram for CV32E40S and CV32E40P.}
-    \label{fig:core_comparison_block}
+    \centering
+    \includegraphics[width=0.6\textwidth]{docs/images/CV32E40S_Block_Diagram.png}
+    \caption{CV32E40S top-level block diagram\cite{cv32e40s_manual}.}
+    \label{fig:cv32e40s_block}
 \end{figure}
 
 \subsection{Xsecure Extension}
+\label{sec:xsecure}
 
 \textit{Xsecure} is an ISE that adds extra security functionality within many of the different sub modules of the core. These security features are meant to deter side-channel attacks through the use of \textit{data independent timing}, \textit{dummy instruction insertion} and \textit{random instructions}\cite{cv32e40s_manual}. While these features will increase execution time, they cannot easily be removed with the use of a dual core setup. This is because preventing side-channel attacks is less about redundancy and more about making the power usage or execution time of a processor unpredictable. 
 
-The extension also adds specific security features to prevent glitch attacks. These include: \textit{Register file ECC}, \textit{Hardened PC} and \textit{Hardened CSRs} among other things. These features can potentially be removed in favour of a dual core lock-step mechanism. Removing only these features without also affecting the core as a whole is quite complicated. However, to give some insight into the resource usage and added execution time for these sub-modules, the core has been simulated and synthesized both with and without \textit{PC Hardening}. When simulation of the core is done, a simple \textit{hello-world} example is run, shown in \autoref{app:helloworldC}. From simulation of both cores it is shown that the core requires \textbf{9} extra clock cycles when using \textit{PC-hardening} as can be seen in \autoref{tab:simulation_cc}. The generated assembly code for this program consists of \textit{11875} instructions. From the documentation about the core, it is explained that \textit{jumps} as well as \textit{branches} that are not taken will require one extra clock cycle due to \textit{PC-hardening}. 
+The extension also adds specific security features to prevent glitch attacks. These include: \textit{Register file ECC}, \textit{Hardened PC} and \textit{Hardened CSRs} among other things. These features can potentially be removed in favour of a dual core lock-step mechanism. Removing only these features without also affecting the core as a whole is quite complicated. However, to give some insight into the resource usage and added execution time for these sub-modules, the core has been simulated and synthesized both with and without \textit{PC Hardening}. When simulation of the core is done, a simple \textit{hello-world} example is run, shown in \autoref{app:helloworldC}. From simulation of both cores it is shown that the core requires \textbf{9} extra clock cycles when using \textit{PC-hardening} as can be seen in \autoref{tab:simulation_cc}. The instruction trace file for this test shows that there are \textit{11875} instructions executed. From the documentation about the core, it is explained that \textit{jumps} as well as \textit{branches} that are not taken will require one extra clock cycle due to \textit{PC-hardening}. From \autoref{fig:instr_occ} it can be observed that the program contains approximately \~ 3000 branch and jump instructions combined. This means removing the \textit{PC-hardening} should reduce the total amount of clock cycles by minimum 1.6\% (if all jumps and branches are taken) and a maximum of 16\% (if all jumps are taken but no branches). 
+The reason for this discrepancy between the documentation and simulation results is that the core contains features to prevent side-channel attacks as well as glitch attacks. One of these features is \textit{Data Independent Timing} (DIT) which leads to all branches in a program being taken (branches that would not normally be taken are immediately followed up by killing of the fetch and decode stages). \autoref{tab:simulation_cc} shows the clock cycles needed with DIT enabled and disabled. From this it is possible to see that \textit{PC-Hardening} actually adds \textit{843} clock cycles which represents an increase of approximately 5\%. 
 
 \begin{table}[h]
 \centering
 \caption{Number of clock cycles needed to simulate the program in \autoref{app:helloworldC} with and without \textit{PC-Hardening}.}
 \label{tab:simulation_cc}
-\begin{tabular}{cc}
+\begin{tabular}{c|cc}
 \toprule 
-With PC-Hardening & Without PC-Hardening \\
+Data Independent Timing & With PC-Hardening & Without PC-Hardening \\
 \midrule
-\rowcolor{black!20} 18289 & 18280 \\
+\rowcolor{black!20} enabled & 18289 & 18280 \\
+disabled & 17313 & 16470 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-\begin{figure}
+\begin{figure}[h!]
     \centering
-    \includegraphics{}
-    \caption{Caption}
-    \label{fig:enter-label}
+    \includegraphics[width=\textwidth]{docs/images/instruction_occurences.png}
+    \caption{All instructions in the generated assembly for the \textit{hello-world}\autoref{app:helloworldC} example, and the amount of calls for each instruction.}
+    \label{fig:instr_occ}
 \end{figure}
 
-From synthesis of both cores it can also be seen that the \textit{PC-Hardening} will add a bit to the total resource usage. The results of synthesis can be seen in \autoref{tab:synth_ppa}.
+\autoref{tab:synth_ppa} shows synthesis results of both cores. The \textit{PC-Hardening} will add a bit to the total area and power usage. However, the module is quite small and the increase in resource usage is not very significant. 
 
 \begin{table}[h]
 \centering
@@ -140,67 +152,52 @@ From synthesis of both cores it can also be seen that the \textit{PC-Hardening} 
 \end{tabular}
 \end{table}
 
-
-
-%One of the implemented features is the \textit{Hardened Program Counter} (Hardened PC). The main idea behind this feature is to check that during sequential operation, the PC in the Instruction Fetch (IF) stage has the correct value as the one determined by the compressed/uncompressed state of the instruction in the Instruction Decode stage. In addition to this it checks that the target for a branch or jump instruction is correct during non-sequential operation. 
-
-% \textbf{PC hardening step by step}
-% \begin{itemize}
-%     \item Set expected address for sequential updates based on address in ID and type of instruction (compressed + 2 / uncompressed + 4)
-%     \begin{itemize}
-%         \item \textbf{Uncompressed instructions}: Standard RISC-V instructions are 32 bits long. These ar eoften refferd to as uncompressed and adhere to the base integer instruction format. 
-%         \item \textbf{Compressed instructions}: Compressed instructions are 16 bits. These often represent frequently used instructions at half the space. 
-%     \end{itemize}
-%     \item The control flow address is chosen based on flopped value comping from the PC-MUX. If the PC-MUX is glitched, this mux may choose the wrong address and an address comparison error is likely to happen. 
-%     \item Choose which address to check vs the IF PC: Sequential or Control flow.
-%     \item Instructions are 16-bit aligned since the core supports compressed instructions. 
-%     \item Address comparison is only valid the cycle after the PC is set or the cycle after an instruction goes from IF to ID. 
-% \end{itemize}
-
-\section{Limitations of glitch protection and proposed solution}
+\section{Limitations of glitch protection}
 \label{sec:limits}
 
-Because glitch protection has gained more attention over recent years, several methods are implemented by different CPU producers. However, many of these security features all have some common limitations. For instance the coverage of protection can often be incomplete. This means that designers often only focus on the most critical glitches, and can therefore sometimes overlook seemingly insignificant glitches that might break the system. For instance, a designer could implement a robust check to see whether the program counter has been modified during execution. However if an attacker glitches the program counter on boot, it could go undetected by the checker mechanism. 
+Despite greatly increasing the hardware security of devices, many glitch protection methods can have some common limitations. For instance the coverage of protection can often be incomplete. This means that designers often only focus on the most critical glitches, and can therefore sometimes overlook seemingly insignificant glitches that might break the system. For instance, a designer could implement a robust check to see whether the program counter has been modified during execution. However if an attacker glitches the program counter on boot, it could go undetected by the checker mechanism. 
 
-In general glitch protection mechanisms will add to both the area and power consumption of a chip. Often the added area also comes from components that are logically redundant. In addition there will be a lot of latency added to the system. 
+In general, glitch protection mechanisms will add to both the area and power consumption of a chip. Often the added area also comes from components that are logically redundant. In addition there will potentially be quite a lot of latency added. As previously described in \autoref{sec:xsecure}, the \textit{PC-hardening} module will add one extra cycle per jump or branch that is not taken. From \autoref{fig:instr_occ} it can be seen that even in a very simple program the potential for added latency is big. However, most of the potential performance gain that can be achieved from removing the \textit{Xsecure} features is mitigated by the side-channel safety features, which can not be removed. 
+
+From simulation and synthesis of both cores it is obvious that the argument for using a dual-core lockstep mechanism cannot be made solely on resource usage and performance gain alone. However, the main advantage will be the coverage and robustness gained. To test this claim, the regular and dual-core setups will both be subjected to several different glitch attacks that will take place in different parts of the pipeline. The quality of the solution will then be determined by how effective each setup is at responding to the attack. 
 
 
-\begin{itemize}
-    \item High logic cost 
-    \item Slower execution of certain pipeline stages
-    \item Lower throughput 
-    \item A typical way of doing fault injection is though EMFI attacks which target larger components like caches or other memory components.
-    How can we prevent these? Comparing the state of the entire chache is not viable, and thus we must allow a fault to persist in 
-    memory untill it is read or used in one of the cores.
-\end{itemize}
+% \begin{itemize}
+%     \item High logic cost 
+%     \item Slower execution of certain pipeline stages
+%     \item Lower throughput 
+%     \item A typical way of doing fault injection is though EMFI attacks which target larger components like caches or other memory components.
+%     How can we prevent these? Comparing the state of the entire chache is not viable, and thus we must allow a fault to persist in 
+%     memory untill it is read or used in one of the cores.
+% \end{itemize}
 
 \textbf{I NEED TO SIMULATE THE CORE WITH AND WITHOUT PC-HARDENING AND CSR-HARDENING TO SEE THE DIFFERENCE IN PPA}
 \textbf{I need to create a c program that has some code that is easily glitchable that represents a real world safety feature. This could be an infinite while loop, where the aim is to break out of this loop using a glitch. To achieve this I can either make a module whose sole purpose is to glitch a register and then make this glitchin happen radomly. Or i can induce som form of clock-glitching. This might not be possible in simulation as the setup / hold times will not be realistic. Voltag eglitching is also not possible as I dont havee access to the supply voltage of the system.}
 
-\textbf{TODO:}
-\begin{itemize}
-    \item Run simulation of core with and without xsecure extension 
-    \begin{itemize}
-        \item Find out where the Xsecure extension is being enabled from. Maybe this is in the documentation. 
-    \end{itemize}
-    \item Run synthesis of core (with and without xsecure extension) 
-    \begin{itemize}
-        \item Power estimation 
-        \item LUTs and Area 
-    \end{itemize}
-    Detail the program that is running when these tests are performed(mostly for simulation)
-    \item Detail how dual cores could work in theory to improve things 
-    \item Describe the tests that will be performed to simulate glitching
-    \item Describe test program that will be running on the core (an infinite while loop to simulate some form of security check)
-    \item Describe the odule that will be implemented to simulate a glitch attack.
-\end{itemize}
+% \textbf{TODO:}
+% \begin{itemize}
+%     \item Run simulation of core with and without xsecure extension 
+%     \begin{itemize}
+%         \item Find out where the Xsecure extension is being enabled from. Maybe this is in the documentation. 
+%     \end{itemize}
+%     \item Run synthesis of core (with and without xsecure extension) 
+%     \begin{itemize}
+%         \item Power estimation 
+%         \item LUTs and Area 
+%     \end{itemize}
+%     Detail the program that is running when these tests are performed(mostly for simulation)
+%     \item Detail how dual cores could work in theory to improve things 
+%     \item Describe the tests that will be performed to simulate glitching
+%     \item Describe test program that will be running on the core (an infinite while loop to simulate some form of security check)
+%     \item Describe the odule that will be implemented to simulate a glitch attack.
+% \end{itemize}
 
-\section{Simulation data}
-\subsection{Clock cycles}
-With PC hardening disabled: 6 cycles
+% \section{Simulation data}
+% \subsection{Clock cycles}
+% With PC hardening disabled: 6 cycles
 
-\subsubsection{Hardened CSR}
+% \subsubsection{Hardened CSR}
 
-\section{The dual core proposition}
-\section{Rationale for this study}
+% \section{The dual core proposition}
+% \section{Rationale for this study}
 
