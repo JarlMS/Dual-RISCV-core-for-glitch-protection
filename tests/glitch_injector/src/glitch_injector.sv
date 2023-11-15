@@ -5,7 +5,7 @@
 // Coder: JarlMS
 //--------------------------------
 
-module glitch_injector #(parameter BIT_LENGTH = 1, parameter SPECIFIC = {BIT_LENGTH{1'b0}})(
+module glitch_injector #(parameter BIT_LENGTH = 8, parameter SPECIFIC = {BIT_LENGTH{1'b0}})(
     output  reg[0:BIT_LENGTH-1]     out,
     input   reg[0:BIT_LENGTH-1]     in,
     input   wire                    clk,
@@ -14,7 +14,7 @@ module glitch_injector #(parameter BIT_LENGTH = 1, parameter SPECIFIC = {BIT_LEN
     input   wire                    enable_specific    
 );
 
-always
+always_ff @(*)
     if (reset) begin 
         out <= 0;
     end else begin

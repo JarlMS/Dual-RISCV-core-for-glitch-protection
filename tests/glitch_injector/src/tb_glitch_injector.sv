@@ -4,7 +4,7 @@
 // Function: Test bench for glitch injector 
 // Coder: JarlMS
 //--------------------------------
-`timescale 1ns/1ps
+`timescale 1ns/1ns
 module tb_glitch_injector();
     reg enable;
     reg enable_specific;
