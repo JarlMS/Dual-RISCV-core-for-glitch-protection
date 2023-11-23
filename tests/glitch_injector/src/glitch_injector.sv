@@ -6,15 +6,15 @@
 //--------------------------------
 
 module glitch_injector #(parameter BIT_LENGTH = 1, parameter SPECIFIC = {BIT_LENGTH{1'b0}})(
-    output  logic [0:BIT_LENGTH-1]     out,
-    input   logic [0:BIT_LENGTH-1]     in,
+    output  reg [0:BIT_LENGTH-1]     out,
+    input   reg [0:BIT_LENGTH-1]     in,
     input   wire                    clk,
     input   wire                    reset,
     input   wire                    enable,
     input   wire                    enable_specific    
 );
 
-always_ff @ (posedge clk or posedge reset) begin 
+always_ff @(posedge clk or posedge reset) begin 
     if (reset) begin 
         out <= 0;
     end else begin

@@ -6,15 +6,15 @@
 //--------------------------------
 `timescale 1ns/1ns
 module tb_glitch_injector();
-    wire enable;
-    wire enable_specific;
-    wire clk;
-    wire reset;
-    logic [7:0] out;
-    logic [7:0] in;
+    reg enable;
+    reg enable_specific;
+    reg clk;
+    reg reset;
+    wire [7:0] out;
+    reg [7:0] in;
 
     // Instantiate the DUT
-    glitch_injector #(8,8'b10101010) u0(
+    glitch_injector #(8,8'b01010101) u0(
         .enable(enable),
         .enable_specific(enable_specific),
         .clk(clk),
@@ -49,7 +49,12 @@ module tb_glitch_injector();
         // Turn on specific 
         enable = 0;
         enable_specific = 1;
-        #100 $finish; // End the simulation
+        #100;
+
+	enable = 0;
+	enable_specific = 0;
+	#100; 
+        $finish; // End the simulation
     end
 
     // Monitor to observe the counter's behavior
