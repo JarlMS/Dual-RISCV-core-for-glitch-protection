@@ -54,14 +54,13 @@ Voltage-glitching is performed by momentarily dropping the supply voltage during
 \begin{figure}
 \begin{lstlisting}[language=C]
 ...
-if (signature_match) // <- Glitch here
+result_code = boot_go(&rsp);
+if (result_code != 0)
 {
-    load_runtime_firmware();
+    BOOT_LOG_ERR("Unable to find bootable image");
+    while(1);
 }
-else 
-{
-    do_not_load_runtime_firmware();
-}
+do_boot();
 ...
 \end{lstlisting}
 \caption{Glitching past signature validation in secure-boot.}
@@ -171,8 +170,8 @@ From simulation and synthesis of both cores it is obvious that the argument for 
 %     memory untill it is read or used in one of the cores.
 % \end{itemize}
 
-\textbf{I NEED TO SIMULATE THE CORE WITH AND WITHOUT PC-HARDENING AND CSR-HARDENING TO SEE THE DIFFERENCE IN PPA}
-\textbf{I need to create a c program that has some code that is easily glitchable that represents a real world safety feature. This could be an infinite while loop, where the aim is to break out of this loop using a glitch. To achieve this I can either make a module whose sole purpose is to glitch a register and then make this glitchin happen radomly. Or i can induce som form of clock-glitching. This might not be possible in simulation as the setup / hold times will not be realistic. Voltag eglitching is also not possible as I dont havee access to the supply voltage of the system.}
+%\textbf{I NEED TO SIMULATE THE CORE WITH AND WITHOUT PC-HARDENING AND CSR-HARDENING TO SEE THE DIFFERENCE IN PPA}
+%\textbf{I need to create a c program that has some code that is easily glitchable that represents a real world safety feature. This could be an infinite while loop, where the aim is to break out of this loop using a glitch. To achieve this I can either make a module whose sole purpose is to glitch a register and then make this glitchin happen radomly. Or i can induce som form of clock-glitching. This might not be possible in simulation as the setup / hold times will not be realistic. Voltag eglitching is also not possible as I dont havee access to the supply voltage of the system.}
 
 % \textbf{TODO:}
 % \begin{itemize}
