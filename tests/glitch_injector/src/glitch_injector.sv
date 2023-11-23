@@ -14,7 +14,7 @@ module glitch_injector #(parameter BIT_LENGTH = 1, parameter SPECIFIC = {BIT_LEN
     input   wire                    enable_specific    
 );
 
-always_ff @ (posedge clk or posedge reset) begin 
+always_ff @ (posedge clk or posedge reset) begin 
     if (reset) begin 
         out <= 0;
     end else begin
