@@ -62,14 +62,19 @@ def plot_instructions(instructions):
 
     df = pd.DataFrame({"Instruction": ins_count.index, "Count": ins_count.values})
 
-    colors = ['salmon' if (ins[0] == 'jalr' or ins[0] == 'jal') else 'skyblue' for ins in df.values]
+    colors = ['salmon' if (ins[0] == 'jalr' or ins[0] == 'jal' or ins[0] == 'beq' or ins[0] == 'bne' or ins[0] == 'blt' or ins[0] == 'bge') else 'skyblue' for ins in df.values]
 
     # Plot the data using pandas
     ax = df.plot(kind="bar", x="Instruction", y="Count", color=colors, legend=None)
     plt.xlabel("Instruction")
     plt.ylabel("Count")
     plt.title("Instruction Occurrences")
-
+    plt.legend()
+    
+    legend_labels = {'Jump/Branch instructions': 'salmon', 'Other instructions': 'skyblue'}
+    legend_handles = [plt.Rectangle((0,0),1,1, color=col) for col in legend_labels.values()]
+    ax.legend(legend_handles, legend_labels.keys(), loc='lower right')
+    
     ax.set_yticks(range(0, max(df['Count'])+1, 100))  # Set ticks at even intervals
     ax.yaxis.grid(True, linestyle='--', linewidth=0.5, color='gray')  # Add dashed grid lines
 
@@ -82,7 +87,5 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     org_log = organize_log(args.log_file)
-    #print(org_log['INSTRUCTION'])
-    #print(pc_always_different(org_log))
-    #print(num_instruction(org_log, 'j'))
+    
     plot_instructions(get_instructions(org_log))

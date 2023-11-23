@@ -1,0 +1,52 @@
+Mathematics må ut av fakultetsnavn 
+
+Ikke bruke 'I' noen sinne. Kan bruke we. 
+Uten pronomen totalt er best
+Savner presisjon i abstract. Bruke tall for å gi bakgrunn. 
+Future work trenger nødvendig vis ikke å være med.
+Metodikk som er brukt og hva som er funnet frem til. 
+
+Struktur:
+Mer stringent struktur 
+Background kommer allerede inn i experimental
+
+Introduksjon:
+Kontekst nivå
+Kapittelet der en ikke-teknolog bør kunne forstå hva som skjer. 
+Man må vite hva glitching er for å kunne forstå 
+Mer presisjon. 
+Mer innformasjon spesifikt om hva min oppgave angeriper. 
+Nevne valinge countermeasures. 
+While relying on bla bla bla we did bla bla bla. 
+
+Problem deifinition:
+Egentlig tar man state of the art før problem definition
+Først gi leseren en forståelse
+Problem deifinition kan være et delkapittel i background. 
+Starten på problem deifition kan være innledningen til papiret egentlig.
+Ikke referer til 'this paper'. DEt er et project eller 'this work'. 
+Tenk gjennom hva aim er i mer detalj. Ikke general public. 
+
+Background:
+Beskrivelse av hva som er i kapittelet på topppen. 
+Beskrive hva et glitch attack er. Dette vil vise forståelse. 
+Forklar hvor invasive attacks ikke er med i dette prosjektet. 
+Delkapittel for non-invasive attacks.
+Trenger å beskrive mer hva er state of the art. Hvilket problem er det som ikke blir løst som vi vil løse med mitt prosjekt. 
+'The need for glitch protection' 
+Beskriv figuren som viser blokk diagram mye bedre og bruk det i teksten.
+Blander bakgrunn og metodikk / motivasjon.
+Savner beskrivelse på hvorfor jeg angeriper problemet jeg angeriper. 
+Siste del i background passer nok bedre inn i metodikk. 
+MER PRESISJON. 
+
+Experiemential:
+Hvordan er det angerpet
+Hvilken metodikk 
+Hvilken medote er brukt for å måle resultater. 
+Hvilke benchmarks har jeg for å evaluere resultater. 
+Hvilke typer tester gjør jeg 
+4.4 choices findings skal være forklart i teksten og mye tidligere i kapittelet. 
+Limitations er basert på valg som blir gjort i 4.2. 
+Tabell som vier hvilke målinger som er gjort mot hva. 
+ 
