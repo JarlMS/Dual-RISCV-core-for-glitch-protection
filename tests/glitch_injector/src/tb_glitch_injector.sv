@@ -6,12 +6,12 @@
 //--------------------------------
 `timescale 1ns/1ns
 module tb_glitch_injector();
-    reg enable;
-    reg enable_specific;
-    reg clk;
-    reg reset;
-    wire [7:0] out;
-    reg [7:0] in;
+    wire enable;
+    wire enable_specific;
+    wire clk;
+    wire reset;
+    logic [7:0] out;
+    logic [7:0] in;
 
     // Instantiate the DUT
     glitch_injector #(8,8'b10101010) u0(
