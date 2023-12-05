@@ -160,5 +160,75 @@ int main(int argc, char *argv[])
 
 \end{lstlisting}
 
+% Define RISC-V Assembly language style
+\lstdefinelanguage{riscv}{
+  morekeywords={add,sub,li,lw,sw,nop,push,addi4spn,jal,beqz,addi,bgeu,j,mv,popret}, % Add your RISC-V instructions
+  sensitive=false,
+  morecomment=[l]{\#},
+  morestring=[b]",
+}
+
+
+\begin{lstlisting}[caption={Assembly code for instruction skip test program}, label=lst:asm_instr_skip, language=riscv]
+00000438 <main>:
+
+int main(int argc, char *argv[])
+{
+     438:	b85a                    cm.push {x1,x8},-48
+     43a:	1800                    c.addi4spn	x8,x2,48
+     43c:	fca42e23                sw	x10,-36(x8)
+     440:	fcb42c23                sw	x11,-40(x8)
+    /* Print a banner to stdout */
+    // printf("\nHello World! This is the new glitch test\n");
+    int result_code = 0;
+     444:	fe042423                sw	x0,-24(x8)
+
+    /* Count to avoid actual infite loop */
+    unsigned int count = 0;
+     448:	fe042623                sw	x0,-20(x8)
+
+    /* Get error result code */
+    result_code = boot_go();
+     44c:	37f1                    c.jal   418 <boot_go>
+     44e:	fea42423                sw	x10,-24(x8)
+
+    if (result_code != 0) {
+     452:	fe842783                lw	x15,-24(x8)
+     456:	c395                    c.beqz  x15,47a <main+0x42>
+      // printf("Unable to find bootable image\n");
+      while(1) {
+        count++;
+     458:	fec42783                lw	x15,-20(x8)
+     45c:	0785                    c.addi  x15,1
+     45e:	fef42623                sw	x15,-20(x8)
+        if (count > 10) {
+     462:	fec42703                lw	x14,-20(x8)
+     466:	47a9                    c.li    x15,10
+     468:	fee7f8e3                bgeu    x15,x14,458 <main+0x20>
+          printf("Exiting...\n");
+     46c:	6791                    c.lui   x15,0x4
+     46e:	84c78513                addi    x10,x15,-1972 # 384c <nmi_end_handler_ret+0x28>
+     472:	05b000ef                jal     x1,ccc <puts>
+          return EXIT_SUCCESS;
+     476:	4781                    c.li    x15,0
+     478:	a801                    c.j     488 <main+0x50>
+        }
+      }
+    }
+
+    printf("Glitched out of loop\n");
+     47a:	6791                    c.lui   x15,0x4
+     47c:	85878513                addi    x10,x15,-1960 # 3858 <nmi_end_handler_ret+0x34>
+     480:	04d000ef                jal     x1,ccc <puts>
+    do_boot();
+     484:	3755                    c.jal   428 <do_boot>
+    return EXIT_FAILURE;
+     486:	4785                    c.li    x15,1
+}
+     488:	853e                    c.mv    x10,x15
+     48a:	be5a                    cm.popret	{x1,x8},48
+
+\end{lstlisting}
+
 \subsubsection{Subsection}
 Write something else here.
