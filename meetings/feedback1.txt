@@ -15,7 +15,7 @@ Kontekst nivå
 Kapittelet der en ikke-teknolog bør kunne forstå hva som skjer. 
 Man må vite hva glitching er for å kunne forstå 
 Mer presisjon. 
-Mer innformasjon spesifikt om hva min oppgave angeriper. 
+Mer informasjon spesifikt om hva min oppgave angeriper. 
 Nevne valinge countermeasures. 
 While relying on bla bla bla we did bla bla bla. 
 
@@ -47,6 +47,6 @@ Hvilken medote er brukt for å måle resultater.
 Hvilke benchmarks har jeg for å evaluere resultater. 
 Hvilke typer tester gjør jeg 
 4.4 choices findings skal være forklart i teksten og mye tidligere i kapittelet. 
-Limitations er basert på valg som blir gjort i 4.2. 
+Limitations er basert på valg som blir gjort i 4.1. 
 Tabell som vier hvilke målinger som er gjort mot hva. 
  
