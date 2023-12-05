@@ -6,14 +6,70 @@
 
 Because the work in this project is based on the pre-existing code found in the CV32E40S repository\cite{cv32e40s_manual}, some design considerations had to be made when implementing the dual core. For instance, removing features from the Xsecure ISE is easier said than done due to the features being heavily woven into many aspects of the core and the verification environment. Because of this, it was decided that only removing the PCH feature would be a good baseline for testing and comparison between the old and new architectures. This means that the two architectures being compared are: \textbf{The unmodified CV32E40S core} and \textbf{The modified Dual-Core Lockstep CV32E40S with PCH removed}. To test that the architectures work they both run a \textit{sanity} simulation of the code shown in \autoref{app:helloworldC} using \textit{Verilator}\cite{verilator}.
 
-Direct comparison between the cores is done by looking at the number of clock cycles needed to run through the test program, as well as the area and power usage of the synthesized design. These comparisons are done mostly to give some understating of the resource usage, but for evaluating the effectiveness of the solution these metrics are not very useful. As these cores are both meant to be used in applications where hardware security is of the utmost importance, they are often allowed to trade PPA for robustness. Because of this, both cores will be tested against a simple program, shown in \autoref{lst:test_code}, representing a secure boot protocol similar to the one shown in \autoref{fig:glitchable_code}. The idea behind the test is to simulate a glitch attack happening at different places in the execution of the program and to see how both architectures will handle it. Because we only removed the PCH feature, the glitching will be restricted to the PC. This means we will only try to do instruction skipping, and no resetting of register values or status registers for conditional branches. 
+Direct comparison between the cores is done by looking at the number of clock cycles needed to run through the test program, as well as the area and power usage of the synthesized design. These comparisons are done mostly to give some understating of the resource usage, but for evaluating the effectiveness of the solution these metrics are not very useful. As these cores are both meant to be used in applications where hardware security is of the utmost importance, they are often allowed to trade PPA for robustness. Because of this, both cores will be tested against two simple programs, shown in \autoref{lst:test_code} and \autoref{lst:coverage_test}. The former represents a secure boot protocol similar to the one shown in \autoref{fig:glitchable_code}. The latter represents some application with a lot of memory accesses and arithemtic operations. 
+
+The idea behind the first test is to simulate a glitch attack happening at different places in the execution of the program and to see how both architectures will handle it. Because we only removed the PCH feature, the glitching in this test will be restricted to the PC. This means we will only try to do instruction skipping, and no resetting of register values or status registers for conditional branches. In the second test we wish to test the fault detection coverage of both cores. This test purposfully attacks parts of the core that are not explicitly covered by features from the \textit{Xsecure} extension. This way it will be possible to see whether the the Dual-Core setup delivers extra fault coverage as a trade off to the increased area and power usage. 
+
+\subsection{Simulating glitch attacks}
+\label{subsec:sim_glitch}
+
+Real glitch attacks as described in \autoref{sec:glitch_attacks} often include tampering with some external stimuli to a device, like the clock, voltage or temperature. Using the same attacks in simulation is both complicated and often not possible. However, to simulate attacks a \textit{glitch injector} module was implemented into the RTL of the \textit{CV32E40S}. The code for this module is shown in \autoref{lst:glitch_injector}. During simulation the module is always running and the output is controlled by the \textit{enable, enable\_specific} and \textit{rst\_n} signals as shown in \autoref{tab:module_output}. Any signal that we wish to glitch can then be forced to the output value of the \textit{glitch\_injector} in the test bench. 
+
+\begin{table}[h]
+\centering
+\caption{Glitch Injector output based on control signals.}
+\label{tab:module_output}
+\begin{tabular}{ccccc}
+\toprule 
+\rowcolor{black!20} \textbf{enable} & \textbf{enable\_specific} & \textbf{rst\_n} & \textbf{in} & \textbf{out} \\
+\midrule
+0 & 0 & x & x & x \\
+\rowcolor{black!20} 1 & 0 & 1 & 0 & Random \\
+1 & 0 & 1 & 1 & Random \\
+\rowcolor{black!20} 1 & 1 & 1 & x & Specific \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{lstlisting}[caption={SystemVerilog code for the glitch\_injector module}, label=lst:glitch_injector, language=verilog]
+module cv32e40s_glitch_injector 
+#(
+parameter BIT_LENGTH = 1, 
+parameter SPECIFIC = {BIT_LENGTH{1'b0}}
+)
+(
+    output  logic [0:BIT_LENGTH-1]      out,
+    input   logic [0:BIT_LENGTH-1]      in,
+    input   wire                        clk,
+    input   wire                        rst_n,
+    input   wire                        enable,
+    input   wire                        enable_specific    
+);
+
+always_ff @ (posedge clk, negedge rst_n) begin 
+    if (rst_n == 1'b0) begin 
+        out <= 0;
+    end else begin
+        reg [BIT_LENGTH-1:0] random_out; // Declare 'random_out' as a register
+
+        if (enable_specific) begin
+            out <= SPECIFIC;
+        end else if (enable && !enable_specific) begin
+            random_out = $\$$urandom;
+            out <= random_out; 
+        end else
+            out <= in;  
+    end
+end
+endmodule
+\end{lstlisting}
 
 \subsection{Skipping instructions}
 \label{subsec:skip_instr}
 
-In a practical system, manipulating the program counter to specific values can be challenging. However, utilizing voltage- or clock-glitching techniques allows for the disruption of the normal logic behavior responsible for incrementing the program counter. This interference enables the incrementation of the pointer multiple times, effectively skipping one or more instructions. Consequently, if an attacker possesses knowledge of the execution sequence, they can strategically skip branches or jumps, gaining unauthorized access to restricted sections of the code.
+In a practical system, manipulating the program counter to specific values can be challenging. However, utilizing voltage- or clock-glitching techniques allows for the disruption of the normal logic behavior responsible for incrementing the program counter. This interference enables the incrementation of the pointer multiple times, effectively skipping one or more instructions. Consequently, if an attacker possesses knowledge of the execution sequence, they can strategically skip branches or jumps, gaining unauthorized access to restricted sections of the code. This type of attack can be simulated with the \textit{glitch\_injector} by setting the output of the module to a specific value. 
 
-In cases where the attacker has limited insight into the instruction sequence but has access to the system's bootloader, an alternative method for instruction skipping exists. By inserting numerous 'NOP' instructions before the targeted restricted code area, the attacker can 'scramble' the program counter, and have an increased likelyhood of landing on a 'NOP'. From this instruction the system continues sequential execution, eventually reaching the desired restricted code.
+In cases where the attacker has limited insight into the instruction sequence but has access to the system's boot-loader, an alternative method for instruction skipping exists. By inserting numerous 'NOP' instructions before the targeted restricted code area, the attacker can 'scramble' the program counter, and have an increased likely-hood of landing on a 'NOP'. From this instruction the system continues sequential execution, eventually reaching the desired restricted code. This type of attack can be simulated with the \textit{glitch\_injector} be setting the output of the module equal to a random value. 
 
 \section{Simulating instruction skipping}
 \label{sec:sim_instr_skip}
@@ -65,23 +121,62 @@ Line in C code & ASM instruction & Expected outcome \\
 \section{Coverage tests}
 \label{sec:coverage_test}
 
-While it is important to check whether the Dual-Core setup can replace some of the specific security features of \textit{Xsecure}, it does not explore one of the main advantages: glitch detection coverage. In order to test coverage, we will introduce glitches in areas that are not specifically covered by \textit{Xsecure}. One such area is the address-bus going to the data-memory during a load or store instruction. If this were to happen with only one core, the wrong data might stay in the memory undetected and faults can propagate to other parts of the execution sequence. With Dual-Cores any discrepancy between the loaded or stored data can be detected before faults distrupt the system. 
+While it is important to check whether the Dual-Core setup can replace some of the specific security features of \textit{Xsecure}, it does not explore one of the main advantages which is coverage. In order to test coverage, we will introduce glitches in areas that are not specifically covered by \textit{Xsecure}. One such area is the address-bus going to the data-memory during a load or store instruction. If this is attacked with only one core, the wrong data might stay in the memory undetected and faults can propagate to other parts of the execution sequence. With Dual-Cores any discrepancy between the loaded or stored data can be detected before faults disrupt the system. 
 
-Other glitches that are not covered by \textit{Xsecure} are glitches affecting the \textit{a} or \textit{b} operands 
+Other glitch attacks that are not covered by \textit{Xsecure} are those that affect the \textit{rs1}, \textit{rs2} or \textit{rd} operands in an instruction as shown in \autoref{fig:riscv_instructions}. If an attacker were to disrupt the values of these operands in either the \textit{ID} or \textit{EX} stage, faults can occur that will disrupt normal operation. Like with faults on the address-bus, there are no dedicated modules to validate the data in \textit{Xsecure}, where as a Dual-Core setup will be able to detect this.
 
-\textbf{Teste om jeg rekker: Glitche adressebussen fra en load/store instruksjon. Glitche operand a eller b når den er i id stage. I execute må man glitch a eller b i id\_ex\_stage}
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{docs/images/riscv_instructions.png}
+    \caption{RISC-V base instruction formats showing immediate variants\cite{riscv_manual}.}
+    \label{fig:riscv_instructions}
+\end{figure}
 
-\subsection{How are the different layouts tested?}
-\subsubsection{Synthesis tool - Which one is used?}
-\subsubsection{How is fault injection done in sumlation?}
-\subsection{How are results from fault injection compared between the different setups?}
+In order to test the fault coverage of both solutions, a different test program is used as shown in \autoref{lst:coverage_test}. This code runs a simple function that calculates the 20th Fibonacci number. The function uses no recursion and the code is compiled without optimization. This is to make the C-code and Assembly as similar as possible. Each line in the loop body between line 6 and 10 translates to at least one load and store instruction each. In addition to this line 7 contains an addition operation. The tests that will run on the code in \autoref{lst:coverage_test} are shown in \autoref{tab:coverage_test}.
+
+\begin{lstlisting}[caption={A sample C++ code}, label=lst:coverage_test, language=C++]
+int main(int argc, char *argv[])
+{
+    int prev = 0;
+    int current = 1;
+
+    for (int i = 1; i < 20; i++) {
+        int next = prev + current;
+        prev = current;
+        current = next;
+    }
+
+    if (current == 6765) {
+        printf("No glitch detected\n");
+        return EXIT_SUCCESS;
+    }
+    printf("Glitch detected\n");
+    return EXIT_FAILURE;
+}
+\end{lstlisting}
+
+\begin{table}[h]
+\centering
+\caption{Instruction skipping tests.}
+\label{tab:coverage_test}
+\begin{tabular}{m{2.5cm}m{3.5cm}m{7.5cm}}
+\toprule 
+Line in C code & ASM instructions & Expected outcome \\
+\midrule
+\rowcolor{black!20} \textbf{7} & \makecell{lw	x14,-20(x8) \\ lw x15,-24(x8) \\ c.add x15,x14 \\ sw x15,-32(x8)} & Disrupting any of the \textit{lw}, \textit{sw} or \textit{add} instructions should lead to the wrong result at the end of the loop.\\
+\textbf{8} & \makecell{lw x15,-24(x8) \\ sw x15,-20(x8)} & Disrupting either the \textit{lw} or \textit{sw} instruction should lead to the wrong result at the end of the loop. \\
+\rowcolor{black!20} \textbf{9} & \makecell{lw x15,-32(x8) \\ sw x15,-24(x8)} & Disrupting either the \textit{lw} or \textit{sw} instruction should lead to the wrong result at the end of the loop.\\
+\bottomrule
+\end{tabular}
+\end{table}
 
 \section{Dual RISC-V Cores in lockstep}
 \label{sec:dualcore}
 
-The proposed dual-core architecture is quite straight forward to implement. All that is needed is to connect two cores with synchronization registers at appropriate intervals. Choosing the correct granularity for comparisons is however important. At the highest level, comparing only the output of both cores is an option. Comparison would then have to be done in the \textit{write-back} stage of the pipeline. For the end-user application, this would be the most natural way to do it as the details of what has glitched is far less important than just detecting an error. However, for analyzing the effects of glitch attacks on a system in more detail, a much more fine grained approach is needed. The obvious counterpart to only comparing the output would be to compare all wires and registers. This would allow the user to determine the exact location of an error, but at the cost of adding a lot of hardware. This way of implementing the comparisons can also be argued against as it goes against one of the principal ideas of using a dual-core lockstep mechanism: simplicity of integration. 
+The proposed dual-core architecture is quite straight forward to implement. All that is needed is to connect two cores with synchronization registers at appropriate intervals. Choosing the correct granularity for comparisons is however important. At the highest level, comparing only the output of both cores is an option. Comparison would then have to be done in the \textit{write-back} stage of the pipeline. For the end-user application, this would be the most natural way to do it as the details of what has glitched is far less important than just detecting that an error has occurred. However, for analyzing the effects of glitch attacks on a system in more detail, a much more fine grained approach is needed. The obvious counterpart to only comparing the output would be to compare all wires and registers. This would allow the user to determine the exact location of an error, but at the cost of adding a lot of extra hardware. This way of implementing the comparisons can also be argued against as it goes against one of the principal ideas of using a dual-core lockstep mechanism: simplicity of implementation. 
 
-As the purpose of this project is to analyze the effectiveness of the dual-core lockstep mechanism, some granularity is needed. However, knowing exactly which wire or register bit has glitched will not be necessary, and adds a lot of extra work for simply connecting everything. Therefore, synchronization registers where comparison happens will be connected to the input signals going to different stages of the pipeline. From this data it is then possible to detect a glitch and give the user some information about exactly where in the pipeline the fault occurred. The top level block diagram for the dual-core lockstep setup is seen in \autoref{fig:dual_block}. As an added security measure, the two cores should be intentionally offset from each other by a few clock cycles. This way, in the unlikely event that an attacker manages to glitch the two cores in precisely the same way at the same time, they now need to do it in a highly synchronized manner, which significantly increases the complexity of the attack. The deliberate offset between the cores introduces a form of time diversity, making it more challenging for an attacker to exploit vulnerabilities using clock glitches or other timing-based attacks. These additional security measures enhance the system's resistance to fault injection attacks and improve its overall robustness.
+As the purpose of this project is to analyze the effectiveness of the dual-core lockstep mechanism, some granularity is needed. However, knowing exactly which wire or register bit has glitched will not be necessary, and adds a lot of extra work for simply connecting everything. Therefore, synchronization registers where comparison happens will be connected to the input signals going to different stages of the pipeline as well as to every output signal going from the core to the OBI interfaces. From this data it is then possible to detect a glitch and give the user some information about exactly where in the pipeline the fault occurred. The top level block diagram for the dual-core lockstep setup is seen in \autoref{fig:dual_block}. 
+As an added security measure from using the synchronization registers, the two cores are offset from each other by a clock cycle. This way, in the unlikely event that an attacker manages to glitch the two cores in precisely the same way at the same time, they now need to do it in a highly synchronized manner, which significantly increases the complexity of the attack. The deliberate offset between the cores introduces a form of time diversity, making it more challenging for an attacker to exploit vulnerabilities using clock glitches or other timing-based attacks. These additional security measures enhance the system's resistance to fault injection attacks and improve its overall robustness.
 
 \begin{figure}[h!]
     \centering
@@ -107,3 +202,8 @@ Verdien 10 lagret i x9
 
 \section{Choices / Findings}
 \label{sec:choice}
+
+\subsection{How are the different layouts tested?}
+\subsubsection{Synthesis tool - Which one is used?}
+\subsubsection{How is fault injection done in sumlation?}
+\subsection{How are results from fault injection compared between the different setups?}
