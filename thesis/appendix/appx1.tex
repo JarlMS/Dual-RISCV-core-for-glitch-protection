@@ -230,5 +230,72 @@ int main(int argc, char *argv[])
 
 \end{lstlisting}
 
+\begin{lstlisting}[caption={Assembly code for coverage test program}, label=lst:asm_coverage, language=riscv]
+
+00000418 <main>:
+#include <stdio.h>
+#include <stdint.h>
+#include <stdlib.h>
+
+int main(int argc, char *argv[])
+{
+     418:	b85a                    cm.push {x1,x8},-48
+     41a:       1800                    c.addi4spn	x8,x2,48
+     41c:	fca42e23                sw      x10,-36(x8)
+     420:	fcb42c23                sw      x11,-40(x8)
+    int prev = 0;
+     424:       fe042623                sw	x0,-20(x8)
+    int current = 1;
+     428:	4785                    c.li    x15,1
+     42a:	fef42423                sw      x15,-24(x8)
+
+    for (int i = 1; i < 20; i++) {
+     42e:       4785                    c.li    x15,1
+     430:       fef42223                sw	x15,-28(x8)
+     434:       a02d                    c.j     45e <main+0x46>
+        int next = prev + current;
+     436:	fec42703                lw	x14,-20(x8)
+     43a:	fe842783                lw	x15,-24(x8)
+     43e:	97ba                    c.add   x15,x14
+     440:	fef42023                sw	x15,-32(x8)
+        prev = current;
+     444:	fe842783                lw	x15,-24(x8)
+     448:	fef42623                sw	x15,-20(x8)
+        current = next;
+     44c:	fe042783                lw	x15,-32(x8)
+     450:	fef42423                sw	x15,-24(x8)
+    for (int i = 1; i < 20; i++) {
+     454:	fe442783                lw	x15,-28(x8)
+     458:	0785                    c.addi  x15,1
+     45a:	fef42223                sw	x15,-28(x8)
+     45e:	fe442703                lw	x14,-28(x8)
+     462:	47cd                    c.li    x15,19
+     464:	fce7d9e3                bge     x15,x14,436 <main+0x1e>
+    }
+
+    if (current == 6765) {
+     468:	fe842703                lw	x14,-24(x8)
+     46c:	6789                    c.lui   x15,0x2
+     46e:	a6d78793                addi    x15,x15,-1427 # 1a6d <__sfvwrite_r+0x35d>
+     472:	00f71963                bne     x14,x15,484 <main+0x6c>
+        printf("No glitch detected\n");
+     476:	6791                    c.lui   x15,0x4
+     478:	85478513                addi    x10,x15,-1964 # 3854 <nmi_end_handler_ret+0x28>
+     47c:	059000ef                jal     x1,cd4 <puts>
+        return EXIT_SUCCESS;
+     480:	4781                    c.li    x15,0
+     482:	a039                    c.j     490 <main+0x78>
+    }
+    printf("Glitch detected\n");
+     484:	6791                    c.lui   x15,0x4
+     486:	86878513                addi    x10,x15,-1944 # 3868 <nmi_end_handler_ret+0x3c>
+     48a:	04b000ef                jal     x1,cd4 <puts>
+    return EXIT_FAILURE;
+     48e:	4785                    c.li    x15,1
+}
+     490:	853e                    c.mv    x10,x15
+     492:	be5a                    cm.popret	{x1,x8},48
+\end{lstlisting}
+
 \subsubsection{Subsection}
 Write something else here.
