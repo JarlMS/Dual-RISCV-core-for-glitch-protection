@@ -1,8 +1,5 @@
 build/
-synthesis/constraints
-synthesis/src
-synthesis/libs
-synthesis/out
+synthesis/
 *.mti
 *.mpf
 *.bak
