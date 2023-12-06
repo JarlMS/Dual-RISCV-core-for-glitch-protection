@@ -13,7 +13,7 @@ The idea behind the first test is to simulate a glitch attack happening at diffe
 \subsection{Simulating glitch attacks}
 \label{subsec:sim_glitch}
 
-Real glitch attacks as described in \autoref{sec:glitch_attacks} often include tampering with some external stimuli to a device, like the clock, voltage or temperature. Using the same attacks in simulation is both complicated and often not possible. However, to simulate attacks a \textit{glitch injector} module was implemented into the RTL of the \textit{CV32E40S}. The code for this module is shown in \autoref{lst:glitch_injector}. During simulation the module is always running and the output is controlled by the \textit{enable, enable\_specific} and \textit{rst\_n} signals as shown in \autoref{tab:module_output}. Any signal that we wish to glitch can then be forced to the output value of the \textit{glitch\_injector} in the test bench. 
+Real glitch attacks as described in \autoref{sec:glitch_attacks} often include tampering with some external stimuli to a device, like the clock, voltage or temperature. Using the same attacks in simulation is both complicated and often not possible. However, to simulate an attack, a \textit{glitch injector} module was implemented into the RTL of the \textit{CV32E40S}. The code for this module is shown in \autoref{lst:glitch_injector}. During simulation the module is always running and the output is controlled by the \textit{enable, enable\_specific} and \textit{rst\_n} signals as shown in \autoref{tab:module_output}. Any signal that we wish to glitch can then be forced to the output value of the \textit{glitch\_injector} in the test bench. 
 
 \begin{table}[h]
 \centering
@@ -63,6 +63,17 @@ always_ff @ (posedge clk, negedge rst_n) begin
 end
 endmodule
 \end{lstlisting}
+
+While this module allows for fault injection, there are still some complications left. As mentioned in \autoref{sec:non_invasive}, effective glitch attacks require very precise timing. While doing this in simulation is a lot simpler than doing it on a physical device, we still need to "reverse engineer" our program to figure out where to do fault injection. 
+
+\begin{enumerate}
+    \item Write high level C code containing some vulnerability that can be exploited. 
+    \item Compile the code with no optimization to make relationship between C and Assembly as close as possible.
+    \item Analyse the Assembly and identify the instruction(s) that can be glitched.
+    \item Simulate the core running the code without any fault injection to log all executed instructions. 
+    \item Analyze the log file to figure out at what time the glitchable instruction was executed. The log file only logs at what time the instruction reached the WB stage, meaning we must subtract 1-3 clock periods based on which part of the pipeline we wish to introduce the glitch. 
+    \item Rerun simulation with fault injection and verify that the expected glitch occurs at the right time. If not, redo step 5 with different timing. 
+\end{enumerate}
 
 \subsection{Skipping instructions}
 \label{subsec:skip_instr}
@@ -123,7 +134,7 @@ Line in C code & ASM instruction & Expected outcome \\
 
 While it is important to check whether the Dual-Core setup can replace some of the specific security features of \textit{Xsecure}, it does not explore one of the main advantages which is coverage. In order to test coverage, we will introduce glitches in areas that are not specifically covered by \textit{Xsecure}. One such area is the address-bus going to the data-memory during a load or store instruction. If this is attacked with only one core, the wrong data might stay in the memory undetected and faults can propagate to other parts of the execution sequence. With Dual-Cores any discrepancy between the loaded or stored data can be detected before faults disrupt the system. 
 
-Other glitch attacks that are not covered by \textit{Xsecure} are those that affect the \textit{rs1}, \textit{rs2} or \textit{rd} operands in an instruction as shown in \autoref{fig:riscv_instructions}. If an attacker were to disrupt the values of these operands in either the \textit{ID} or \textit{EX} stage, faults can occur that will disrupt normal operation. Like with faults on the address-bus, there are no dedicated modules to validate the data in \textit{Xsecure}, where as a Dual-Core setup will be able to detect this.
+Other glitch attacks that are not covered by \textit{Xsecure} are those that affect the \textit{rs1}, \textit{rs2} or \textit{rd} operands in an instruction as shown in \autoref{fig:riscv_instructions}. If an attacker were to disrupt the values of these operands in either the \textit{ID} or \textit{EX} stage, faults can occur that will disrupt normal operation. Like with faults on the address-bus, there are no dedicated modules for validating this data in \textit{Xsecure}, where as a Dual-Core setup should be able to detect this.
 
 \begin{figure}[h!]
     \centering
@@ -180,7 +191,7 @@ As an added security measure from using the synchronization registers, the two c
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=\textwidth]{docs/images/dual_cores_block.png}
+    \includegraphics[width=\textwidth]{docs/images/dual_cores-block.png}
     \caption{Block diagram cv32e40s dual-core lockstep mechanism.}
     \label{fig:dual_block}
 \end{figure}
