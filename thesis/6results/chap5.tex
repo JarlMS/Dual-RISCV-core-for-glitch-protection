@@ -56,17 +56,39 @@ Glitching out of the while loop was not successful. This is possibly due to othe
 
 \subsubsection{Skipping directly to end}
 
-As mentioned earlier, an attacker can potentially glitch directly to the end of the program if they have some way of manipulating the code in the boot-loader. To simulate this, the program counter is forced to the address of the instruction after the while loop. This force happens as soon as the main program is entered. This happens at 1737ns. 
+As mentioned earlier, an attacker can potentially glitch directly to the end of the program if they have some way of manipulating the code in the boot-loader. To simulate this, the program counter is forced to the address of the instruction after the while loop, \textit{0x00000482}. This force happens as soon as the main program is entered, which is at 1737ns.
 
-This glitch attack was not successful. However, no major alert was raised by the core as can be seen in 
+This glitch attack was not successful. However, no major alert was raised by the core as can be seen in \autoref{fig:direct_skip_single_wave}. This glitch therefore bypassed the PCH feature. 
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=\textwidth]{docs/images/instr_skip_glitch_injection_single_core.png}
-    \caption{Waveforms from simulated instruction skip on CV32E40S.}
+    \includegraphics[width=\textwidth]{docs/images/direct_skip_single_core.png}
+    \caption{Waveforms from simulated direct instruction skip on CV32E40S.}
     \label{fig:direct_skip_single_wave}
 \end{figure}
 
+\subsection{Dual-Core Lockstep}
+\label{subsec:dual_instr_skip}
+
+\subsubsection{Skipping function call}
+
+The call to the \textit{c.jal} instruction occurs at 1731ns. The program counter is glitched to the address \textit{0x0000044e}. 
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{docs/images/instr_sk.png}
+    \caption{Waveforms from simulated direct instruction skip on CV32E40S.}
+    \label{fig:direct_skip_single_wave}
+\end{figure}
+
+
+\subsubsection{Skipping out of while loop}
+
+The call to the \textit{c.j} instruction occurs first at 1809ns. The program counter is glitched to the address \textit{0x0000047c}.
+
+\subsubsection{Skipping directly to end}
+
+The call to the \textit{main} function occurs at 1710ns. The program counter is glitche dto the address \textit{0x00000482}.
 
 
 \section{Coverage Test}
