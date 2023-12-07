@@ -122,8 +122,8 @@ int main(int argc, char *argv[])
 \toprule 
 Line in C code & ASM instruction & Expected outcome \\
 \midrule
-\rowcolor{black!20} \textbf{9} & c.jal 418 $\langle$boot_go$\rangle$ & Skipping this instruction means that the value of '-1' from the 'boot\_go()' function is never stored in the 'result\_code' register. The program then never enters the scope of the conditional statement. \\
-\textbf{15} & c.j 458 $\langle$main+0x20$\rangle$ & Skipping the jump instruction that keeps the 'while(1)' loop repeating will glitch out of the scope of the loop and execute the 'do\_boot()' function.  \\
+\rowcolor{black!20} \textbf{9} & c.jal 418 $\langle$boot\_go$\rangle$ & Skipping this instruction means that the value of '-1' from the 'boot\_go()' function is never stored in the 'result\_code' register. The program then never enters the scope of the conditional statement. \\
+\textbf{12} & c.j 458 $\langle$main+0x20$\rangle$ & Skipping the jump instruction that keeps the 'while(1)' loop repeating will glitch out of the scope of the loop and execute the 'do\_boot()' function.  \\
 \rowcolor{black!20} \textbf{Any line} & Any instruction & From any point in the code it is potentially possible to glitch directly to the address of the 'do\_boot()' function. The real danger of this happening is discussed in \autoref{subsec:skip_instr}. \\
 \bottomrule
 \end{tabular}
