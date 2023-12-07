@@ -6,7 +6,7 @@
 
 Because the work in this project is based on the pre-existing code found in the CV32E40S repository\cite{cv32e40s_manual}, some design considerations had to be made when implementing the dual core. For instance, removing features from the Xsecure ISE is easier said than done due to the features being heavily woven into many aspects of the core and the verification environment. Because of this, it was decided that only removing the PCH feature would be a good baseline for testing and comparison between the old and new architectures. This means that the two architectures being compared are: \textbf{The unmodified CV32E40S core} and \textbf{The modified Dual-Core Lockstep CV32E40S with PCH removed}. To test that the architectures work they both run a \textit{sanity} simulation of the code shown in \autoref{app:helloworldC} using \textit{Verilator}\cite{verilator}.
 
-Direct comparison between the cores is done by looking at the number of clock cycles needed to run through the test program, as well as the area and power usage of the synthesized design. These comparisons are done mostly to give some understating of the resource usage, but for evaluating the effectiveness of the solution these metrics are not very useful. As these cores are both meant to be used in applications where hardware security is of the utmost importance, they are often allowed to trade PPA for robustness. Because of this, both cores will be tested against two simple programs, shown in \autoref{lst:test_code} and \autoref{lst:coverage_test}. The former represents a secure boot protocol similar to the one shown in \autoref{fig:glitchable_code}. The latter represents some application with a lot of memory accesses and arithemtic operations. 
+Direct comparison between the cores is done by looking at the number of clock cycles needed to run through the test program, as well as the area and power usage of the synthesized design. Synthesis is done using \textit{Cadence Genus} with a 45nm technology library. Reports of area and power usage are generated for comparison by the tool. The number of clock cycles needed to run the program is counted using a build in feature of \textit{SimVision}. These comparisons are done mostly to give some understating of the resource usage, but for evaluating the effectiveness of the solution these metrics are not very useful. As these cores are both meant to be used in applications where hardware security is of the utmost importance, they are often allowed to trade PPA for robustness. Because of this, both cores will be tested against two simple programs, shown in \autoref{lst:test_code} and \autoref{lst:coverage_test}. The former represents a secure boot protocol similar to the one shown in \autoref{fig:glitchable_code}. The latter represents some application with a lot of memory accesses and arithemtic operations. 
 
 The idea behind the first test is to simulate a glitch attack happening at different places in the execution of the program and to see how both architectures will handle it. Because we only removed the PCH feature, the glitching in this test will be restricted to the PC. This means we will only try to do instruction skipping, and no resetting of register values or status registers for conditional branches. In the second test we wish to test the fault detection coverage of both cores. This test purposfully attacks parts of the core that are not explicitly covered by features from the \textit{Xsecure} extension. This way it will be possible to see whether the the Dual-Core setup delivers extra fault coverage as a trade off to the increased area and power usage. 
 
@@ -122,7 +122,7 @@ int main(int argc, char *argv[])
 \toprule 
 Line in C code & ASM instruction & Expected outcome \\
 \midrule
-\rowcolor{black!20} \textbf{11} & sw x10,-24(x8) & Skipping this instruction means that the value of '-1' from the 'boot\_go()' function is never stored in the 'result\_code' register. The program then never enters the scope of the conditional statement. \\
+\rowcolor{black!20} \textbf{9} & c.jal 418 $\langle$boot_go$\rangle$ & Skipping this instruction means that the value of '-1' from the 'boot\_go()' function is never stored in the 'result\_code' register. The program then never enters the scope of the conditional statement. \\
 \textbf{15} & c.j 458 $\langle$main+0x20$\rangle$ & Skipping the jump instruction that keeps the 'while(1)' loop repeating will glitch out of the scope of the loop and execute the 'do\_boot()' function.  \\
 \rowcolor{black!20} \textbf{Any line} & Any instruction & From any point in the code it is potentially possible to glitch directly to the address of the 'do\_boot()' function. The real danger of this happening is discussed in \autoref{subsec:skip_instr}. \\
 \bottomrule
@@ -186,35 +186,15 @@ Line in C code & ASM instructions & Expected outcome \\
 
 The proposed dual-core architecture is quite straight forward to implement. All that is needed is to connect two cores with synchronization registers at appropriate intervals. Choosing the correct granularity for comparisons is however important. At the highest level, comparing only the output of both cores is an option. Comparison would then have to be done in the \textit{write-back} stage of the pipeline. For the end-user application, this would be the most natural way to do it as the details of what has glitched is far less important than just detecting that an error has occurred. However, for analyzing the effects of glitch attacks on a system in more detail, a much more fine grained approach is needed. The obvious counterpart to only comparing the output would be to compare all wires and registers. This would allow the user to determine the exact location of an error, but at the cost of adding a lot of extra hardware. This way of implementing the comparisons can also be argued against as it goes against one of the principal ideas of using a dual-core lockstep mechanism: simplicity of implementation. 
 
-As the purpose of this project is to analyze the effectiveness of the dual-core lockstep mechanism, some granularity is needed. However, knowing exactly which wire or register bit has glitched will not be necessary, and adds a lot of extra work for simply connecting everything. Therefore, synchronization registers where comparison happens will be connected to the input signals going to different stages of the pipeline as well as to every output signal going from the core to the OBI interfaces. From this data it is then possible to detect a glitch and give the user some information about exactly where in the pipeline the fault occurred. The top level block diagram for the dual-core lockstep setup is seen in \autoref{fig:dual_block}. 
+As the purpose of this project is to analyze the effectiveness of the dual-core lockstep mechanism, some granularity is needed. However, knowing exactly which wire or register bit has glitched will not be necessary, and adds a lot of extra work for simply connecting everything. Therefore, synchronization registers where comparison happens will be connected to the input signals going to different stages of the pipeline as well as to every output signal going from the core to the OBI interfaces. From this data it is then possible to detect a glitch and give the user some information about exactly where in the pipeline the fault occurred. 
+
 As an added security measure from using the synchronization registers, the two cores are offset from each other by a clock cycle. This way, in the unlikely event that an attacker manages to glitch the two cores in precisely the same way at the same time, they now need to do it in a highly synchronized manner, which significantly increases the complexity of the attack. The deliberate offset between the cores introduces a form of time diversity, making it more challenging for an attacker to exploit vulnerabilities using clock glitches or other timing-based attacks. These additional security measures enhance the system's resistance to fault injection attacks and improve its overall robustness.
 
-\begin{figure}[h!]
+The top level block diagram for the dual-core lockstep setup is seen in \autoref{fig:dual_block}. The red blocks represent a stage in the pipeline, and the yellow rectangles are the registers between the different stages. The dark blue blocks are the OBI interfaces and the light blue blocks are the LSU modules responsible for communicating with the data interface. Each purple block represents a flip-flop that delays a signal one clock cycle, and the green blocks represent logic dedicated to comparing the signals of both cores. If any of the comparisons fail, one of four bits on the \textit{alert\_compare\_o} wire will be set to '1'. Which bit is set tells the user which one of the comparisons that failed.  
+
+\begin{figure}[ht!]
     \centering
     \includegraphics[width=\textwidth]{docs/images/dual_cores-block.png}
     \caption{Block diagram cv32e40s dual-core lockstep mechanism.}
     \label{fig:dual_block}
 \end{figure}
-
-\textbf{Instruction to be glitched:}
-\begin{lstlisting}
-       30003.000 ns | 0000672c | memchr syscalls.c 379 - beq x14,x10,66b4 <memchr+0x3c>
-\end{lstlisting}
-
-In order to glitch the loop we need to make the program skip the instruction that happens at 29991.000 ns. This is a bne instruction that keeps us in the loop. Next instruction occurs at 29997 and we must therefore chang ethe program counter before this. 
-
-Glitch 6734 to 673c
-
-Count lagret i x8 
-Verdien 10 lagret i x9
-
-\section{Limitations}
-\label{sec:limit}
-
-\section{Choices / Findings}
-\label{sec:choice}
-
-\subsection{How are the different layouts tested?}
-\subsubsection{Synthesis tool - Which one is used?}
-\subsubsection{How is fault injection done in sumlation?}
-\subsection{How are results from fault injection compared between the different setups?}

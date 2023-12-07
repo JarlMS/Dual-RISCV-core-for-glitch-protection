@@ -1,6 +1,52 @@
 \chapter{Results and Analysis}
 \label{chap5}
 
+\section{PPA comparison}
+\label{sec:synth_comparison}
+
+Results of synthesis of both cores as well as number of cycles needed to complete the test program in \autoref{app:helloworldC} is shown in \autoref{tab:ppa_results}. The relative difference from the single core to dual-cores is shown in the table.
+
+\begin{table}[h]
+\centering
+\caption{PPA results from simulation and synthesis of both setups.}
+\label{tab:ppa_results}
+\begin{tabular}{c|ccc}
+\toprule 
+Setup & Area[$pm^2$] & Power[$\mu W$] & Clock Cycles\\
+\midrule
+\rowcolor{black!20} CV32E40S & 63121.093 & 113.007 & 18424\\
+CV32E40S Dual-Core & 65214.732[$+3.3\%$] & 144.482[$+27.9\%$] & 17446[$-5.3\%$] \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Instruction Skipping}
+\label{sec:instr_skip_result}
+
+\subsection{CV32E40S}
+\label{subsec:single_instr_skip}
+
+To perform the tests described in \autoref{tab:instr_skip_test} we follow the steps described in \autoref{subsec:sim_glitch}. From the log file, we can see that the \textit{c.jal} instruction is logged at 1752ns. To skip this instruction the program counter needs to be skipped in the \textit{IF} stage, which is 3 cycles before \textit{WB}. The system clock has a period of 3ns, meaning the glitch is injected at 1743ns. The \textit{c.jal} is located at the address: \textit{0x0000044c}. Forcing the program counter to the next address \textit{0x0000044e} for a duration of 3ns will simulate an instruction skip. The address of the next instruction is only 2 away because the \textit{jal} is a 16-bit compressed instruction.
+
+Glitching of the core was done successfully. The log from execution with and without glitches are shown in \textbf{TABELL} and the waveforms from simulation are shown in \textbf{FIGURE}. From the figure one can see that the glitch is detected immediately. 
+
+\section{Coverage Test}
+\label{sec:cov_test_result}
+
+
+
+\textbf{Instruction to be glitched:}
+\begin{lstlisting}
+       30003.000 ns | 0000672c | memchr syscalls.c 379 - beq x14,x10,66b4 <memchr+0x3c>
+\end{lstlisting}
+
+In order to glitch the loop we need to make the program skip the instruction that happens at 29991.000 ns. This is a bne instruction that keeps us in the loop. Next instruction occurs at 29997 and we must therefore chang ethe program counter before this. 
+
+Glitch 6734 to 673c
+
+Count lagret i x8 
+Verdien 10 lagret i x9
+
 \section{Layout comparisons}
 
 \subsection{Can this be implemented in read hardware?}
