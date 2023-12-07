@@ -113,7 +113,7 @@ disabled & 17313 & 16470 \\
 & With PC-Hardening & Without PC-Hardening \\
 \midrule
 \rowcolor{black!20} \textbf{area[$pm^2$]} & 63164.38 & 61757.916 \\
-\textbf{power[$W$]} & 1.12163mW & 1.10450mW \\
+\textbf{power[$\mu W$]} & 112.163 & 110.450 \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -128,49 +128,10 @@ In general, glitch protection mechanisms will add to both the area and power con
 From simulation and synthesis of both cores it is obvious that the argument for using a dual-core lockstep mechanism cannot be made solely on resource usage and performance gain alone. However, the main advantage will be the coverage and robustness gained. To test this claim, the regular and dual-core setups will both be subjected to several different glitch attacks that will take place in different parts of the pipeline. The quality of the solution will then be determined by how effective each setup is at responding to the attack. 
 
 \section{Problem Definition}
+\label{sec:problem_definition}
 
 The openHW group has developed an instruction set extension (ISE) 'Xsecure' which contains several extra features aimed at stopping side-channel attacks as well as glitches. To prevent glitches the extensions introduces ECC for the registers and hardening of both the PC and the CSRs. These additions can slow down the performance of the CPU, increase the power usage and increase the over all complexity of the core. This paper researches the possibility of using dual RISC-V cores and comparing the entire state of both cores to provide redundancy and thereby glitch protection, without significantly impacting the power, performance and area (PPA) in a negative way. 
 
 The current way of doing glitch protection that is used by 'Xsecure' also allows the user to sometimes get a specific error message saying where and what things went wrong. This feature is however not able to do this for all major alerts or errors. The proposed dual core setup might be able to give detailed errors every time as it is possible to know exactly which area of the cores that are not coinciding. 
 
 Introducing a dual-core setup offers potential glitch protection via redundancy. However, the feasibility, overheads, synchronization mechanisms, and actual effectiveness of such a strategy needs thorough examination. In addition, the strategies for detection of a glitch, switch-over mechanisms, and potential recovery strategies need to be explored. An exploration of where and how glitches typically affect RISC-V cores is crucial. From other literature it is apparent that most glitches are induced outside of the CPU pipeline itself, and instead on larger area intensive components like data busses or register files/caches\cite{emfi_injection}. Because it is not feasible to validate the state of caches and register files at all times it is necessary to explore whether a dual core setup will be able to stop or register these types of glitches also. 
-
-
-% \begin{itemize}
-%     \item High logic cost 
-%     \item Slower execution of certain pipeline stages
-%     \item Lower throughput 
-%     \item A typical way of doing fault injection is though EMFI attacks which target larger components like caches or other memory components.
-%     How can we prevent these? Comparing the state of the entire chache is not viable, and thus we must allow a fault to persist in 
-%     memory untill it is read or used in one of the cores.
-% \end{itemize}
-
-%\textbf{I NEED TO SIMULATE THE CORE WITH AND WITHOUT PC-HARDENING AND CSR-HARDENING TO SEE THE DIFFERENCE IN PPA}
-%\textbf{I need to create a c program that has some code that is easily glitchable that represents a real world safety feature. This could be an infinite while loop, where the aim is to break out of this loop using a glitch. To achieve this I can either make a module whose sole purpose is to glitch a register and then make this glitchin happen radomly. Or i can induce som form of clock-glitching. This might not be possible in simulation as the setup / hold times will not be realistic. Voltag eglitching is also not possible as I dont havee access to the supply voltage of the system.}
-
-% \textbf{TODO:}
-% \begin{itemize}
-%     \item Run simulation of core with and without xsecure extension 
-%     \begin{itemize}
-%         \item Find out where the Xsecure extension is being enabled from. Maybe this is in the documentation. 
-%     \end{itemize}
-%     \item Run synthesis of core (with and without xsecure extension) 
-%     \begin{itemize}
-%         \item Power estimation 
-%         \item LUTs and Area 
-%     \end{itemize}
-%     Detail the program that is running when these tests are performed(mostly for simulation)
-%     \item Detail how dual cores could work in theory to improve things 
-%     \item Describe the tests that will be performed to simulate glitching
-%     \item Describe test program that will be running on the core (an infinite while loop to simulate some form of security check)
-%     \item Describe the odule that will be implemented to simulate a glitch attack.
-% \end{itemize}
-
-% \section{Simulation data}
-% \subsection{Clock cycles}
-% With PC hardening disabled: 6 cycles
-
-% \subsubsection{Hardened CSR}
-
-% \section{The dual core proposition}
-% \section{Rationale for this study}
