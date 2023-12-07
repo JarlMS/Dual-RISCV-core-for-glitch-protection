@@ -72,23 +72,23 @@ This glitch attack was not successful. However, no major alert was raised by the
 
 \subsubsection{Skipping function call}
 
-The call to the \textit{c.jal} instruction occurs at 1731ns. The program counter is glitched to the address \textit{0x0000044e}. 
+The call to the \textit{c.jal} instruction occurs at 1707ns. The program counter is glitched to the address \textit{0x0000044e}. The 
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=\textwidth]{docs/images/instr_sk.png}
-    \caption{Waveforms from simulated direct instruction skip on CV32E40S.}
+    \includegraphics[width=\textwidth]{docs/images/instr_skip_dual_core.png}
+    \caption{Waveforms from simulated instruction skip on Dual-Core Lockstep setup.}
     \label{fig:direct_skip_single_wave}
 \end{figure}
 
 
 \subsubsection{Skipping out of while loop}
 
-The call to the \textit{c.j} instruction occurs first at 1809ns. The program counter is glitched to the address \textit{0x0000047c}.
+The call to the \textit{c.j} instruction occurs first at 1782ns. The program counter is glitched to the address \textit{0x0000047c}.
 
 \subsubsection{Skipping directly to end}
 
-The call to the \textit{main} function occurs at 1710ns. The program counter is glitche dto the address \textit{0x00000482}.
+The call to the \textit{main} function occurs at 1689ns. The program counter is glitche dto the address \textit{0x00000482}.
 
 
 \section{Coverage Test}
