@@ -45,8 +45,27 @@ Glitching of the core was done successfully. The waveforms from simulation are s
 
 From the log file, we can see that the \textit{c.j} instruction is called 10 times. We skip the one logged at 1833ns. To skip this instruction the program counter needs to be skipped in the \textit{IF} stage, which is 3 cycles before the \textit{WB}. The \textit{c.j} is located at \textit{0x0000047a}. Forcing the program counter to the next address \textit{0x0000047c} for a duration of 3ns will simulate an instruction skip. This address is only 2 away because the \textit{j} is a 16-bit compressed instruction. 
 
-Glitching out of the while loop was not successful. This is possibly due to other branch instructions from the loop that are also inside the pipeline. The attempted instruction skip is still detected and a major alert is raised. This can be seen in the simulation waveforms in 
+Glitching out of the while loop was not successful. This is possibly due to other branch instructions from the loop that are also inside the pipeline. The attempted instruction skip is still detected and a major alert is raised. This can be seen in the simulation waveforms in \autoref{fig:instr_skip_loop_single_wave}. 
 
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{docs/images/instr_skip_glitch_injection_single_core.png}
+    \caption{Waveforms from simulated instruction skip on CV32E40S.}
+    \label{fig:instr_skip_loop_single_wave}
+\end{figure}
+
+\subsubsection{Skipping directly to end}
+
+As mentioned earlier, an attacker can potentially glitch directly to the end of the program if they have some way of manipulating the code in the boot-loader. To simulate this, the program counter is forced to the address of the instruction after the while loop. This force happens as soon as the main program is entered. This happens at 1737ns. 
+
+This glitch attack was not successful. However, no major alert was raised by the core as can be seen in 
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{docs/images/instr_skip_glitch_injection_single_core.png}
+    \caption{Waveforms from simulated instruction skip on CV32E40S.}
+    \label{fig:direct_skip_single_wave}
+\end{figure}
 
 
 
