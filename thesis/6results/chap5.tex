@@ -1,8 +1,6 @@
 \chapter{Results and Analysis}
 \label{chap5}
 
-To perform the tests described in \autoref{tab:instr_skip_test} we follow the steps described in \autoref{subsec:sim_glitch}.
-
 \section{PPA comparison}
 \label{sec:synth_comparison}
 
@@ -25,14 +23,16 @@ CV32E40S Dual-Core & 65214.732[$+3.3\%$] & 144.482[$+27.9\%$] & 17446[$-5.3\%$] 
 \section{Instruction Skipping}
 \label{sec:instr_skip_result}
 
+To perform the tests described in \autoref{tab:instr_skip_test} we follow the steps described in \autoref{subsec:sim_glitch}. The fault in the PC is always introduced in the \textit{IF} stage, which is 3 cycles before the \textit{WB} stage. The system clock period is 3ns, meaning the glitch is injected 9ns before it is logged. 
+
 \subsection{CV32E40S}
 \label{subsec:single_instr_skip}
 
 \subsubsection{Skipping function call}
 
- From the log file, we can see that the \textit{c.jal} instruction is logged at 1752ns. To skip this instruction the program counter needs to be skipped in the \textit{IF} stage, which is 3 cycles before \textit{WB}. The system clock has a period of 3ns, meaning the glitch is injected at 1743ns. The \textit{c.jal} is located at the address: \textit{0x0000044c}. Forcing the program counter to the next address \textit{0x0000044e} for a duration of 3ns will simulate an instruction skip. The address of the next instruction is only 2 away because the \textit{jal} is a 16-bit compressed instruction.
+The call to the \textit{c.jal} instruction occurs at 1752ns. The program counter is glitched to be \textit{0x0000044e}. 
 
-Glitching of the core was done successfully. The waveforms from simulation are shown in \autoref{fig:instr_skip_single_wave}. From the figure one can see that the glitch is detected immediately. 
+Glitching of the core was done successfully, and line \textbf{21} in \autoref{lst:test_code} is executed. The waveforms from simulation are shown in \autoref{fig:instr_skip_single_wave}. From the figure one can see that the glitch is detected immediately and a major alert is raised. 
 
 \begin{figure}[h!]
     \centering
@@ -43,14 +43,14 @@ Glitching of the core was done successfully. The waveforms from simulation are s
 
 \subsubsection{Skipping out of while loop}
 
-From the log file, we can see that the \textit{c.j} instruction is called 10 times. We skip the one logged at 1833ns. To skip this instruction the program counter needs to be skipped in the \textit{IF} stage, which is 3 cycles before the \textit{WB}. The \textit{c.j} is located at \textit{0x0000047a}. Forcing the program counter to the next address \textit{0x0000047c} for a duration of 3ns will simulate an instruction skip. This address is only 2 away because the \textit{j} is a 16-bit compressed instruction. 
+The call to the \textit{c.j} instruction occurs first at 1833ns. The program counter is glitched to be \textit{0x0000047c}.
 
-Glitching out of the while loop was not successful. This is possibly due to other branch instructions from the loop that are also inside the pipeline. The attempted instruction skip is still detected and a major alert is raised. This can be seen in the simulation waveforms in \autoref{fig:instr_skip_loop_single_wave}. 
+Glitching out of the while loop was not successful. The attempted instruction skip is detected and a major alert is raised. This can be seen in the simulation waveforms in \autoref{fig:instr_skip_loop_single_wave}. 
 
 \begin{figure}[h!]
     \centering
     \includegraphics[width=\textwidth]{docs/images/instr_skip_glitch_injection_single_core.png}
-    \caption{Waveforms from simulated instruction skip on CV32E40S.}
+    \caption{Waveforms from simulated instruction skip out of loop on CV32E40S.}
     \label{fig:instr_skip_loop_single_wave}
 \end{figure}
 
@@ -72,13 +72,15 @@ This glitch attack was not successful. However, no major alert was raised by the
 
 \subsubsection{Skipping function call}
 
-The call to the \textit{c.jal} instruction occurs at 1707ns. The program counter is glitched to the address \textit{0x0000044e}. From the figure we observe that the fault is detected immediately and the error propagates through each stage of the pipeline.  
+The call to the \textit{c.jal} instruction occurs at 1707ns. The program counter is glitched to the address \textit{0x0000044e}. 
+
+The glitch attack was not successful. From \autoref{fig:instr_skip_loop_dual_wave} we observe that the fault is detected immediately and the error propagates through each stage of the pipeline. 
 
 \begin{figure}[h!]
     \centering
     \includegraphics[width=\textwidth]{docs/images/instr_skip_dual_core.png}
     \caption{Waveforms from simulated instruction skip on Dual-Core Lockstep setup.}
-    \label{fig:direct_skip_single_wave}
+    \label{fig:instr_skip_dual_wave}
 \end{figure}
 
 
@@ -86,21 +88,48 @@ The call to the \textit{c.jal} instruction occurs at 1707ns. The program counter
 
 The call to the \textit{c.j} instruction occurs first at 1782ns. The program counter is glitched to the address \textit{0x0000047c}.
 
+The glitch attack was not successful. From \autoref{fig:instr_skip_loop_dual_wave} we observe that the fault is detected immediately and the error propagates though each stage of the pipeline. 
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{docs/images/instr_skip_loop_dual_core.png}
+    \caption{Waveforms from simulated instruction skip out of loop on Dual-Core Lockstep setup.}
+    \label{fig:instr_skip_loop_dual_wave}
+\end{figure}
+
 \subsubsection{Skipping directly to end}
 
 The call to the \textit{main} function occurs at 1689ns. The program counter is glitched to the address \textit{0x00000482}.
+
+The glitch attack was not successful. However, unlike in the single core setup a fault is detected and propagated though each stage of the pipeline as can be seen in \autoref{fig:direct_skip_dual_wave}. 
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{docs/images/direct_skip_dual_core.png}
+    \caption{Waveforms from simulated instruction skip on Dual-Core Lockstep setup.}
+    \label{fig:direct_skip_dual_wave}
+\end{figure}
 
 
 \section{Coverage Test}
 \label{sec:cov_test_result}
 
+To perform the coverage tests described in \autoref{tab:coverage_test}, the data-bus is glitched in different places in the pipeline. The \textit{store} and \textit{load} instructions are glitched in the \textit{WB} stage as the data is being read or written to the data memory. While three instructions are mentioned in the table, it is only necessary to glitch one of them as the outcome will be similar. Therefore only the instructions corresponding to line \textbf{7} in \autoref{lst:coverage_test} will be glitched. 
+
 \subsection{CV32E40S}
 
 \subsubsection{Glitching load instruction}
 
+This instruction occurs at 1827ns. 
+
+The glitch attack was successful and no major alert was raised by the single core. 
+
 \subsubsection{Glitching store instruction}
 
-\subsubsection{Glitching arithmetic operation}
+This instruction occurs at 1836ns. 
+
+The glitch attack was successful and no major alert was raised by the single core. 
+
 
 \subsection{Dual-Core Lockstep}
 
@@ -108,4 +137,3 @@ The call to the \textit{main} function occurs at 1689ns. The program counter is 
 
 \subsubsection{Glitching store instruction}
 
-\subsubsection{Glitching arithmetic operation}

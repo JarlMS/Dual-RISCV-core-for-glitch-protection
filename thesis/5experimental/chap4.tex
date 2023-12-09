@@ -132,18 +132,22 @@ Line in C code & ASM instruction & Expected outcome \\
 \section{Coverage tests}
 \label{sec:coverage_test}
 
-While it is important to check whether the Dual-Core setup can replace some of the specific security features of \textit{Xsecure}, it does not explore one of the main advantages which is coverage. In order to test coverage, we will introduce glitches in areas that are not specifically covered by \textit{Xsecure}. One such area is the address-bus going to the data-memory during a load or store instruction. If this is attacked with only one core, the wrong data might stay in the memory undetected and faults can propagate to other parts of the execution sequence. With Dual-Cores any discrepancy between the loaded or stored data can be detected before faults disrupt the system. 
+While it is important to check whether the Dual-Core setup can replace some of the specific security features of \textit{Xsecure}, it does not explore one of the main advantages which is coverage. In order to test coverage, we will introduce glitches in areas that are not specifically covered by \textit{Xsecure}. One such area is the data-bus going to the data-memory during a load or store instruction. If this is attacked with only one core, the wrong data might stay in the memory undetected and faults can propagate to other parts of the execution sequence. With Dual-Cores any discrepancy between the loaded or stored data can be detected before faults disrupt the system. 
 
-Other glitch attacks that are not covered by \textit{Xsecure} are those that affect the \textit{rs1}, \textit{rs2} or \textit{rd} operands in an instruction as shown in \autoref{fig:riscv_instructions}. If an attacker were to disrupt the values of these operands in either the \textit{ID} or \textit{EX} stage, faults can occur that will disrupt normal operation. Like with faults on the address-bus, there are no dedicated modules for validating this data in \textit{Xsecure}, where as a Dual-Core setup should be able to detect this.
+These types of attacks pose a real threat as data-buses are often long because they have to go between different modules, and require a large area if the bus is wide. This large area and makes it easy for an attacker to target with something like EMFI if they have some knowledge of the chip layout. Voltage and clock glitches can also potentially disrupt the data on a bus. 
 
-\begin{figure}[h!]
-    \centering
-    \includegraphics[width=\textwidth]{docs/images/riscv_instructions.png}
-    \caption{RISC-V base instruction formats showing immediate variants\cite{riscv_manual}.}
-    \label{fig:riscv_instructions}
-\end{figure}
+% Other glitch attacks that are not covered by \textit{Xsecure} are those that affect the \textit{rs1}, \textit{rs2} or \textit{rd} operands in an instruction as shown in \autoref{fig:riscv_instructions}. If an attacker were to disrupt the values of these operands in either the \textit{ID} or \textit{EX} stage, faults can occur that will disrupt normal operation. Like with faults on the address-bus, there are no dedicated modules for validating this data in \textit{Xsecure}, where as a Dual-Core setup should be able to detect this.
 
-In order to test the fault coverage of both solutions, a different test program is used as shown in \autoref{lst:coverage_test}. This code runs a simple function that calculates the 20th Fibonacci number. The function uses no recursion and the code is compiled without optimization. This is to make the C-code and Assembly as similar as possible. Each line in the loop body between line 6 and 10 translates to at least one load and store instruction each. In addition to this line 7 contains an addition operation. The tests that will run on the code in \autoref{lst:coverage_test} are shown in \autoref{tab:coverage_test}.
+% \begin{figure}[h!]
+%     \centering
+%     \includegraphics[width=\textwidth]{docs/images/riscv_instructions.png}
+%     \caption{RISC-V base instruction formats showing immediate variants\cite{riscv_manual}.}
+%     \label{fig:riscv_instructions}
+% \end{figure}
+
+In order to test the fault coverage of both solutions, a different test program is used as shown in \autoref{lst:coverage_test}. This code runs a simple function that calculates the 20th Fibonacci number. The function uses no recursion and the code is compiled without optimization. This is to make the C-code and Assembly as similar as possible. Each line in the loop body between line 6 and 10 translates to at least one load and store instruction. The tests that will run on the code in \autoref{lst:coverage_test} are shown in \autoref{tab:coverage_test}. 
+
+%Because disrupting the \textit{load} or \textit{store} instructions in either one of the lines in the code leads to a similar outcome, the glitches will only be applied to the instructions corresponding to ine \textbf{7}.
 
 \begin{lstlisting}[caption={A sample C++ code}, label=lst:coverage_test, language=C++]
 int main(int argc, char *argv[])
