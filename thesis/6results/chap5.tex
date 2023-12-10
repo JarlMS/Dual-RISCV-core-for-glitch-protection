@@ -124,16 +124,33 @@ This instruction occurs at 1827ns.
 
 The glitch attack was successful and no major alert was raised by the single core. 
 
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{docs/images/lw_glitch_single_core.png}
+    \caption{Waveforms from simulated glitched LW instruction skip on CV32E40S.}
+    \label{fig:lw_glitch_single_wave}
+\end{figure}
+
 \subsubsection{Glitching store instruction}
 
 This instruction occurs at 1836ns. 
 
 The glitch attack was successful and no major alert was raised by the single core. 
 
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{docs/images/sw_glitch_single_core.png}
+    \caption{Waveforms from simulated glitched SW instruction skip on CV32E40S.}
+    \label{fig:sw_glitch_single_wave}
+\end{figure}
+
 
 \subsection{Dual-Core Lockstep}
 
 \subsubsection{Glitching load instruction}
 
+This instruction occurs at 1722ns. 
+
 \subsubsection{Glitching store instruction}
 
+This instruction occurs at 1731ns.
