@@ -74,7 +74,7 @@ alsodigit={.},
 \title{Dual RISC-V cores for glitch protection}
 
 \author{ Jarl Magnus Sæbø }
-\degreetype{MSc in Electrical systems design}
+\degreetype{MSc in Design of Digital and Embedded Systems}
 
 \maketitle
 %\includepdf{titlepage}
@@ -101,7 +101,29 @@ alsodigit={.},
 
 \chapter{List of abbreviations}
 \begin{acronym}
-\acro{ADC}{Analogue to Digital Converter}
+\acro{PC}{Program Counter}
+\acro{PCH}{Program Counter Hardening}
+\acro{CSR}{Control and Status Register}
+\acro{IF}{Instruction Fetch}
+\acro{ID}{Instruction Decode}
+\acro{EX}{Execute}
+\acro{WB}{Write Back}
+\acro{LSU}{Load Store Unit}
+\acro{DCL}{Dual-Core Lockstep}
+\acro{CPU}{Central Processing Unit}
+\acro{RISC}{Reduced Instruction Set Computer}
+\acro{ISA}{Instruction Set Architecture}
+\acro{ISE}{Instruction Set Extension}
+\acro{ECC}{Error Correcting Code}
+\acro{EMFI}{Electromagnetic Fault Injection}
+\acro{SoC}{System on Chip}
+\acro{PPA}{Power Performance Area}
+\acro{RTL}{Register Transfer Level}
+\acro{ASM}{Assembly}
+\acro{TEE}{Trusted Execution Environment}
+\acro{PMP}{Physical Memory Protection}
+
+
 %\acro{}{}
 \end{acronym}
 
@@ -110,7 +132,7 @@ alsodigit={.},
 \mainmatter
 
 \input{thesis/2introduction/chap1}
-\input{thesis/3state_of_the_art/chap2}
+%\input{thesis/3state_of_the_art/chap2}
 \input{thesis/4background/chap3}
 \input{thesis/5experimental/chap4}
 \input{thesis/6results/chap5}
@@ -124,7 +146,6 @@ alsodigit={.},
 \addappheadtotoc
 
 \input{appendix/appx1}
-\input{appendix/appx2}
 
 \lstset{language=matlab,breakautoindent, tabsize=1, breaklines, numbers=left, numberstyle=\tiny, numbersep=5pt, breakatwhitespace=true, frame=single, captionpos=tb, mathescape=true, basicstyle=\scriptsize}
 
