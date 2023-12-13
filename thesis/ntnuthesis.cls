@@ -16,8 +16,8 @@
 %
 \newcommand{\SubTitle}{}
 \newcommand{\DegreeType}{}
-\newcommand{\Faculty}{Faculty of Information Technology, \\ Mathematics and Electrical Engineering}
-\newcommand{\Department}{Department of Electronics and Telecommunications }
+\newcommand{\Faculty}{Faculty of Information Technology and Electrical Engineering}
+\newcommand{\Department}{Department of Electronic Systems }
 %\newcommand{\CopyrightNotice}{}
 %\newcommand{\ISBNPrinted}{N/A}
 %\newcommand{\ISBNElectronic}{N/A}
@@ -114,7 +114,7 @@
 
 	{
 	%\LARGE 
-	Master thesis\\for the degree \DegreeType
+	Specialization project\\for the degree \DegreeType
 
 	%{\@author}
 
@@ -143,7 +143,7 @@
 
 	Norwegian University of Science and Technology
 
-	Master thesis\\
+	Specialization project\\
 	for the degree of \DegreeType
 
 	\Faculty\ \\
