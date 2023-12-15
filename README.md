@@ -2,7 +2,7 @@
 
 This project is done in collaboration with Silicon Laboratories Norway AS and investigates a new way of doing glitch protection in RISC-V cores. For this purpose we introduce the CV32E40DC. This is a modified version of the CV32E40S core made by the [OpenHW group](https://docs.openhwgroup.org/projects/cv32e40s-user-manual/en/latest/intro.html) running a dual-core lockstep mechanism. We demonstrate how this core, while simple to implement, offers an increased system robustness and fault detection coverage. By replacing complex security features we are also potentially able to increase throughput. 
 
-![CV32E40DC block diagram](https://github.com/[username]/[reponame]/blob/[branch]/image.jpg?raw=true)
+![CV32E40DC block diagram](https://github.com/JarlMS/Dual-RISCV-core-for-glitch-protection/blob/main/docs/images/dual_cores-block.png?raw=true)
 
 ## Testing and verification 
 
