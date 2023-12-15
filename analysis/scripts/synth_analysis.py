@@ -3,19 +3,19 @@ import argparse as arg
 import matplotlib.pyplot as plt
 import numpy as np
 
-# dual_core = {
-#     "area": 65214.732,
-#     "power[uW]": 144.482
-#     # "instr_skip": 2790,
-#     # "cov_test": 3123
-# }
+dual_core = {
+    "area": 65214.732,
+    "power[uW]": 144.482
+    # "instr_skip": 2790,
+    # "cov_test": 3123
+}
 
-# core = {
-#     "area": 63121.093,
-#     "power[uW]": 113.007
-#     # "insr_skip": 2799,
-#     # "cov_test": 3132
-# }
+core = {
+    "area": 63121.093,
+    "power[uW]": 113.007
+    # "insr_skip": 2799,
+    # "cov_test": 3132
+}
 
 dual_core_power = {
     "leakage": 5.90822e-06,
@@ -29,6 +29,20 @@ core_power = {
     "internal": 5.08823e-04,
     "switching": 6.18671e-04,
     "total": 1.13007e-03
+}
+
+dual_core_area = {
+    # "cell count" : 29351,
+    "cell area" : 97142.022,
+    "net area" : 43445.210,
+    "total area": 140587.232
+}
+
+core_area = {
+    # "cell count" : 13525,
+    "cell area" : 42548.220,
+    "net area" : 20572.873,
+    "total area": 63121.093
 }
 
 def plot_power(core, dual_core):
@@ -55,6 +69,36 @@ def plot_power(core, dual_core):
     plt.legend()
 
     plt.yticks(np.arange(0, max(max(core_values), max(dual_core_values)), step=0.0003))
+
+    # Display the plot
+
+    # Display the plot
+    plt.show()
+
+def plot_area(core, dual_core):
+    # Extracting keys and values
+    labels = ["Cell Area", "Net Area", "Total Area"]
+    dual_core_values = [dual_core["cell area"], dual_core["net area"], dual_core["total area"]]
+    core_values = [core["cell area"], core["net area"], core["total area"]]
+
+    # Bar width
+    bar_width = 0.35
+
+    # Bar positions
+    bar_positions = np.arange(len(labels))
+
+    # Creating bar plots
+    plt.bar(bar_positions - bar_width / 2, dual_core_values, bar_width, label='CV32E40DC', color='blue')
+    plt.bar(bar_positions + bar_width / 2, core_values, bar_width, label='CV32E40S', color='red')
+
+    # Adding labels, title, and legend
+    plt.xlabel('Categories')
+    plt.ylabel('Area [$pm^2$]')
+    plt.title('Area comparison between CV32E40S and CV32E40DC')
+    plt.xticks(bar_positions, labels)
+    plt.legend()
+
+    plt.yticks(np.arange(0, max(max(core_values), max(dual_core_values)), step=10000))
 
     # Display the plot
 
@@ -108,5 +152,5 @@ def plot_total(core, dual_core):
 
 
 if __name__ == "__main__":
-    plot_power(core_power, dual_core_power)
+    plot_area(core_area, dual_core_area)
 
