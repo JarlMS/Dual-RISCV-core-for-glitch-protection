@@ -296,3 +296,651 @@ int main(int argc, char *argv[])
      490:	853e                    c.mv    x10,x15
      492:	be5a                    cm.popret	{x1,x8},48
 \end{lstlisting}
+
+
+\begin{lstlisting}[caption={CV32E40DC wrapper code}, label=lst:dc_wrapper, language=verilog]
+
+    // Instantiate the dual core wrapper 
+    cv32e40dc_core
+        #(
+          .LIB                   ( LIB                   ),
+          .RV32                  ( RV32                  ),
+          .B_EXT                 ( B_EXT                 ),
+          .M_EXT                 ( M_EXT                 ),
+          .PMP_GRANULARITY       ( PMP_GRANULARITY       ),
+          .PMP_NUM_REGIONS       ( PMP_NUM_REGIONS       ),
+          .PMP_PMPNCFG_RV        ( PMP_PMPNCFG_RV        ),
+          .PMP_PMPADDR_RV        ( PMP_PMPADDR_RV        ),
+          .PMP_MSECCFG_RV        ( PMP_MSECCFG_RV        ),
+          .CLIC                  ( CLIC                  ),
+          .CLIC_ID_WIDTH         ( CLIC_ID_WIDTH         ),
+          .DEBUG                 ( DEBUG                 ),
+          .DM_REGION_START       ( DM_REGION_START       ),
+          .DM_REGION_END         ( DM_REGION_END         ),
+          .DBG_NUM_TRIGGERS      ( DBG_NUM_TRIGGERS      ),
+          .PMA_NUM_REGIONS       ( PMA_NUM_REGIONS       ),
+          .PMA_CFG               ( PMA_CFG               ),
+          .LFSR0_CFG             ( LFSR0_CFG             ),
+          .LFSR1_CFG             ( LFSR1_CFG             ),
+          .LFSR2_CFG             ( LFSR2_CFG             ))
+    core_i (.*);
+
+    // Glitching signals 
+    reg glitch_enable;
+    wire glitch_enable_specific;
+    logic [31:0] glitch_out;
+
+    cv32e40s_glitch_injector 
+      #(
+        32,
+        32'h0000673c
+        )
+    glitch_injector_i (
+      .enable           (1'b1),
+      .enable_specific  (1'b1),
+      .clk              (clk_i),
+      .rst_n            (rst_ni),
+      .out              (glitch_out),
+      .in               (core_i.if_id_pipe.pc)
+    );
+
+\end{lstlisting}
+
+\begin{lstlisting}[caption={Dual core code with synchronization registers}, label=lst:dc_code, language=verilog, literate={<=}{{$<=$}}1]                                                                                    
+
+  // Static configuration
+  logic [31:0]                   boot_addr_i_cmp;
+  logic [31:0]                   dm_exception_addr_i_cmp;
+  logic [31:0]                   dm_halt_addr_i_cmp;
+  logic [31:0]                   mhartid_i_cmp;
+  logic  [3:0]                   mimpid_patch_i_cmp;
+  logic [31:0]                   mtvec_addr_i_cmp;
+
+  // Instruction memory interface
+  logic                          instr_req_o_cmp;
+  logic                          instr_gnt_i_cmp;
+  logic                          instr_rvalid_i_cmp;
+  logic [31:0]                   instr_addr_o_cmp;
+  logic [1:0]                    instr_memtype_o_cmp;
+  logic [2:0]                    instr_prot_o_cmp;
+  logic                          instr_dbg_o_cmp;
+  logic [31:0]                   instr_rdata_i_cmp;
+  logic                          instr_err_i_cmp;
+
+  logic                          instr_reqpar_o_cmp;         // secure
+  logic                          instr_gntpar_i_cmp;         // secure
+  logic                          instr_rvalidpar_i_cmp;      // secure
+  logic [12:0]                   instr_achk_o_cmp;           // secure
+  logic [4:0]                    instr_rchk_i_cmp;           // secure
+
+  // Data memory interface
+  logic                          data_req_o_cmp;
+  logic                          data_gnt_i_cmp;
+  logic                          data_rvalid_i_cmp;
+  logic [31:0]                   data_addr_o_cmp;
+  logic [3:0]                    data_be_o_cmp;
+  logic                          data_we_o_cmp;
+  logic [31:0]                   data_wdata_o_cmp;
+  logic [1:0]                    data_memtype_o_cmp;
+  logic [2:0]                    data_prot_o_cmp;
+  logic                          data_dbg_o_cmp;
+  logic [31:0]                   data_rdata_i_cmp;
+  logic                          data_err_i_cmp;
+
+  logic                          data_reqpar_o_cmp;          // secure
+  logic                          data_gntpar_i_cmp;          // secure
+  logic                          data_rvalidpar_i_cmp;       // secure
+  logic [12:0]                   data_achk_o_cmp;            // secure
+  logic [4:0]                    data_rchk_i_cmp;            // secure
+
+  // Cycle count
+  logic [63:0]                   mcycle_o_cmp;
+
+  // Basic interrupt architecture
+  logic [31:0]                   irq_i_cmp;
+
+  // Event wakeup signals
+  logic                          wu_wfe_i_cmp;   // Wait-for-event wakeup
+
+  // CLIC interrupt architecture
+  logic                          clic_irq_i_cmp;
+  logic [CLIC_ID_WIDTH-1:0]      clic_irq_id_i_cmp;
+  logic [ 7:0]                   clic_irq_level_i_cmp;
+  logic [ 1:0]                   clic_irq_priv_i_cmp;
+  logic                          clic_irq_shv_i_cmp;
+
+  // Fence.i flush handshake
+  logic                          fencei_flush_req_o_cmp;
+  logic                          fencei_flush_ack_i_cmp;
+
+    // Security Alerts
+  logic                          alert_minor_o_cmp;          // secure
+  logic                          alert_major_o_cmp;          // secure
+
+  // Debug interface
+  logic                          debug_req_i_cmp;
+  logic                          debug_havereset_o_cmp;
+  logic                          debug_running_o_cmp;
+  logic                          debug_halted_o_cmp;
+  logic                          debug_pc_valid_o_cmp;
+  logic [31:0]                   debug_pc_o_cmp;
+
+  // CPU control signals
+  logic                          fetch_enable_i_cmp;
+  logic                          core_sleep_o_cmp;
+
+  // Comparison outputs 
+  if_id_pipe_t                   if_id_compare_o_cmp;
+  id_ex_pipe_t                   id_ex_compare_o_cmp;
+  ex_wb_pipe_t                   ex_wb_compare_o_cmp;
+
+  // Register for output form main core
+  logic         instr_req_o_reg;         
+  logic [31:0]  instr_addr_o_reg;        
+  logic [1:0]   instr_memtype_o_reg;     
+  logic [2:0]   instr_prot_o_reg;        
+  logic         instr_dbg_o_reg;         
+  logic         instr_reqpar_o_reg;      
+  logic [12:0]  instr_achk_o_reg;        
+
+  logic         data_req_o_reg;          
+  logic [31:0]  data_addr_o_reg;         
+  logic [3:0]   data_be_o_reg;           
+  logic         data_we_o_reg;           
+  logic [31:0]  data_wdata_o_reg;        
+  logic [1:0]   data_memtype_o_reg;      
+  logic [2:0]   data_prot_o_reg;           
+  logic         data_dbg_o_reg;          
+  logic         data_reqpar_o_reg;       
+  logic [12:0]  data_achk_o_reg;       
+
+  logic [63:0]  mcycle_o_reg;  
+
+  logic         fencei_flush_req_o_reg;  
+
+  logic         alert_minor_o_reg;       
+  logic         alert_major_o_reg;
+
+  logic         debug_havereset_o_reg;   
+  logic         debug_running_o_reg;     
+  logic         debug_halted_o_reg;      
+  logic         debug_pc_valid_o_reg;    
+  logic [31:0]  debug_pc_o_reg;       
+
+  logic [31:0]  core_sleep_o_reg;   
+
+  if_id_pipe_t  if_id_compare_o_reg;     
+  id_ex_pipe_t  id_ex_compare_o_reg;    
+  ex_wb_pipe_t  ex_wb_compare_o_reg;     
+
+always_ff @(posedge clk_i or negedge rst_ni) begin
+  if (!rst_ni) begin 
+    // Registers for holding input data going to comparison core
+    boot_addr_i_cmp         <= 0;
+    dm_exception_addr_i_cmp <= 0;
+    dm_halt_addr_i_cmp      <= 0;
+    mhartid_i_cmp           <= 0;
+    mimpid_patch_i_cmp      <= 0;
+    mtvec_addr_i_cmp        <= 0;
+    instr_gnt_i_cmp         <= 0;
+    instr_rvalid_i_cmp      <= 0;
+    instr_rdata_i_cmp       <= 0;
+    instr_err_i_cmp         <= 0;
+    instr_gntpar_i_cmp      <= 0;         // secure
+    instr_rvalidpar_i_cmp   <= 0;      // secure
+    instr_rchk_i_cmp        <= 0;           // secure
+    data_gnt_i_cmp          <= 0;
+    data_rvalid_i_cmp       <= 0;
+    data_rdata_i_cmp        <= 0;
+    data_err_i_cmp          <= 0;
+    data_gntpar_i_cmp       <= 0;          // secure
+    data_rvalidpar_i_cmp    <= 0;       // secure
+    data_rchk_i_cmp         <= 0;            // secure
+    irq_i_cmp               <= 0;
+    wu_wfe_i_cmp            <= 0;   // Wait-for-event wakeup
+    clic_irq_i_cmp          <= 0;
+    clic_irq_id_i_cmp       <= 0;
+    clic_irq_level_i_cmp    <= 0; 
+    clic_irq_priv_i_cmp     <= 0;
+    clic_irq_shv_i_cmp      <= 0;
+    fencei_flush_ack_i_cmp  <= 0;
+    debug_req_i_cmp         <= 0;
+    fetch_enable_i_cmp      <= 0;
+
+    // Registers for holding output data from main core 
+    instr_req_o_reg         <= 0;
+    instr_addr_o_reg        <= 0;
+    instr_memtype_o_reg     <= 0;
+    instr_prot_o_reg        <= 0;
+    instr_dbg_o_reg         <= 0;
+    instr_reqpar_o_reg      <= 0;
+    instr_achk_o_reg        <= 0;
+    data_req_o_reg          <= 0;  
+    data_addr_o_reg         <= 0;
+    data_be_o_reg           <= 0;
+    data_we_o_reg           <= 0;
+    data_wdata_o_reg        <= 0;
+    data_memtype_o_reg      <= 0;
+    data_prot_o_reg         <= 0;
+    data_dbg_o_reg          <= 0;
+    data_reqpar_o_reg       <= 0;
+    data_achk_o_reg         <= 0;
+    mcycle_o_reg            <= 0;
+    fencei_flush_req_o_reg  <= 0;
+    alert_minor_o_reg       <= 0;
+    alert_major_o_reg       <= 0;
+    debug_havereset_o_reg   <= 0;
+    debug_running_o_reg     <= 0;
+    debug_halted_o_reg      <= 0;
+    debug_pc_valid_o_reg    <= 0;
+    debug_pc_o_reg          <= 0;
+    core_sleep_o_reg        <= 0;
+    if_id_compare_o_reg     <= 0;
+    id_ex_compare_o_reg     <= 0;
+    ex_wb_compare_o_reg     <= 0;
+  end
+  else begin
+    // Registers for holding input data going to comparison core
+    boot_addr_i_cmp         <= boot_addr_i;
+    dm_exception_addr_i_cmp <= dm_exception_addr_i;
+    dm_halt_addr_i_cmp      <= dm_halt_addr_i;
+    mhartid_i_cmp           <= mhartid_i;
+    mimpid_patch_i_cmp      <= mimpid_patch_i;
+    mtvec_addr_i_cmp        <= mtvec_addr_i;
+    instr_gnt_i_cmp         <= instr_gnt_i;
+    instr_rvalid_i_cmp      <= instr_rvalid_i;
+    instr_rdata_i_cmp       <= instr_rdata_i;
+    instr_err_i_cmp         <= instr_err_i;
+    instr_gntpar_i_cmp      <= instr_gntpar_i;         // secure
+    instr_rvalidpar_i_cmp   <= instr_rvalidpar_i;      // secure
+    instr_rchk_i_cmp        <= instr_rchk_i;           // secure
+    data_gnt_i_cmp          <= data_gnt_i;
+    data_rvalid_i_cmp       <= data_rvalid_i;
+    data_rdata_i_cmp        <= data_rdata_i;
+    data_err_i_cmp          <= data_err_i;
+    data_gntpar_i_cmp       <= data_gntpar_i;          // secure
+    data_rvalidpar_i_cmp    <= data_rvalidpar_i;       // secure
+    data_rchk_i_cmp         <= data_rchk_i;            // secure
+    irq_i_cmp               <= irq_i;
+    wu_wfe_i_cmp            <= wu_wfe_i;   // Wait-for-event wakeup
+    clic_irq_i_cmp          <= clic_irq_i;
+    clic_irq_id_i_cmp       <= clic_irq_id_i;
+    clic_irq_level_i_cmp    <= clic_irq_level_i;
+    clic_irq_priv_i_cmp     <= clic_irq_priv_i;
+    clic_irq_shv_i_cmp      <= clic_irq_shv_i;
+    fencei_flush_ack_i_cmp  <= fencei_flush_ack_i;
+    debug_req_i_cmp         <= debug_req_i;
+    fetch_enable_i_cmp      <= fetch_enable_i;
+ 
+    // Registers for holding output data from main core 
+    instr_req_o_reg         <= instr_req_o;
+    instr_addr_o_reg        <= instr_addr_o;
+    instr_memtype_o_reg     <= instr_memtype_o;
+    instr_prot_o_reg        <= instr_prot_o;
+    instr_dbg_o_reg         <= instr_dbg_o;
+    instr_reqpar_o_reg      <= instr_reqpar_o;
+    instr_achk_o_reg        <= instr_achk_o;
+    data_req_o_reg          <= data_req_o;
+    data_addr_o_reg         <= data_addr_o;
+    data_be_o_reg           <= data_be_o;
+    data_we_o_reg           <= data_we_o;
+    data_wdata_o_reg        <= data_wdata_o;
+    data_memtype_o_reg      <= data_memtype_o;
+    data_prot_o_reg         <= data_prot_o;
+    data_dbg_o_reg          <= data_dbg_o;
+    data_reqpar_o_reg       <= data_reqpar_o;
+    data_achk_o_reg         <= data_achk_o;
+    mcycle_o_reg            <= mcycle_o;
+    fencei_flush_req_o_reg  <= fencei_flush_req_o;
+    alert_minor_o_reg       <= alert_minor_o;
+    alert_major_o_reg       <= alert_major_o;
+    debug_havereset_o_reg   <= debug_havereset_o;
+    debug_running_o_reg     <= debug_running_o;
+    debug_halted_o_reg      <= debug_halted_o;
+    debug_pc_valid_o_reg    <= debug_pc_valid_o;
+    debug_pc_o_reg          <= debug_pc_o;
+    core_sleep_o_reg        <= core_sleep_o;
+    if_id_compare_o_reg     <= if_id_compare_o;
+    id_ex_compare_o_reg     <= id_ex_compare_o;
+    ex_wb_compare_o_reg     <= ex_wb_compare_o;
+  end 
+end
+
+always_comb begin
+    alert_compare_o[0] = 
+    // Instruction memory interface
+    (instr_req_o_reg != instr_req_o_cmp) |
+    (instr_addr_o_reg != instr_addr_o_cmp) |
+    (instr_memtype_o_reg != instr_memtype_o_cmp) |
+    (instr_prot_o_reg != instr_prot_o_cmp) |
+    (instr_dbg_o_reg != instr_dbg_o_cmp) |
+    (instr_reqpar_o_reg != instr_reqpar_o_cmp) |
+    (instr_achk_o_reg != instr_achk_o_cmp) |
+    // Data memory interface
+    (data_req_o_reg != data_req_o_cmp) |
+    (data_addr_o_reg != data_addr_o_cmp) |
+    (data_be_o_reg != data_be_o_cmp) |
+    (data_we_o_reg != data_we_o_cmp) |
+    (data_wdata_o_reg != data_wdata_o_cmp) |
+    (data_memtype_o_reg != data_memtype_o_cmp) |
+    (data_prot_o_reg != data_prot_o_cmp) |
+    (data_dbg_o_reg != data_dbg_o_cmp) |
+    (data_reqpar_o_reg != data_reqpar_o_cmp) |
+    (data_achk_o_reg != data_achk_o_cmp) |
+    // Cycle count
+    (mcycle_o_reg != mcycle_o_cmp) |
+    // Fence.i flush handshake
+    (fencei_flush_req_o_reg != fencei_flush_req_o_cmp) |
+    // Security Alerts
+    (alert_minor_o_reg != alert_minor_o_cmp) |
+    (alert_major_o_reg != alert_major_o_cmp) |
+    // Debug interface
+    (debug_havereset_o_reg != debug_havereset_o_cmp) |
+    (debug_running_o_reg != debug_running_o_cmp) |
+    (debug_halted_o_reg != debug_halted_o_cmp) |
+    (debug_pc_valid_o_reg != debug_pc_valid_o_cmp) |
+    (debug_pc_o_reg != debug_pc_o_cmp) |
+    // CPU control signals
+    (core_sleep_o_reg != core_sleep_o_cmp);
+    // Comparison outputs
+    
+    alert_compare_o[1] = (if_id_compare_o_reg != if_id_compare_o_cmp);
+    alert_compare_o[2] = (id_ex_compare_o_reg != id_ex_compare_o_cmp);
+    alert_compare_o[3] = (ex_wb_compare_o_reg != ex_wb_compare_o_cmp);
+end
+
+cv32e40s_core
+        #(
+          .LIB                   ( LIB                   ),
+          .RV32                  ( RV32                  ),
+          .B_EXT                 ( B_EXT                 ),
+          .M_EXT                 ( M_EXT                 ),
+          .PMP_GRANULARITY       ( PMP_GRANULARITY       ),
+          .PMP_NUM_REGIONS       ( PMP_NUM_REGIONS       ),
+          .PMP_PMPNCFG_RV        ( PMP_PMPNCFG_RV        ),
+          .PMP_PMPADDR_RV        ( PMP_PMPADDR_RV        ),
+          .PMP_MSECCFG_RV        ( PMP_MSECCFG_RV        ),
+          .CLIC                  ( CLIC                  ),
+          .CLIC_ID_WIDTH         ( CLIC_ID_WIDTH         ),
+          .DEBUG                 ( DEBUG                 ),
+          .DM_REGION_START       ( DM_REGION_START       ),
+          .DM_REGION_END         ( DM_REGION_END         ),
+          .DBG_NUM_TRIGGERS      ( DBG_NUM_TRIGGERS      ),
+          .PMA_NUM_REGIONS       ( PMA_NUM_REGIONS       ),
+          .PMA_CFG               ( PMA_CFG               ),
+          .LFSR0_CFG             ( LFSR0_CFG             ),
+          .LFSR1_CFG             ( LFSR1_CFG             ),
+          .LFSR2_CFG             ( LFSR2_CFG             ))
+    core_cmp_i (
+    .clk_i(clk_i),
+    .rst_ni(rst_ni),
+    .scan_cg_en_i(scan_cg_en_i),
+
+    // Static configuration
+    .boot_addr_i(boot_addr_i_cmp),
+    .dm_exception_addr_i(dm_exception_addr_i_cmp),
+    .dm_halt_addr_i(dm_halt_addr_i_cmp),
+    .mhartid_i(mhartid_i_cmp),
+    .mimpid_patch_i(mimpid_patch_i_cmp),
+    .mtvec_addr_i(mtvec_addr_i_cmp),
+
+    // Instruction memory interface
+    .instr_req_o(instr_req_o_cmp),
+    .instr_gnt_i(instr_gnt_i_cmp),
+    .instr_rvalid_i(instr_rvalid_i_cmp),
+    .instr_addr_o(instr_addr_o_cmp),
+    .instr_memtype_o(instr_memtype_o_cmp),
+    .instr_prot_o(instr_prot_o_cmp),
+    .instr_dbg_o(instr_dbg_o_cmp),
+    .instr_rdata_i(instr_rdata_i_cmp),
+    .instr_err_i(instr_err_i_cmp),
+    .instr_reqpar_o(instr_reqpar_o_cmp),         // secure
+    .instr_gntpar_i(instr_gntpar_i_cmp),         // secure
+    .instr_rvalidpar_i(instr_rvalidpar_i_cmp),      // secure
+    .instr_achk_o(instr_achk_o_cmp),           // secure
+    .instr_rchk_i(instr_rchk_i_cmp),           // secure
+
+    // Data memory interface
+    .data_req_o(data_req_o_cmp),
+    .data_gnt_i(data_gnt_i_cmp),
+    .data_rvalid_i(data_rvalid_i_cmp),
+    .data_addr_o(data_addr_o_cmp),
+    .data_be_o(data_be_o_cmp),
+    .data_we_o(data_we_o_cmp),
+    .data_wdata_o(data_wdata_o_cmp),
+    .data_memtype_o(data_memtype_o_cmp),
+    .data_prot_o(data_prot_o_cmp),
+    .data_dbg_o(data_dbg_o_cmp),
+    .data_rdata_i(data_rdata_i_cmp),
+    .data_err_i(data_err_i_cmp),
+    .data_reqpar_o(data_reqpar_o_cmp),          // secure
+    .data_gntpar_i(data_gntpar_i_cmp),          // secure
+    .data_rvalidpar_i(data_rvalidpar_i_cmp),       // secure
+    .data_achk_o(data_achk_o_cmp),            // secure
+    .data_rchk_i(data_rchk_i_cmp),            // secure
+
+    // Cycle count
+    .mcycle_o(mcycle_o_cmp),
+
+    // Basic interrupt architecture
+    .irq_i(irq_i_cmp),
+
+    // Event wakeup signals
+    .wu_wfe_i(wu_wfe_i_cmp),   // Wait-for-event wakeup
+
+    // CLIC interrupt architecture
+    .clic_irq_i(clic_irq_i_cmp),
+    .clic_irq_id_i(clic_irq_id_i_cmp),
+    .clic_irq_level_i(clic_irq_level_i_cmp),
+    .clic_irq_priv_i(clic_irq_priv_i_cmp),
+    .clic_irq_shv_i(clic_irq_shv_i_cmp),
+
+    // Fence.i flush handshake
+    .fencei_flush_req_o(fencei_flush_req_o_cmp),
+    .fencei_flush_ack_i(fencei_flush_ack_i_cmp),
+
+    // Security Alerts
+    .alert_minor_o(alert_minor_o_cmp),          // secure
+    .alert_major_o(alert_major_o_cmp),          // secure
+
+    // Debug interface
+    .debug_req_i(debug_req_i_cmp),
+    .debug_havereset_o(debug_havereset_o_cmp),
+    .debug_running_o(debug_running_o_cmp),
+    .debug_halted_o(debug_halted_o_cmp),
+    .debug_pc_valid_o(debug_pc_valid_o_cmp),
+    .debug_pc_o(debug_pc_o_cmp),
+
+    // CPU control signals
+    .fetch_enable_i(fetch_enable_i_cmp),
+    .core_sleep_o(core_sleep_o_cmp),
+
+    // Comparison outputs
+    .if_id_compare_o(if_id_compare_o_cmp),
+    .id_ex_compare_o(id_ex_compare_o_cmp),
+    .ex_wb_compare_o(ex_wb_compare_o_cmp)
+  );
+
+\end{lstlisting}
+
+\begin{lstlisting}[caption={TCL script for synthesizing designs and generating reports.}, label=lst:tcl, language=tcl]
+
+source "../tcl/settings.tcl"
+
+set TIMING_CLOCK_PORT "clk"
+
+# Setup design libraries
+set_db / .library $\$$LIB_FILES
+set_db / .lef_library $\$$LEF_FILES
+set_db / .qrc_tech_file $\$$QRC_FILES
+
+set_db / .design_process_node 45
+
+set_db auto_ungroup both
+
+# Read source files
+read_hdl -sv ../src/include/cv32e40s_pkg.sv
+
+foreach sv_file [glob -nocomplain ../src/*.sv] {
+	read_hdl -sv $\$$ sv_file
+}
+
+# Elaborate
+elaborate $\$$DESIGN_TOP_MODULE
+
+# Setup timing
+
+read_sdc ../constraints/cv32e40s_core.sdc
+
+set_load $\$$LOAD [all_outputs]
+
+# Synthesis
+syn_generic
+
+syn_map
+
+syn_opt
+syn_opt -incremental
+
+write_hdl > ../out/$\$${DESIGN_NAME}_synth.sv
+write_sdf -delimiter / -edges check_edge -no_escape -setuphold split -recrem split > $\$$DESIGN_NAME.sdf.gz
+write_spef -power > $\$$DESIGN_NAME.spef
+write_sdc > ../out/$\$$DESIGN_NAME.sdc.gz
+write_design -innovus -base_name session/$DESIGN_NAME
+
+report_timing > reports/timing.txt
+report_gates > reports/gates.txt
+report_area > reports/area.txt
+report_dp > reports/datapath.txt
+report_power > reports/power.txt
+report_sequential > reports/sequential.txt
+report_clock_gating > reports/clock_gating.txt
+
+#quit
+\end{lstlisting}
+
+\begin{lstlisting}[caption={Power usage report from synthesis of the CV32E40S.}, label=lst:cv32e40s_power, language=txt]
+
+Instance: /cv32e40s_core
+Power Unit: W
+PDB Frames: /stim#0/frame#0
+  -------------------------------------------------------------------------
+    Category         Leakage     Internal    Switching        Total    Row%
+  -------------------------------------------------------------------------
+      memory     0.00000e+00  0.00000e+00  0.00000e+00  0.00000e+00   0.00%
+    register     1.24472e-06  3.38053e-04  1.15429e-04  4.54727e-04  40.24%
+       latch     0.00000e+00  0.00000e+00  0.00000e+00  0.00000e+00   0.00%
+       logic     1.33087e-06  1.70770e-04  5.02775e-04  6.74876e-04  59.72%
+        bbox     0.00000e+00  0.00000e+00  2.49260e-07  2.49260e-07   0.02%
+       clock     0.00000e+00  0.00000e+00  2.17800e-07  2.17800e-07   0.02%
+         pad     0.00000e+00  0.00000e+00  0.00000e+00  0.00000e+00   0.00%
+          pm     0.00000e+00  0.00000e+00  0.00000e+00  0.00000e+00   0.00%
+  -------------------------------------------------------------------------
+    Subtotal     2.57559e-06  5.08823e-04  6.18671e-04  1.13007e-03 100.00%
+  Percentage           0.23%       45.03%       54.75%      100.00% 100.00%
+  -------------------------------------------------------------------------
+\end{lstlisting}
+
+\begin{lstlisting}[caption={Power usage report from synthesis of the CV32E40SDC.}, label=lst:cv32e40dc_power, language=txt]
+
+Instance: /cv32e40s_dual_core
+Power Unit: W
+PDB Frames: /stim#0/frame#0
+  -------------------------------------------------------------------------
+    Category         Leakage     Internal    Switching        Total    Row%
+  -------------------------------------------------------------------------
+      memory     0.00000e+00  0.00000e+00  0.00000e+00  0.00000e+00   0.00%
+    register     3.08383e-06  1.62940e-03  4.85935e-04  2.11842e-03  64.79%
+       latch     0.00000e+00  0.00000e+00  0.00000e+00  0.00000e+00   0.00%
+       logic     2.82440e-06  3.37798e-04  8.10212e-04  1.15083e-03  35.20%
+        bbox     0.00000e+00  0.00000e+00  4.76740e-07  4.76740e-07   0.01%
+       clock     0.00000e+00  0.00000e+00  0.00000e+00  0.00000e+00   0.00%
+         pad     0.00000e+00  0.00000e+00  0.00000e+00  0.00000e+00   0.00%
+          pm     0.00000e+00  0.00000e+00  0.00000e+00  0.00000e+00   0.00%
+  -------------------------------------------------------------------------
+    Subtotal     5.90822e-06  1.96720e-03  1.29662e-03  3.26973e-03 100.00%
+  Percentage           0.18%       60.16%       39.66%      100.00% 100.00%
+  -------------------------------------------------------------------------
+\end{lstlisting}
+
+\begin{lstlisting}[caption={Area report from synthesis of the CV32E40S.}, label=lst:cv32e40s_area, language=txt]
+
+============================================================
+  Generated by:           Genus(TM) Synthesis Solution 21.18-s082_1
+  Generated on:           Dec 06 2023  02:01:52 pm
+  Module:                 cv32e40s_core
+  Operating conditions:   PVT_1P1V_0C 
+  Interconnect mode:      global
+  Area mode:              physical library
+============================================================
+
+                   Instance                                         Module                        Cell Count  Cell Area  Net Area   Total Area 
+-----------------------------------------------------------------------------------------------------------------------------------------------
+cv32e40s_core                                                                                          13525  42548.220 20572.873    63121.093 
+  cs_registers_i_basic_mode_csrs.mcause_csr_i cv32e40s_csr_LIB0_WIDTH32_SHADOWCOPY1_RESETVALUE0_          29     43.776    39.057       82.833 
+  cs_registers_i_basic_mode_csrs.mie_csr_i    cv32e40s_csr_LIB0_WIDTH32_SHADOWCOPY1_RESETVALUE0_          44     69.084    60.059      129.143 
+  cs_registers_i_basic_mode_csrs.mtvec_csr_i  cv32e40s_csr_LIB0_WIDTH32_SHADOWCOPY1_RESETVALUE1_          62     96.102    84.367      180.469 
+  cs_registers_i_gen_debug_csr.dcsr_csr_i     cv32e40s_csr_LIB0_WIDTH32_SHADOWCOPY1_RESETVALUE10          24     35.568    33.868       69.436 
+  cs_registers_i_jvt_csr_i                    cv32e40s_csr_LIB0_WIDTH32_SHADOWCOPY1_RESETVALUE0_          62     96.102    84.367      180.469 
+  cs_registers_i_mepc_csr_i                   cv32e40s_csr_LIB0_WIDTH32_SHADOWCOPY1_RESETVALUE0_          72    113.886    98.736      212.622 
+  cs_registers_i_mscratch_csr_i               cv32e40s_csr_LIB0_WIDTH32_SHADOWCOPY1_RESETVALUE0_          75    116.964   102.062      219.026 
+  cs_registers_i_mstateen0_csr_i              cv32e40s_csr_LIB0_WIDTH32_SHADOWCOPY1_RESETVALUE0_           2      3.078     2.585        5.663 
+  cs_registers_i_mstatus_csr_i                cv32e40s_csr_LIB0_WIDTH32_SHADOWCOPY1_RESETVALUE61          14     22.572    19.519       42.091 
+  cs_registers_i_privlvl_user.priv_lvl_i      cv32e40s_csr_LIB0_WIDTH2_SHADOWCOPY1_RESETVALUE3_M           5      7.524     6.272       13.796 
+  cs_registers_i_xsecure.cpuctrl_csr_i        cv32e40s_csr_LIB0_WIDTH32_SHADOWCOPY1_RESETVALUE25          21     32.832    28.376       61.208 
+  sleep_unit_i                                cv32e40s_sleep_unit_LIB0                                     7     21.204     4.067       25.271 
+
+
+\end{lstlisting}
+
+\begin{lstlisting}[caption={Area report from synthesis of the CV32E40SDC.}, label=lst:cv32e40dc_area, language=txt]
+
+============================================================
+  Generated by:           Genus(TM) Synthesis Solution 21.18-s082_1
+  Generated on:           Dec 15 2023  06:57:43 pm
+  Module:                 cv32e40s_dual_core
+  Operating conditions:   PVT_1P1V_0C 
+  Interconnect mode:      global
+  Area mode:              physical library
+============================================================
+
+                           Instance                                                  Module                        Cell Count  Cell Area  Net Area   Total Area 
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+cv32e40s_dual_core                                                                                                      29351  97142.022 43445.210   140587.232 
+  core_cmp_i_cs_registers_i_basic_mode_csrs.mcause_csr_i       cv32e40s_csr_LIB0_WIDTH32_SHADOWCOPY1_RESETVALUE0_          29     43.776    39.057       82.833 
+  core_cmp_i_cs_registers_i_basic_mode_csrs.mie_csr_i          cv32e40s_csr_LIB0_WIDTH32_SHADOWCOPY1_RESETVALUE0_          44     69.084    60.059      129.143 
+  core_cmp_i_cs_registers_i_basic_mode_csrs.mtvec_csr_i        cv32e40s_csr_LIB0_WIDTH32_SHADOWCOPY1_RESETVALUE1_          62     96.102    84.367      180.469 
+  core_cmp_i_cs_registers_i_gen_debug_csr.dcsr_csr_i           cv32e40s_csr_LIB0_WIDTH32_SHADOWCOPY1_RESETVALUE10          24     35.568    33.868       69.436 
+  core_cmp_i_cs_registers_i_jvt_csr_i                          cv32e40s_csr_LIB0_WIDTH32_SHADOWCOPY1_RESETVALUE0_          62     96.102    84.367      180.469 
+  core_cmp_i_cs_registers_i_mepc_csr_i                         cv32e40s_csr_LIB0_WIDTH32_SHADOWCOPY1_RESETVALUE0_          72    113.886    98.736      212.622 
+  core_cmp_i_cs_registers_i_mscratch_csr_i                     cv32e40s_csr_LIB0_WIDTH32_SHADOWCOPY1_RESETVALUE0_          75    116.964   102.062      219.026 
+  core_cmp_i_cs_registers_i_mstateen0_csr_i                    cv32e40s_csr_LIB0_WIDTH32_SHADOWCOPY1_RESETVALUE0_           2      3.078     2.585        5.663 
+  core_cmp_i_cs_registers_i_mstatus_csr_i                      cv32e40s_csr_LIB0_WIDTH32_SHADOWCOPY1_RESETVALUE61          14     22.572    19.519       42.091 
+  core_cmp_i_cs_registers_i_privlvl_user.priv_lvl_i            cv32e40s_csr_LIB0_WIDTH2_SHADOWCOPY1_RESETVALUE3_M           5      7.524     6.272       13.796 
+  core_cmp_i_cs_registers_i_xsecure.cpuctrl_csr_i              cv32e40s_csr_LIB0_WIDTH32_SHADOWCOPY1_RESETVALUE25          21     32.832    28.376       61.208 
+  core_cmp_i_ex_stage_i_alu_i_ff_one_i                         cv32e40s_ff_one                                             52     85.158    50.347      135.505 
+  core_cmp_i_gen_basic_interrupt.int_controller_i              cv32e40s_int_controller                                     79    211.698    53.007      264.705 
+  core_cmp_i_id_stage_i_decoder_i_i_decoder_i                  cv32e40s_i_decoder_CLIC0                                   168    251.370   159.896      411.266 
+  core_cmp_i_if_stage_i_gen_dummy_instr.dummy_instr_i          cv32e40s_dummy_instr                                        56    126.882    59.469      186.351 
+  core_cmp_i_register_file_wrapper_i_genblk2.register_file_ecc cv32e40s_register_file_ecc_REGFILE_NUM_READ_PORTS2         190    462.384   150.451      612.835 
+  core_cmp_i_sleep_unit_i                                      cv32e40s_sleep_unit_LIB0                                     6     19.152     3.326       22.478 
+  cs_registers_i_basic_mode_csrs.mcause_csr_i                  cv32e40s_csr_LIB0_WIDTH32_SHADOWCOPY1_RESETVALUE0_          29     43.776    39.057       82.833 
+  cs_registers_i_basic_mode_csrs.mie_csr_i                     cv32e40s_csr_LIB0_WIDTH32_SHADOWCOPY1_RESETVALUE0_          44     69.084    60.059      129.143 
+  cs_registers_i_basic_mode_csrs.mtvec_csr_i                   cv32e40s_csr_LIB0_WIDTH32_SHADOWCOPY1_RESETVALUE1_          62     96.102    84.367      180.469 
+  cs_registers_i_gen_debug_csr.dcsr_csr_i                      cv32e40s_csr_LIB0_WIDTH32_SHADOWCOPY1_RESETVALUE10          24     35.568    33.868       69.436 
+  cs_registers_i_jvt_csr_i                                     cv32e40s_csr_LIB0_WIDTH32_SHADOWCOPY1_RESETVALUE0_          62     96.102    84.367      180.469 
+  cs_registers_i_mepc_csr_i                                    cv32e40s_csr_LIB0_WIDTH32_SHADOWCOPY1_RESETVALUE0_          72    113.886    98.736      212.622 
+  cs_registers_i_mscratch_csr_i                                cv32e40s_csr_LIB0_WIDTH32_SHADOWCOPY1_RESETVALUE0_          75    116.964   102.062      219.026 
+  cs_registers_i_mstateen0_csr_i                               cv32e40s_csr_LIB0_WIDTH32_SHADOWCOPY1_RESETVALUE0_           2      3.078     2.585        5.663 
+  cs_registers_i_mstatus_csr_i                                 cv32e40s_csr_LIB0_WIDTH32_SHADOWCOPY1_RESETVALUE61          14     22.572    19.519       42.091 
+  cs_registers_i_privlvl_user.priv_lvl_i                       cv32e40s_csr_LIB0_WIDTH2_SHADOWCOPY1_RESETVALUE3_M           5      7.524     6.272       13.796 
+  cs_registers_i_xsecure.cpuctrl_csr_i                         cv32e40s_csr_LIB0_WIDTH32_SHADOWCOPY1_RESETVALUE25          21     32.832    28.376       61.208 
+  ex_stage_i_alu_i_ff_one_i                                    cv32e40s_ff_one_6850                                        52     85.158    50.347      135.505 
+  id_stage_i_decoder_i_i_decoder_i                             cv32e40s_i_decoder_CLIC0_3572                              167    252.054   158.433      410.487 
+  if_stage_i_gen_dummy_instr.dummy_instr_i                     cv32e40s_dummy_instr_3569                                   56    126.882    59.469      186.351 
+  register_file_wrapper_i_genblk2.register_file_ecc            cv32e40s_register_file_ecc_REGFILE_NUM_READ_PORTS2         190    462.384   150.451      612.835 
+  sleep_unit_i                                                 cv32e40s_sleep_unit_LIB0_6852                                7     21.204     4.067       25.271 
+
+
+\end{lstlisting}
+
