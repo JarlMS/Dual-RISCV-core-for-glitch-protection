@@ -1,3 +1,5 @@
+SINGLE CORE
+
 Instance: /cv32e40s_core
 Power Unit: W
 PDB Frames: /stim#0/frame#0
