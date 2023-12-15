@@ -10,4 +10,10 @@ Testing and verifying of the CV32E40DC was done using the toolchain described in
 
 ## Results
 
-The quality of the CV32E40DC is determined by comparing the power, performance and area to benchmarks set by the CV32E40S. After synthesis of the cores it was found that the CV32E40DC occupies $3.3\%$ more area and uses $27.9\%$ more power than the benchmark. The impact to performance was shown to be negligible as the execution time was only decreased by $0.05\%$. This could not be improved as performance is limited by side-channel attack prevention features which can not be replaced by a dual-core lockstep mechanism. In addition to this both cores were subjected to tests meant to simulate possible glitch attacks. From these tests we found that the CV32E40DC outperformed the CV32E40S and was able to detect all faults injected to the system. 
+The quality of the CV32E40DC is determined by comparing the power, performance and area to benchmarks set by the CV32E40S. After synthesis of the cores it was found that the CV32E40DC occupies $3.3%$ more area and uses $27.9%$ more power than the benchmark. The impact to performance was shown to be negligible as the execution time was only decreased by $0.05%$. This could not be improved as performance is limited by side-channel attack prevention features which can not be replaced by a dual-core lockstep mechanism. 
+
+![CV32E40S vs CV32E40DC area and power consumtion](https://github.com/JarlMS/Dual-RISCV-core-for-glitch-protection/blob/main/docs/images/area_power_both_cores.png?raw=true)
+
+
+In addition to this both cores were subjected to tests meant to simulate possible glitch attacks. From these tests we found that the CV32E40DC outperformed the CV32E40S and was able to detect all faults injected to the system. 
+
