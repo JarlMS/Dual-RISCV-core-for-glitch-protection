@@ -6,7 +6,7 @@ In this chapter we perform synthesis of both cores and run the tests described i
 \section{PPA comparison}
 \label{sec:synth_comparison}
 
-Area and power consumption reports generated after synthesis of both cores are shown in \autoref{tab:cv32e40dc_power} and \autoref{tab:cv32e40s_power}. These tables show the power consumption for several categories. 
+Area and power consumption reports generated after synthesis of both cores are shown in \autoref{tab:cv32e40dc_power} and \autoref{tab:cv32e40s_power}. These tables show the power consumption for several categories. \autoref{fig:power_comapre} shows the difference in power consumption though leakage, internal and switching for both cores. 
 
 \begin{table}[h]
 \centering
@@ -54,30 +54,42 @@ Percentage & 0.23\% & 45.03\% & 54.75\% & 100.00\% & 100.00\% \\
 \end{tabular}
 \end{table}
 
-\begin{figure}
+\begin{figure}[h!]
     \centering
-    \includegraphics{powe}
-    \caption{Caption}
-    \label{fig:enter-label}
+    \includegraphics[width=\textwidth]{docs/images/power_comparison.png}
+    \caption{Power consumption comparison between CV32E40S and CV32E40DC.}
+    \label{fig:power_comapre}
 \end{figure}
 
-\begin{table}[h]
+From the tables we see that the total power consumption is increased by $189.33\%$.  From the complete reports we see that the dynamic power consumption from switching increased from $54.75\%$ to $63.42\%$. The amount of clock cycles needed to run the test program decreases by $0.05\%$. This is the same decrease achieved from only removing PCH as shown in \autoref{sec:xsecure}.
+
+\begin{table}[h!]
 \centering
-\caption{PPA results from simulation and synthesis of both setups.}
-\label{tab:ppa_results}
-\begin{tabular}{c|ccc}
+\caption{Area report for CV32E40DC.}
+\label{tab:cv32e40dc_area}
+\begin{tabular}{c|cccc}
 \toprule 
-Setup & Area[$pm^2$] & Power[$\mu W$] & Clock Cycles\\
+Instance & Cell Count & Cell Area[$pm^2$] & Net Area[$pm^2$] & Total Area[$pm^2$]\\
 \midrule
-\rowcolor{black!20} CV32E40S & 63121.093 & 113.007 & 18424\\
-CV32E40DC & 140587.232[$+122.72\%$] & 326.973[$+189.33\%$] & 18415[$-0.05\%$] \\
+\rowcolor{black!20} cv32e40dc\_core & 29351 & 97142.022 & 43445.210 & 140587.232\\
 \bottomrule
 \end{tabular}
 \end{table}
 
-From the table we see that the total area and power consumption are increased by $122.72\%$ and $189.33\%$ respectively. From the complete reports we see that the dynamic power consumption from switching increased from $54.75\%$ to $63.42\%$. The amount of clock cycles needed to run the test program decreases by $0.05\%$. This is the same decrease achieved from only removing PCH as shown in \autoref{sec:xsecure}.
+\begin{table}[h!]
+\centering
+\caption{Area report for CV32E40S.}
+\label{tab:cv32e40s_area}
+\begin{tabular}{c|cccc}
+\toprule 
+Instance & Cell Count & Cell Area[$pm^2$] & Net Area[$pm^2$] & Total Area[$pm^2$]\\
+\midrule
+\rowcolor{black!20} cv32e40s\_core & 13525 & 42548.220 & 20572.873 & 63121.093\\
+\bottomrule
+\end{tabular}
+\end{table}
 
-The amount of clock cycles each core uses to execute the code from \autoref{lst:test_code} and \autoref{lst:coverage_test} is shown in \autoref{tab:test_ccs}. From the table we see that the CV32E40DC uses 9 fewer clock cycles for each of the tests. This amounts to a decrease of $0.32\%$ and $-0.28\%$ for the instruction skipping test and the fault coverage test repspecively. 
+The amount of clock cycles each core uses to execute the code from \autoref{lst:test_code} and \autoref{lst:coverage_test} is shown in \autoref{tab:test_ccs}. From the table we see that the CV32E40DC uses 9 fewer clock cycles for each of the tests. This amounts to a decrease of $0.05\%$, $0.32\%$ and $0.28\%$ for the sanity test, instruction skipping test and the fault coverage test repspecively. 
 
 \begin{table}[h]
 \centering
