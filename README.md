@@ -1,21 +1,19 @@
 # Dual-RISCV-core-for-glitch-protection
-Project thesis based on researching the use of two RISC-V cores for glitch protection to avoid using other costly security measures.
 
-The main idea behind this project is to look at the possiblity of using a dual core lock-step mechanism with two RISC-V cv32e40s cores, to replace more complex 
-safety features that are in the core. So far in the project, the features that are mainly gong to be removed by using the dual cores are the PC hardening and CSR hardening as these slow down performance, add a lot of redundant logic and increase power usage. So far I have done a lot of reasearch into how glitch attacks are actually done in practice, and for my project the idea is to implement a dual core lock step mechanism and compare its performance to the already existing Xsecure ISE. The idea is then to have a C-program running on a simulaiton of the core with some sort of infinite loop that will be broken out of by glitching some part of the core. This can either be glitching a register og glithcing the PC counter. I want to then see that the new setup is able to detect the glitches and warn the user of these. This should lead to a reset of the cores. The Xsecure ISE for now allows for some detailed error messages, but it also can have some quite vague ones if a fault occurs in an area of the core with less coverage. The idea of the dual cores is that we can constantly compare the states of the two cores, and if anything deviates, it will lead to an alert being raised. This might also make it possible to tell the user exactly which part of the two cores that are differnt such that precicely finding the glitch is possible. 
+This project is done in collaboration with Silicon Laboratories Norway AS and investigates a new way of doing glitch protection in RISC-V cores. For this purpose we introduce the CV32E40DC. This is a modified version of the CV32E40S core made by the [OpenHW group](https://docs.openhwgroup.org/projects/cv32e40s-user-manual/en/latest/intro.html) running a dual-core lockstep mechanism. We demonstrate how this core, while simple to implement, offers an increased system robustness and fault detection coverage. By replacing complex security features we are also potentially able to increase throughput. 
 
-For testing of the system i plan to first simulate injected errors by writing a module that is able to either let data through untouched, or to scramble data. Exactly how this should happen is not decided yet, but I think it should be a way to either force all bits to 1's or 0's, ranodmize all bits, flip a specific bit, or flip a random amount of bits. Most of these might lead to random outcomes which dont giv eus any meaningful insight or lead to any cool glitchies, but it might still be good to see that these types of errors can be detected. I should also make it possible to glitch the clock to see what happens, but in simulation the setup- and hold.times might not be relaistic and therefore this might not lead to any glitching. 
+![CV32E40DC block diagram](https://github.com/JarlMS/Dual-RISCV-core-for-glitch-protection/blob/main/docs/images/dual_cores-block.png?raw=true)
 
-For my masters thesis I am planning on hopefully being able to run the dual core setup on an FPGA and thereby be able to do voltag , clock and EMFI glitching. Seeing if the system then works in a real life attack setting would be very cool. A possiblity is alos to add some sort of external buttons that can inject errors when i want. For instance i can skip an instruction or scramble a register at will. 
+## Testing and verification 
 
-For now my plan is this:
+Testing and verifying of the CV32E40DC was done using the toolchain described in [core-v-verif](https://github.com/openhwgroup/core-v-verif).
 
-Simulate and synthesise the core with different security features turned off to give an idea of the performance impact they have 
-Write the module that will scramble data 
-Write the rtl for the dual core setup. 
-Run the simulated program (possibly just in infinite while loop) on the new an dold setups and see how they both react to glitches. 
-Be able to say something about how good/bad the new setup is in comparison to the old one with emphasis on PPA. 
+## Results
 
-In the project so far i have started synthesizing the differnt setups of the core and I have done quite a bit of background research into glitching and the RISC-V architecture as a whole. I have used Cadence Genus for synthesis mostly and had to write the tcl scripts for this. 
+The quality of the CV32E40DC is determined by comparing the power, performance and area to benchmarks set by the CV32E40S. After synthesis of the cores it was found that the CV32E40DC occupies $3.3%$ more area and uses $27.9%$ more power than the benchmark. The impact to performance was shown to be negligible as the execution time was only decreased by $0.05%$. This could not be improved as performance is limited by side-channel attack prevention features which can not be replaced by a dual-core lockstep mechanism. 
 
-This last year i have had courses where i designed a simle MIPS processor from scratch. I also learned haskell and used it to dome some high level synthesis. I also made a simple processor core in haskell. Then i also had a course where i used ROS2 to create a game where we had to to multithreading. I also had a course where we had to use a NIOS2 soft core processor on a Cycleone IV FPGA to control a camera. We then had to write our own PWM mode and encoder as well as our own controller. I also had a course where we had to do some hardware acceleration where we used OpenGL. I have also had a few courses focused on software validation techniques, however i have not had any formal verification techniques in systemverilog. I also had acourse called System on Chip where i did a lot of simulation and synthesis as well as power simulations and test-vector injection into a system. I have mostly been programming in VHDL this past year. 
+![CV32E40S vs CV32E40DC area and power consumtion](https://github.com/JarlMS/Dual-RISCV-core-for-glitch-protection/blob/main/docs/images/area_power_both_cores.png?raw=true)
+
+
+In addition to this both cores were subjected to tests meant to simulate possible glitch attacks. From these tests we found that the CV32E40DC outperformed the CV32E40S and was able to detect all faults injected to the system. 
+
