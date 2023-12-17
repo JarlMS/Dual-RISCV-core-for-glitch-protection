@@ -6,7 +6,7 @@ In this chapter we perform synthesis of both cores and run the tests described i
 \section{PPA comparison}
 \label{sec:synth_comparison}
 
-Area and power consumption reports generated after synthesis of both cores are shown in \autoref{tab:cv32e40dc_power} and \autoref{tab:cv32e40s_power}. These tables show the power consumption for several categories. \autoref{fig:power_comapre} shows the difference in power consumption though leakage, internal and switching for both cores. 
+Power consumption reports generated after synthesis of both cores are shown in \autoref{tab:cv32e40dc_power} and \autoref{tab:cv32e40s_power}. These tables show the power consumption for several categories. \autoref{fig:power_comapre} shows the difference in power consumption through leakage, internal and switching for both cores. 
 
 \begin{table}[h]
 \centering
@@ -88,6 +88,13 @@ Instance & Cell Count & Cell Area[$pm^2$] & Net Area[$pm^2$] & Total Area[$pm^2$
 \bottomrule
 \end{tabular}
 \end{table}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{docs/images/area_comparison.png}
+    \caption{Area comparison between CV32E40S and CV32E40DC.}
+    \label{fig:area_compare}
+\end{figure}
 
 The amount of clock cycles each core uses to execute the code from \autoref{lst:test_code} and \autoref{lst:coverage_test} is shown in \autoref{tab:test_ccs}. From the table we see that the CV32E40DC uses 9 fewer clock cycles for each of the tests. This amounts to a decrease of $0.05\%$, $0.32\%$ and $0.28\%$ for the sanity test, instruction skipping test and the fault coverage test repspecively. 
 

@@ -1,9 +1,9 @@
 \chapter{Introduction}
 \label{intro} 
 
-Modern integrated systems and other programmable electronics often have safety-measures built in to avoid unintended behaviour, whether it be accidental or from an external source. These safety measures typically only address software or firmware issues, leaving systems unprotected against hardware-induced faults, known as glitch attacks. These attacks are able to bypass robust software and firmware security measures given the right attacker. Interestingly, despite the importance of glitch protection, it only started gaining attention after practical glitch attacks first made their appearance in 2002 through an optical fault attack\cite{trouchkine2019fault}. 
+Modern integrated systems and other programmable electronics often have safety-measures built in to avoid unintended behaviour, whether it be accidental or from an external source. These safety measures typically only address software or firmware issues, leaving systems unprotected against hardware-induced faults, known as glitch attacks. These attacks are able to bypass robust software and firmware security measures given the right method of attack. Interestingly, despite the importance of glitch protection, it only started gaining attention after practical glitch attacks first made their appearance in 2002 through an optical fault attack\cite{trouchkine2019fault}. 
 
-In the world of computer architecture, many aspects remain closely guarded secrets. This secrecy extends to preventive measures against such attacks, making them often inaccessible to the public. Over recent years there has been a large shift away from this secrecy as more and more researchers and companies use the \textit{RISC-V} instruction set architecture (ISA)\cite{riscv_manual}. This architecture is open source, allowing anyone with the right knowledge and motivation to create their own central processing unit (CPU). One group of people doing this is the \textit{OpenHW Group} who have developed several publicly available RISC-V CPUs over recent years. One of these is the \textit{CV32E40S}, which is a core mainly focused on safeguarding against glitch- and side-channel attacks\cite{cv32e40s_manual}.
+In the world of computer architecture, many aspects remain closely guarded secrets, including preventive measures against glitch attacks. This secrecy often makes these preventative measures inaccessible to the public. Over recent years there has been a large shift away from this secrecy as more and more researchers and companies use the \textit{RISC-V} instruction set architecture (ISA)\cite{riscv_manual}. This architecture is open source, allowing anyone with the right knowledge and motivation to create their own central processing unit (CPU). One group of people doing this is the \textit{OpenHW Group} who have developed several publicly available RISC-V CPUs over recent years. One of these is the \textit{CV32E40S}, which is a core mainly focused on safeguarding against glitch- and side-channel attacks\cite{cv32e40s_manual}.
 
 While the \textit{CV32E40S} has a proven to be able to detect glitch attacks, it comes at a cost in performance. Often the methods used to protect against attacks are complex and increase the execution time and power needed for the CPU to perform its given tasks. This project investigates the possibility of replacing some of the security features of the \textit{CV32E40S} in favour of running two CPUs in a \textit{Dual-Core Lockstep} (DCL) mechanism instead to increase throughput and simplicity. Henceforth the core using the DCL mechanism is reffered to as the \textit{CV32E40DC}. 
 
@@ -13,7 +13,6 @@ While the \textit{CV32E40S} has a proven to be able to detect glitch attacks, it
 Out of the 17 sustainability goals of the United Nations\cite{un}, at least two can be considered highly relevant for this project. 
 
 \begin{itemize}
-    %\item \textbf{Goal 8:} Promote inclusive and sustainable economic growth, employment and decent work for all.
     \item \textbf{Goal 9:} Build resilient infrastructure, promote sustainable industrialization and foster innovation.
     \item \textbf{Goal 17:} Revitalize the global partnership for sustainable development.
 \end{itemize}
@@ -23,4 +22,15 @@ The goal of this project is to investigate a new way of possibly making componen
 \section{The use of AI}
 \label{sec:AI}
 
-The AI chat bot ChatGPT made by \textit{Open AI}\cite{chat} was used as an acedmic tool when working on this project. Its main use was to offer possible ways to restructure a part of the text that could be difficult to understand or where the point did not come across clearly. In addition it was used to generate code that would otherwise be tedious to write. This includes for example SystemVerilog code where two modules with large interfaces are connected. 
+The AI chat bot ChatGPT made by \textit{Open AI}\cite{chat} was used as an academic tool when working on this project. Its main use was to offer possible ways to restructure parts of the text that could be difficult to understand or where the point did not come across clearly. For example, I had the following text where the word "them" could be ambiguous: 
+
+\begin{lstlisting}
+Restructure this sentence so its more clear what "them" is: 
+In the world of computer architecture, many aspects remain closely guarded
+secrets. This secrecy extends to preventive measures against such 
+attacks, making them often inaccessible to the public.
+\end{lstlisting}
+
+
+
+In addition it was used to generate code that would otherwise be tedious to write. This includes for example SystemVerilog code where two modules with large interfaces are connected. 
