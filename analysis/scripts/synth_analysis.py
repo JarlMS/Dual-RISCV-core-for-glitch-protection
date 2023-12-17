@@ -17,20 +17,6 @@ core = {
     # "cov_test": 3132
 }
 
-dual_core_power = {
-    "leakage": 5.90822e-06,
-    "internal": 1.96720e-03,
-    "switching": 1.29662e-03,
-    "total": 3.26973e-03
-}
-
-core_power = {
-    "leakage": 2.57559e-06,
-    "internal": 5.08823e-04,
-    "switching": 6.18671e-04,
-    "total": 1.13007e-03
-}
-
 dual_core_area = {
     # "cell count" : 29351,
     "cell area" : 97142.022,
@@ -44,6 +30,49 @@ core_area = {
     "net area" : 20572.873,
     "total area": 63121.093
 }
+
+dual_core_power = {
+    "Leakage": 5.90822e-06,
+    "Internal": 1.96720e-03,
+    "Switching": 1.29662e-03
+    #"total": 3.26973e-03
+}
+
+core_power = {
+    "Leakage": 2.57559e-06,
+    "Internal": 5.08823e-04,
+    "Switching": 6.18671e-04
+    #"total": 1.13007e-03
+}
+
+
+def plot_pie(data1, data2):
+    labels = data1.keys()
+    values1 = list(data1.values())
+    values2 = list(data2.values())
+
+    # Calculate the percentage difference between values1 and values2
+    percentage_diff = [(v1 - v2) / v2 * 100 if v2 != 0 else 0 for v1, v2 in zip(values1, values2)]
+
+    # Create subplots with 1 row and 2 columns
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(10, 5))
+
+    # Plot pie chart for dual_core
+    ax1.pie(values1, labels=labels, autopct=lambda p: '{:.1f}%\n({:.2e}W)'.format(p, p * sum(values1) / 100),
+            startangle=90, colors=['red', 'green', 'blue'], textprops=dict(color="w"))
+    ax1.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+    ax1.set_title(f'CV32E40S - Total {sum(values1):.2e}W')
+
+    # Plot pie chart for core
+    ax2.pie(values2, labels=labels, autopct=lambda p: '{:.1f}%\n({:.2e}W)'.format(p, p * sum(values2) / 100), 
+            startangle=90, colors=['red', 'green', 'blue'],
+            textprops=dict(color="w"))
+    ax2.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+    ax2.set_title(f'CV32E40DC - Total {sum(values2):.2e}W')
+
+    plt.suptitle("CV32E40S vs CV32E40DC power consumption")
+    plt.legend()
+    plt.show()
 
 def plot_power(core, dual_core):
     # Extracting keys and values
@@ -152,5 +181,5 @@ def plot_total(core, dual_core):
 
 
 if __name__ == "__main__":
-    plot_area(core_area, dual_core_area)
+    plot_pie(core_power, dual_core_power)
 
