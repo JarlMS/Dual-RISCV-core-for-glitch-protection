@@ -22,15 +22,13 @@ The goal of this project is to investigate a new way of possibly making componen
 \section{The use of AI}
 \label{sec:AI}
 
-The AI chat bot ChatGPT made by \textit{Open AI}\cite{chat} was used as an academic tool when working on this project. Its main use was to offer possible ways to restructure parts of the text that could be difficult to understand or where the point did not come across clearly. For example, I had the following text where the word "them" could be ambiguous: 
+The AI chat bot ChatGPT made by \textit{Open AI}\cite{chat} was used as an academic tool when working on this project. Its main use was to offer possible ways to restructure parts of the text that could be difficult to understand or where the point did not come across clearly. \autoref{fig:chatGPT} shows a typical use of ChatGPT.
 
-\begin{lstlisting}
-Restructure this sentence so its more clear what "them" is: 
-In the world of computer architecture, many aspects remain closely guarded
-secrets. This secrecy extends to preventive measures against such 
-attacks, making them often inaccessible to the public.
-\end{lstlisting}
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.8\textwidth]{docs/images/chat_gpt_use.png}
+    \caption{Typical use of ChatGPT.}
+    \label{fig:chatGPT}
+\end{figure}
 
-
-
-In addition it was used to generate code that would otherwise be tedious to write. This includes for example SystemVerilog code where two modules with large interfaces are connected. 
+In this project it was also used to write the code shown in \autoref{lst:dc_code}. This is SystemVerilog code where modules with large interfaces are instantiated and a lot of signals that are copies of preexisting ones are made with the added suffix "\_cmp" or "\_reg". This is code that requires little effort to think of but would be tedious to write by hand. 
