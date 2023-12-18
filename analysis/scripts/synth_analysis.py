@@ -131,7 +131,7 @@ def plot_area(core, dual_core):
     # # Calculate percentage difference and add text annotations
     for i, (core_val, dual_core_val) in enumerate(zip(core_values, dual_core_values)):
         percentage_diff = ((dual_core_val - core_val) / core_val) * 100
-        plt.text(bar_positions[i] - bar_width / 2, dual_core_val + 5000, f'+{percentage_diff:.2f}%', ha='center', va='bottom', color='black')
+        plt.text(bar_positions[i] - bar_width / 2, dual_core_val + 5000, f'+{percentage_diff:.2f}%', ha='center', va='bottom', color='black', fontsize=15)
 
     # Display the plot
     plt.show()
