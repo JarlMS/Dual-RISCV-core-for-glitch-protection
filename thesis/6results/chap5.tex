@@ -268,12 +268,12 @@ The \textit{sw} instruction is logged in the \textit{WB} stage at 1731ns. The fa
 
 As discussed in \autoref{sec:xsecure}, removing the PCH feature from the \textit{Xsecure} extension would lead to an increase in execution speed as shown in \autoref{tab:test_ccs}. However, as mentioned previously this increase is limited by the side-channel attack prevention that also exists within the core. Exactly why the decrease in clock cycles from the CV32E40S to the CV32E40DC is always 9 is yet to be determined. This is not explained in the documentation for the core.  
 
-Adding an extra core is also shown in \autoref{subsec:power} to increase total area and total power consumption. \autoref{fig:area_power_plot} shows the difference between these metrics for both cores. The red bars represent the measured values from the CV32E40DC and the blue represent those from the CV32E40S. The axis on the left shows the area starting from 60000$pm^2$, and the axis on the right shows the power consumption in $\mu W$. The increase in area is smaller than the increase in power usage relative to the CV3E40S. The reason for this is that the CV32E40DC mainly adds computationally heavy logic circuits. These circuits will not necessarily occupy a lot area, but as shown in \autoref{sec:synth_comparison}, the dynamic power consumption from switching increases from $54.75\%$ to $63.42\%$. With optimization of the CV32E40DC, it is possible to bring these metrics closer to those of the CV32E40S. Doing this will save costs when producing and running the core and make it a more viable alternative to the CV32E40S. 
+Adding an extra core is also shown in \autoref{subsec:power} to increase total area and total power consumption. \autoref{fig:area_power_plot} shows the difference between these metrics for both cores. The red bars represent the measured values from the CV32E40DC and the blue represent those from the CV32E40S. The axis on the left shows the area in $pm^2$ and the axis on the right shows the power consumption in $W$. The increase in area is smaller than the increase in power usage relative to the CV3E40S. The reason for this is that the CV32E40DC mainly adds computationally heavy logic circuits. These circuits will not necessarily occupy a lot area, but as shown in \autoref{sec:synth_comparison}, the dynamic power consumption from switching increases from $54.75\%$ to $63.42\%$. With optimization of the CV32E40DC, it is possible to bring these metrics closer to those of the CV32E40S. Doing this will save costs when producing and running the core and make it a more viable alternative to the CV32E40S. 
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=0.55\textwidth]{docs/images/area_power_both_cores.png}
-    \caption{Area and power consumption of synthesized CV32E40S and CV32E40DC cores. }
+    \includegraphics[width=\textwidth]{docs/images/metric_compare.png}
+    \caption{Area and power consumption comparison after synthesis of CV32E40S and CV32E40DC cores. }
     \label{fig:area_power_plot}
 \end{figure}
 
