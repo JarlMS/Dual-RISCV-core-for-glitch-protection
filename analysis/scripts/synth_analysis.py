@@ -149,6 +149,7 @@ def plot_total(core, dual_core):
     # Make the plot for area and power on the left y-axis
     ax.bar(br1, core_values, color='b', width=barWidth, edgecolor='grey', label='CV32E40S')
     ax.bar(br2, dual_core_values, color='r', width=barWidth, edgecolor='grey', label='CV32E40DC')
+    bars = ax.bar(br2, dual_core_values, color='r', width=barWidth, edgecolor='grey')
 
     ax.set_ylabel('Area [pm^2]', fontweight='bold', fontsize=15) 
     ax2 = ax.twinx()
@@ -156,6 +157,7 @@ def plot_total(core, dual_core):
     # Make the plot for power on the right y-axis
     ax2.bar(br1, [0, core["power"]], color='b', width=barWidth, edgecolor='grey', label='CV32E40S')
     ax2.bar(br2, [0, dual_core["power"]], color='r', width=barWidth, edgecolor='grey', label='CV32E40DC')
+    bars2 = ax2.bar(br2, [dual_core["power"]], color='r', width=barWidth, edgecolor='grey')
 
     ax2.set_ylabel('Power [W]', fontweight='bold', fontsize=15)
 
@@ -168,6 +170,14 @@ def plot_total(core, dual_core):
     # lines2, labels2 = ax2.get_legend_handles_labels()
     # ax.legend(lines + lines2, labels + labels2, loc='upper left')
     ax.legend(loc='upper left')
+    # Adding percentage difference inside the bars for dual_core
+    for bar, bar2, value_core, value_dual_core in zip(bars, bars2, core_values, dual_core_values):
+        percentage_difference = ((value_dual_core - value_core) / value_core) * 100
+        yval = bar.get_height()
+        yval2 = bar2.get_height()
+        ax.text(bar.get_x() + bar.get_width()/2, yval, f'+{percentage_difference:.2f}%', ha='center', va='bottom')
+        ax2.text(bar2.get_x() + bar2.get_width()/2, yval2, f'+{percentage_difference:.2f}%', ha='center', va='bottom')
+
     plt.show()
 
 if __name__ == "__main__":
