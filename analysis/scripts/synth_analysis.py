@@ -58,13 +58,13 @@ def plot_pie(data1, data2):
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(10, 5))
 
     # Plot pie chart for dual_core
-    ax1.pie(values1, labels=labels, autopct=lambda p: '{:.1f}%\n({:.2e}W)'.format(p, p * sum(values1) / 100),
+    ax1.pie(values1, labels=labels, autopct=lambda p: '{:.2f}%\n({:.2e}W)'.format(p, p * sum(values1) / 100),
             startangle=90, colors=['red', 'green', 'blue'], textprops=dict(color="w",fontsize=20))
     ax1.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
     ax1.set_title(f'CV32E40S - Total {sum(values1):.2e}W', fontsize=20)
 
     # Plot pie chart for core
-    ax2.pie(values2, labels=labels, autopct=lambda p: '{:.1f}%\n({:.2e}W)'.format(p, p * sum(values2) / 100), 
+    ax2.pie(values2, labels=labels, autopct=lambda p: '{:.2f}%\n({:.2e}W)'.format(p, p * sum(values2) / 100), 
             startangle=90, colors=['red', 'green', 'blue'],
             textprops=dict(color="w",fontsize=20))
     ax2.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
