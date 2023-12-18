@@ -126,9 +126,12 @@ def plot_area(core, dual_core):
     plt.xticks(bar_positions, labels)
     plt.legend()
 
-    plt.yticks(np.arange(0, max(max(core_values), max(dual_core_values)), step=10000))
+    plt.yticks(np.arange(0, max(max(core_values), max(dual_core_values)+10000), step=10000))
 
-    # Display the plot
+    # # Calculate percentage difference and add text annotations
+    for i, (core_val, dual_core_val) in enumerate(zip(core_values, dual_core_values)):
+        percentage_diff = ((dual_core_val - core_val) / core_val) * 100
+        plt.text(bar_positions[i] - bar_width / 2, dual_core_val + 5000, f'+{percentage_diff:.2f}%', ha='center', va='bottom', color='black')
 
     # Display the plot
     plt.show()
@@ -180,5 +183,5 @@ def plot_total(core, dual_core):
 
 
 if __name__ == "__main__":
-    plot_pie(core_power, dual_core_power)
+    plot_area(core_area, dual_core_area)
 
