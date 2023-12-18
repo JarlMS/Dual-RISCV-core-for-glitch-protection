@@ -217,3 +217,33 @@ The top level block diagram for the dual-core lockstep setup is shown in \autore
 Parts of the implementation of CV32E40DC are shown in \autoref{lst:dc_code}. This is a slightly modified and extended version of the \textit{cv32e40s\_core.sv} code found in \cite{cv32e40s_github}. The major changes are the removal of the PCH feature, adding the pipeline stages as outputs and the instantiation of a second core. All the same inputs and outputs are declared for both cores. A synchronization register is made for each of these signals. The signals from both cores are compared in four separate statements. The first comparison is between all the output signals that exist in the unmodified CV32E40S. The next three comparisons are of the different pipeline stages. This way we can differentiate between an error in the pipeline or one occurring somewhere in the normal outputs. 
 
 Because all inputs and outputs of the core remain the same (with the exception of the output pipeline signals) we can easily connect it to the pre-existing verification framework. \autoref{lst:dc_wrapper} shows the instantiation of the CV32E40DC and a glitch injector module in the test bench.
+
+
+\section{Tests and Evaluation}
+
+All tests that will be performed on both cores are shown in \autoref{tab:instruction_fault_tests}. The tests are listed in the order they appear in \autoref{chap5}. As mentioned in \autoref{sec:method}, the PPA of both cores will be compared. However, in the context of secure operations these metrics do not determine the quality of a solution. Evaluating the quality of a solution is done solely on the given solutions ability to fulfill the passing condition described in \autoref{tab:instruction_fault_tests}, i.e. detecting an attempted glitch attack. 
+
+
+\begin{table}[h!]
+\centering
+\renewcommand{\arraystretch}{2} 
+\caption{Instruction Skip and Fault Coverage Tests}
+\label{tab:instruction_fault_tests}
+\resizebox{\textwidth}{!}{
+\begin{tabular}{lll}
+\toprule
+\multicolumn{3}{c}{\cellcolor[HTML]{9B9B9B}\textbf{Instruction Skip Tests}} \\
+\textbf{Test name} & \textbf{Intended glitching outcome} & \textbf{Passing Condition} \\
+\midrule
+\rowcolor{black!20} Skipping function call & Skip jump to function body, thus not setting the value of 'result\_code' and executing restricted code & Detect attempted glitch attack\\
+Skipping out of while loop & Skip jump to top of loop body, thus exiting loop and executing restricted code & Detect attempted glitch attack\\
+\rowcolor{black!20}Skipping directly to end & Skip directly to restricted code & {Detect attempted glitch attack} \\
+\midrule
+\multicolumn{3}{c}{\cellcolor[HTML]{9B9B9B}\textbf{Fault Coverage Tests}} \\
+\textbf{Test name} & \textbf{Intended glitching outcome} & \textbf{Passing Condition} \\
+\midrule
+\rowcolor{black!20}Glitching load instruction & Disrupt address bus, leading to wrong result at end of calculation & Detect attempted glitch attack\\
+Glitching store instruction & Disrupt address bus, leading to wrong result at end of calculation & {Detect attempted glitch attack} \\
+\bottomrule
+\end{tabular}}
+\end{table}
