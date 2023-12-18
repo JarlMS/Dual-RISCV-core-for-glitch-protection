@@ -6,7 +6,8 @@ In this chapter we perform synthesis of both cores and run the tests described i
 \section{PPA comparison}
 \label{sec:synth_comparison}
 
-Power consumption reports generated after synthesis of both cores are shown in \autoref{tab:cv32e40dc_power} and \autoref{tab:cv32e40s_power}. These tables show the power consumption for several categories. \autoref{fig:power_comapre} shows the difference in power consumption through leakage, internal, switching and in total for both cores. 
+Power consumption reports generated after synthesis of both cores are shown in \autoref{tab:cv32e40dc_power} and \autoref{tab:cv32e40s_power}. These tables show the leakage, switching and internal power consumption for several categories. 
+% \autoref{fig:power_comapre} shows the difference in power consumption through leakage, internal, switching and in total for both cores. 
 
 \begin{table}[h]
 \centering
@@ -63,7 +64,7 @@ Percentage & 0.23\% & 45.03\% & 54.75\% & 100.00\% & 100.00\% \\
 
 \newpage
 
-From the tables we see that the total power consumption is increased by $189.33\%$. Leakage power increases by $129.39\%$, internal power increases by $286.61\%$ and switching power increases by $109.58\%$. The value of each category as a percentage of total power consumption is shown in \autoref{fig:compare_power_pie}. From the figure we see that as a percentage of total power consumption leakage current decreases by $0.05\%$. However, internal power consumption increases by $15.13\%$.  
+From the tables we see that the total power consumption is increased by $189.33\%$. Leakage power increases by $129.39\%$, internal power increases by $286.61\%$ and switching power increases by $109.58\%$. The value of each category as a percentage of total power consumption is shown in \autoref{fig:compare_power_pie}. From the figure we see that as a percentage of total power consumption leakage current decreases by $0.05\%$. However, internal power consumption increases by $15.13\%$ (and in turn switching power decreases by the same amount).  
 
 \begin{figure}[h!]
     \centering
@@ -102,7 +103,7 @@ Instance & Cell Count & Cell Area[$pm^2$] & Net Area[$pm^2$] & Total Area[$pm^2$
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=\textwidth]{docs/images/area_comparison.png}
+    \includegraphics[width=\textwidth]{docs/images/area_comparison.png.png}
     \caption{Area comparison between CV32E40S and CV32E40DC.}
     \label{fig:area_compare}
 \end{figure}
