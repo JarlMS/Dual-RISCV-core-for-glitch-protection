@@ -4,17 +4,13 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 dual_core = {
-    "area": 65214.732,
-    "power[uW]": 144.482
-    # "instr_skip": 2790,
-    # "cov_test": 3123
+    "area": 140587.232,
+    "power": 3.26973e-03
 }
 
 core = {
     "area": 63121.093,
-    "power[uW]": 113.007
-    # "insr_skip": 2799,
-    # "cov_test": 3132
+    "power": 1.13007e-03
 }
 
 dual_core_area = {
@@ -139,49 +135,41 @@ def plot_area(core, dual_core):
 def plot_total(core, dual_core):
     # Extracting keys and values
     labels = ["Area", "Power"]
-    dual_core_values = [dual_core["area"], dual_core["power[uW]"]]
-    core_values = [core["area"], core["power[uW]"]]
+    dual_core_values = [dual_core["area"], dual_core["power"]]
+    core_values = [core["area"], core["power"]]
 
-    # Bar width
-    bar_width = 0.35
+    # set width of bar 
+    barWidth = 0.25
+    fig, ax = plt.subplots(figsize=(12, 8))
 
-    # Bar positions
-    bar_positions = np.arange(len(labels))
+    # Set position of bar on X axis 
+    br1 = np.arange(len(core_values)) 
+    br2 = [x + barWidth for x in br1] 
+    
+    # Make the plot for area and power on the left y-axis
+    ax.bar(br1, core_values, color='b', width=barWidth, edgecolor='grey', label='CV32E40S')
+    ax.bar(br2, dual_core_values, color='r', width=barWidth, edgecolor='grey', label='CV32E40DC')
 
-    # Creating the main axis
-    fig, ax1 = plt.subplots()
-   
-    # Creating bar plots for area on the left y-axis
-    ax1.bar(bar_positions, [dual_core["area"], core["area"]], bar_width, label='CV32E40S', color='blue')
-    ax1.set_xlabel('Metrics')
-    ax1.set_ylabel('Area [pm^2]', color='blue')
-    ax1.tick_params(axis='y', labelcolor='blue')
+    ax.set_ylabel('Area [pm^2]', fontweight='bold', fontsize=15) 
+    ax2 = ax.twinx()
 
-    ax1.set_ylim(60000, ax1.get_ylim()[1])
+    # Make the plot for power on the right y-axis
+    ax2.bar(br1, [0, core["power"]], color='b', width=barWidth, edgecolor='grey', label='CV32E40S')
+    ax2.bar(br2, [0, dual_core["power"]], color='r', width=barWidth, edgecolor='grey', label='CV32E40DC')
 
-    ax1.set_yticks(np.arange(ax1.get_yticks()[0], ax1.get_yticks()[-1], step=1000))
+    ax2.set_ylabel('Power [W]', fontweight='bold', fontsize=15)
 
-
-    # Creating a twin axis for power on the right y-axis
-    ax2 = ax1.twinx()
-    ax2.bar(bar_positions + bar_width, [dual_core["power[uW]"], core["power[uW]"]], bar_width, label='CV32E40DC', color='red')
-    ax2.set_ylabel('Power [uW]', color='red')
-    ax2.tick_params(axis='y', labelcolor='red')
-
-    # Adding labels, title, and legend
-    plt.title('Comparison of CV32E40S and CV32E40DC')
-    plt.xticks(bar_positions + bar_width/2, labels)
-
-    handles1, labels1 = ax1.get_legend_handles_labels()
-    handles2, labels2 = ax2.get_legend_handles_labels()
-    handles = handles1 + handles2
-    labels = labels1 + labels2
-    plt.legend(handles, labels)
-
-    # Display the plot
+    # Adding Xticks 
+    ax.set_xticks([r + barWidth/2 for r in range(len(core_values))])
+    ax.set_xticklabels(['Area', 'Power'])
+    
+    # Combine legends from both axes
+    # lines, labels = ax.get_legend_handles_labels()
+    # lines2, labels2 = ax2.get_legend_handles_labels()
+    # ax.legend(lines + lines2, labels + labels2, loc='upper left')
+    ax.legend(loc='upper left')
     plt.show()
 
-
 if __name__ == "__main__":
-    plot_area(core_area, dual_core_area)
+    plot_total(core, dual_core)
 
