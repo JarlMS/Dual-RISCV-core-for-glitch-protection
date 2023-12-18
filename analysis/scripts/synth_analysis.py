@@ -59,14 +59,14 @@ def plot_pie(data1, data2):
 
     # Plot pie chart for dual_core
     ax1.pie(values1, labels=labels, autopct=lambda p: '{:.1f}%\n({:.2e}W)'.format(p, p * sum(values1) / 100),
-            startangle=90, colors=['red', 'green', 'blue'], textprops=dict(color="w"))
+            startangle=90, colors=['red', 'green', 'blue'], textprops=dict(color="w",fontsize=12))
     ax1.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
     ax1.set_title(f'CV32E40S - Total {sum(values1):.2e}W')
 
     # Plot pie chart for core
     ax2.pie(values2, labels=labels, autopct=lambda p: '{:.1f}%\n({:.2e}W)'.format(p, p * sum(values2) / 100), 
             startangle=90, colors=['red', 'green', 'blue'],
-            textprops=dict(color="w"))
+            textprops=dict(color="w",fontsize=12))
     ax2.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
     ax2.set_title(f'CV32E40DC - Total {sum(values2):.2e}W')
 
