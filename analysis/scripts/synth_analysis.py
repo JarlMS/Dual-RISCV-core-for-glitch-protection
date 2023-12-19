@@ -55,13 +55,13 @@ def plot_pie(data1, data2):
 
     # Plot pie chart for dual_core
     ax1.pie(values1, labels=labels, autopct=lambda p: '{:.2f}%\n({:.2e}W)'.format(p, p * sum(values1) / 100),
-            startangle=90, colors=['red', 'green', 'blue'], textprops=dict(color="w",fontsize=20))
+            startangle=90, colors=['darkviolet', 'lightsalmon', 'lightblue'], textprops=dict(color="w",fontsize=20))
     ax1.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
     ax1.set_title(f'CV32E40S - Total {sum(values1):.2e}W', fontsize=20)
 
     # Plot pie chart for core
     ax2.pie(values2, labels=labels, autopct=lambda p: '{:.2f}%\n({:.2e}W)'.format(p, p * sum(values2) / 100), 
-            startangle=90, colors=['red', 'green', 'blue'],
+            startangle=90, colors=['darkviolet', 'lightsalmon', 'lightblue'],
             textprops=dict(color="w",fontsize=20))
     ax2.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
     ax2.set_title(f'CV32E40DC - Total {sum(values2):.2e}W', fontsize=20)
@@ -82,8 +82,8 @@ def plot_power(core, dual_core):
     bar_positions = np.arange(len(labels))
 
     # Creating bar plots
-    plt.bar(bar_positions - bar_width / 2, dual_core_values, bar_width, label='CV32E40DC', color='blue')
-    plt.bar(bar_positions + bar_width / 2, core_values, bar_width, label='CV32E40S', color='red')
+    plt.bar(bar_positions - bar_width / 2, dual_core_values, bar_width, label='CV32E40DC', color='lightblue')
+    plt.bar(bar_positions + bar_width / 2, core_values, bar_width, label='CV32E40S', color='lightsalmon')
 
     # Adding labels, title, and legend
     plt.xlabel('Categories')
@@ -112,8 +112,8 @@ def plot_area(core, dual_core):
     bar_positions = np.arange(len(labels))
 
     # Creating bar plots
-    plt.bar(bar_positions - bar_width / 2, dual_core_values, bar_width, label='CV32E40DC', color='blue')
-    plt.bar(bar_positions + bar_width / 2, core_values, bar_width, label='CV32E40S', color='red')
+    plt.bar(bar_positions - bar_width / 2, dual_core_values, bar_width, label='CV32E40DC', color='lightblue')
+    plt.bar(bar_positions + bar_width / 2, core_values, bar_width, label='CV32E40S', color='lightsalmon')
 
     # Adding labels, title, and legend
     plt.xlabel('Categories')
@@ -147,17 +147,17 @@ def plot_total(core, dual_core):
     br2 = [x + barWidth for x in br1] 
     
     # Make the plot for area and power on the left y-axis
-    ax.bar(br1, core_values, color='b', width=barWidth, edgecolor='grey', label='CV32E40S')
-    ax.bar(br2, dual_core_values, color='r', width=barWidth, edgecolor='grey', label='CV32E40DC')
-    bars = ax.bar(br2, dual_core_values, color='r', width=barWidth, edgecolor='grey')
+    ax.bar(br1, core_values, color='lightblue', width=barWidth, edgecolor='cadetblue', label='CV32E40S')
+    ax.bar(br2, dual_core_values, color='lightsalmon', width=barWidth, edgecolor='tomato', label='CV32E40DC')
+    bars = ax.bar(br2, dual_core_values, color='lightsalmon', width=barWidth, edgecolor='tomato')
 
     ax.set_ylabel('Area [pm^2]', fontweight='bold', fontsize=15) 
     ax2 = ax.twinx()
 
     # Make the plot for power on the right y-axis
-    ax2.bar(br1, [0, core["power"]], color='b', width=barWidth, edgecolor='grey', label='CV32E40S')
-    ax2.bar(br2, [0, dual_core["power"]], color='r', width=barWidth, edgecolor='grey', label='CV32E40DC')
-    bars2 = ax2.bar(br2, [dual_core["power"]], color='r', width=barWidth, edgecolor='grey')
+    ax2.bar(br1, [0, core["power"]], color='lightblue', width=barWidth, edgecolor='cadetblue', label='CV32E40S')
+    ax2.bar(br2, [0, dual_core["power"]], color='lightsalmon', width=barWidth, edgecolor='tomato', label='CV32E40DC')
+    bars2 = ax2.bar(br2, [dual_core["power"]], color='lightsalmon', width=barWidth, edgecolor='tomato')
 
     ax2.set_ylabel('Power [W]', fontweight='bold', fontsize=15)
 
@@ -182,4 +182,4 @@ def plot_total(core, dual_core):
 
 if __name__ == "__main__":
     plot_total(core, dual_core)
-
+    plot_pie(core_power, dual_core_power)
