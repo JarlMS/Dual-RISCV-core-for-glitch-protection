@@ -67,12 +67,12 @@ Percentage & 0.23\% & 45.03\% & 54.75\% & 100.00\% & 100.00\% \\
 
 \newpage
 
-From the tables we see that the total power consumption is increased by $189.33\%$. Leakage power increases by $129.39\%$, internal power increases by $286.61\%$ and switching power increases by $109.58\%$. The value of each category as a percentage of total power consumption is shown in \autoref{fig:compare_power_pie}. From the figure we see that as a percentage of total power consumption leakage current decreases by $0.05\%$. However, internal power consumption increases by $15.13\%$ (and in turn switching power decreases by the same amount).  
+From the tables we see that leakage power increases by $129.39\%$, internal power increases by $286.61\%$, switching power increases by $109.58\%$ and total power consumption increases by $189.33\%$. The value of each type of power consumption as a percentage of total power consumption is shown in \autoref{fig:compare_power_pie}. From the figure we see that as a percentage of total power consumption leakage current decreases by $0.05\%$. However, internal power consumption increases by $15.13\%$ (and in turn switching power decreases by the same amount).  
 
 \begin{figure}[h!]
     \centering
     \includegraphics[width=\textwidth]{docs/images/power_compare_pie.png}
-    \caption{Comparison of percentage used of total power for each category in both cores.}
+    \caption{Comparison of percentage used of total power for each type of power consumption in both cores.}
     \label{fig:compare_power_pie}
 \end{figure}
 
@@ -83,7 +83,7 @@ Area reports after synthesis of both cores with relative increase are shown in \
 
 \begin{table}[h!]
 \centering
-\caption{Area report for CV32E40S.}
+\caption{Area reports for CV32E40S and CV32E40DC.}
 \label{tab:area_report}
 \resizebox{\textwidth}{!}{
 \begin{tabular}{c|cccc}
@@ -91,7 +91,7 @@ Area reports after synthesis of both cores with relative increase are shown in \
 Instance & Cell Count & Cell Area[$pm^2$] & Net Area[$pm^2$] & Total Area[$pm^2$]\\
 \midrule
 \rowcolor{black!20} CV32E40S & 13525 & 42548.220 & 20572.873 & 63121.093\\
-CV32E40DC & 29351[$+117.01\%$] & 97142.022[$128.31\%$] & 43445.210[$111.18\%$] & 140587.232[$122.73\%$] \\ 
+CV32E40DC & 29351[$+117.01\%$] & 97142.022[$+128.31\%$] & 43445.210[$+111.18\%$] & 140587.232[$+122.73\%$] \\ 
 \bottomrule
 \end{tabular}}
 \end{table}
@@ -105,11 +105,11 @@ CV32E40DC & 29351[$+117.01\%$] & 97142.022[$128.31\%$] & 43445.210[$111.18\%$] &
 
 \subsection{Performance}
 
-The amount of clock cycles each core uses to execute the code from \autoref{lst:sample_code}, \autoref{lst:test_code} and \autoref{lst:coverage_test} is shown in \autoref{tab:test_ccs}. The relative difference is also shown. From the table we see that the CV32E40DC uses 9 fewer clock cycles for each of the tests. This amounts to a decrease of $0.05\%$, $0.32\%$ and $0.28\%$ for the sanity test, instruction skipping test and the fault coverage test repspecively. 
+The amount of clock cycles each core uses to execute the code from \autoref{lst:sample_code}, \autoref{lst:test_code} and \autoref{lst:coverage_test} is shown in \autoref{tab:test_ccs}. The relative difference is also shown. From the table we see that the CV32E40DC uses 9 fewer clock cycles for each of the tests. This amounts to a decrease of $0.05\%$, $0.32\%$ and $0.28\%$ for the sanity test, instruction skipping test and the fault coverage test respectively. 
 
 \begin{table}[h!]
 \centering
-\caption{Clock cycle used to execute the code in \autoref{lst:sample_code}, \autoref{lst:test_code} and \autoref{lst:coverage_test} on both cores.}
+\caption{Clock cycles used to execute the code in \autoref{lst:sample_code}, \autoref{lst:test_code} and \autoref{lst:coverage_test} on both cores.}
 \label{tab:test_ccs}
 \begin{tabular}{c|ccc}
 \toprule 
@@ -132,7 +132,7 @@ CV32E40DC & 18415[$-0.05\%$] & 2790[$-0.32\%$] & 3123[$-0.28\%$]\\
 
 The \textit{c.jal} instruction is logged in the \textit{WB} stage at 1752ns. The fault is injected in the \textit{EX} stage at 1743ns. The program counter is glitched to be \textit{0x0000044e}, thus skipping one instruction. 
 
-Glitching of the core was done successfully, and line \textbf{21} in \autoref{lst:test_code} was executed. The waveforms from simulation are shown in \autoref{fig:instr_skip_single_wave}. From the figure one can see that the glitch is detected immediately and a major alert is raised. The test is \textbf{passed}.
+The glitch attack was successful, and line \textit{21} in \autoref{lst:test_code} was executed. The waveforms from simulation are shown in \autoref{fig:instr_skip_single_wave}. From the figure we see that the glitch is detected immediately and a major alert is raised. The test is \textbf{passed}.
 
 \begin{figure}[h!]
     \centering
@@ -145,12 +145,12 @@ Glitching of the core was done successfully, and line \textbf{21} in \autoref{ls
 
 The \textit{c.j} instruction is logged in the \textit{WB} stage at 1833ns. The fault is injected in the \textit{EX} stage at 1824ns. The program counter is glitched to be \textit{0x0000047c}, thus skipping one instruction.
 
-Glitching out of the while loop was not successful. The attempted instruction skip is detected and a major alert is raised. This can be seen in the simulation waveforms in \autoref{fig:instr_skip_loop_single_wave}. The test is \textbf{passed}.
+The glitch attack was not successful. The attempted instruction skip is detected and a major alert is raised. This can be seen in the simulation waveforms in \autoref{fig:instr_skip_loop_single_wave}. The test is \textbf{passed}.
 
 \begin{figure}[h!]
     \centering
     \includegraphics[width=\textwidth]{docs/images/instr_skip_glitch_injection_single_core.png}
-    \caption{Waveforms from simulated skip of \textit{c.j} instruction to out of loop on CV32E40S.}
+    \caption{Waveforms from simulated skip of \textit{c.j} instruction to jump out of loop on CV32E40S.}
     \label{fig:instr_skip_loop_single_wave}
 \end{figure}
 
@@ -158,7 +158,7 @@ Glitching out of the while loop was not successful. The attempted instruction sk
 
 The call to the \textit{main} function is logged in the \textit{WB} stage at 1737ns. The fault is injected in the \textit{EX} stage at 1728ns. The program counter is glitched to the address \textit{0x00000482}, thus skipping 24 instructions.
 
-This glitch attack was not successful. However, no major alert was raised by the core as can be seen in \autoref{fig:direct_skip_single_wave}. This glitch therefore bypassed the PCH feature and the test is \textbf{not passed}.
+The glitch attack was not successful. However, no major alert was raised by the core as can be seen in \autoref{fig:direct_skip_single_wave}. This glitch therefore bypassed the PCH feature and the test is \textbf{not passed}.
 
 \begin{figure}[h!]
     \centering
@@ -210,6 +210,7 @@ The glitch attack was not successful. From \autoref{fig:direct_skip_dual_wave} w
     \label{fig:direct_skip_dual_wave}
 \end{figure}
 
+\newpage 
 
 \section{Coverage Test}
 \label{sec:cov_test_result}
@@ -238,6 +239,8 @@ The \textit{sw} instruction is logged in the \textit{WB} stage at 1836ns. The fa
     \label{fig:sw_glitch_single_wave}
 \end{figure}
 
+\newpage
+
 
 \subsection{CV32E40DC}
 
@@ -247,8 +250,8 @@ The \textit{lw} instruction is logged in the \textit{WB} stage at 1722ns. The fa
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=\textwidth]{docs/images/lw_glitch_dual_core.png}
-    \caption{Waveforms from simulated glitched LW instruction skip on Dual-Core Lockstep setup.}
+    \includegraphics[width=\textwidth]{docs/images/sw_glitch_dual_core.png}
+    \caption{Waveforms from simulated glitched LW instruction skip on CV32E40DC.}
     \label{fig:lw_glitch_dual_wave}
 \end{figure}
 
@@ -258,8 +261,8 @@ The \textit{sw} instruction is logged in the \textit{WB} stage at 1731ns. The fa
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=\textwidth]{docs/images/sw_glitch_dual_core.png}
-    \caption{Waveforms from simulated glitched SW instruction skip on Dual-Core Lockstep setup.}
+    \includegraphics[width=\textwidth]{docs/images/lw_glitch_dual_core.png}
+    \caption{Waveforms from simulated glitched SW instruction skip on CV32E40DC.}
     \label{fig:sw_glitch_dual_wave}
 \end{figure}
 
@@ -268,21 +271,23 @@ The \textit{sw} instruction is logged in the \textit{WB} stage at 1731ns. The fa
 
 As discussed in \autoref{sec:xsecure}, removing the PCH feature from the \textit{Xsecure} extension would lead to an increase in execution speed as shown in \autoref{tab:test_ccs}. However, as mentioned previously this increase is limited by the side-channel attack prevention that also exists within the core. Exactly why the decrease in clock cycles from the CV32E40S to the CV32E40DC is always 9 is yet to be determined. This is not explained in the documentation for the core.  
 
-Adding an extra core is also shown in \autoref{subsec:power} to increase total area and total power consumption. \autoref{fig:area_power_plot} shows the difference between these metrics for both cores. The red bars represent the measured values from the CV32E40DC and the blue represent those from the CV32E40S. The axis on the left shows the area in $pm^2$ and the axis on the right shows the power consumption in $W$. The increase in area is smaller than the increase in power usage relative to the CV3E40S. The reason for this is that the CV32E40DC mainly adds computationally heavy logic circuits. These circuits will not necessarily occupy a lot area, but as shown in \autoref{sec:synth_comparison}, the dynamic power consumption from switching increases from $54.75\%$ to $63.42\%$. With optimization of the CV32E40DC, it is possible to bring these metrics closer to those of the CV32E40S. Doing this will save costs when producing and running the core and make it a more viable alternative to the CV32E40S. 
+Adding an extra core is also shown in \autoref{subsec:power} to increase total area and total power consumption. Because the CV32E40DC consists of two cores, synchronization registers and comparators we would expect to see at least a $100\%$ increase in both metrics. \autoref{fig:area_power_plot} shows the difference between these metrics for both cores. The red bars represent the measured values from the CV32E40DC and the blue represent those from the CV32E40S. The axis on the left shows the area in $pm^2$ and the axis on the right shows the power consumption in $W$. From the figure we see that the total area increases by $122.73\%$ and the total power increases by $189.34\%$. 
+
+This increase in area and power consumption is more than doubled. While PPA can be traded for robustness in secure operation, we still want to save on energy and cost whenever possible when manufacturing a chip. However, with optimizations like for example using a shared register file for the cores within the CV32E40DC, it is possible to bring the PPA metrics closer to those of the CV32E40S. This will make it a more viable alternative to the CV32E40S. 
 
 \begin{figure}[h!]
     \centering
     \includegraphics[width=\textwidth]{docs/images/metric_compare.png}
-    \caption{Area and power consumption comparison after synthesis of CV32E40S and CV32E40DC cores. }
+    \caption{Area and power consumption comparison after synthesis of CV32E40S and CV32E40DC. }
     \label{fig:area_power_plot}
 \end{figure}
 
-\autoref{tab:detection} shows the whether the glitch attack was detected or not for all tests. Detecting instruction skips is shown to be more reliable using the CV32E40DC. This core was able to detect a glitch in all three test cases. The CV32E40S was only able to detect a glitch in two of the three tests, as the glitch skipping directly to the end went undetected. For unknown reasons, the skipping of a function call was only successful on the CV32E40S as shown in \autoref{subsubsec:func_call}. Repeating the test lead to the same result every time. Random chance can therefore be ruled out. The reason why this test has a different outcome on both cores could be due to some undiscovered difference in timing between them.
+\autoref{tab:detection} shows whether the glitch attack was detected or not for all tests. Detecting instruction skips is shown to be more reliable using the CV32E40DC. This core was able to detect a glitch in all three test cases. The CV32E40S was only able to detect a glitch in two of the three tests, as the glitch skipping directly to the end and the coverage tests went undetected. For unknown reasons, the skipping of a function call was only successful on the CV32E40S as described in \autoref{subsubsec:func_call}. Repeating the test lead to the same result every time and random chance can therefore be ruled out. The reason why this test has a different outcome on both cores could be due to some undiscovered difference in timing between them.
 
 
 \begin{table}[h]
 \centering
-\caption{Result of glitch detection in the tests from \autoref{tab:coverage_test} and \autoref{tab:instr_skip_test} on the CV32E40S and CV32E40DC.}
+\caption{Glitch detection in the tests from \autoref{tab:instruction_fault_tests} on the CV32E40S and CV32E40DC.}
 \label{tab:detection}
 \setlength{\tabcolsep}{10pt} % Default value: 6pt
 \renewcommand{\arraystretch}{1.5} % Default value: 1
@@ -299,4 +304,4 @@ Test                                                & CV32E40S                  
 \end{tabular}
 \end{table}
 
-For the coverage test it is clear that the CV32E40DC outperforms the CV32E40S as it is able to detect both glitch attacks. The CV32E40S detects neither of them. This is to be expected as these tests specifically target areas that are not covered by \textit{Xsecure}. This added coverage means that previously successful glitch attacks like those described in \autoref{chap3} might now be stopped. For example, the MTVEC exploit\cite{mtvec_corruption} would now be much more complex to perform. First of all an attacker would now need to trigger an exception in both cores. The timing offset between them makes this task more complicated. In addition the exception will need to be identical between the two cores, as any discrepancy will be detected. 
+For the coverage test it is clear that the CV32E40DC outperforms the CV32E40S as it is able to detect both glitch attacks. The CV32E40S detects neither of them. This is to be expected as these tests specifically target areas that are not covered by \textit{Xsecure}. This added coverage means that previously successful glitch attacks like those described in \autoref{chap3} might now be stopped. For example, the MTVEC exploit\cite{mtvec_corruption} would now be much more complex to perform. First of all an attacker would now need to trigger an exception in both cores. The timing offset between them makes this task more complicated. This is because while disrupting a specific instruction in one core, another instruction happening with a cycle offset might also be affected in the other core. This unintended disruption of another instruction might then be detected. In addition the exception will need to behave identical in both cores, as any discrepancy will be also be detected. 
