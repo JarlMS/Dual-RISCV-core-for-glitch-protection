@@ -1,7 +1,7 @@
 \chapter{Experimental}
 \label{chap4}
 
-This chapter first lists all tools used for testing. Then we describe how different types of glitch attacks will be simulated on the CV32E40S and CV32E40DC. The methodology behind the tests as well as a detailed description of how the tests are performed and evaluated will be discussed. Lastly, this chapter introduces the general idea behind the architecture of the CV32E40DC. 
+This chapter first lists all tools used for testing. Then we describe how different types of glitch attacks will be simulated on the CV32E40S and CV32E40DC. The methodology behind the tests as well as a detailed description of how the tests are performed and evaluated will be discussed. Lastly, this chapter introduces the general idea behind the architecture and implementation of the CV32E40DC. 
 
 \section{Tools}
 \label{sec:tools}
@@ -18,9 +18,9 @@ This chapter first lists all tools used for testing. Then we describe how differ
 
 The work in this project is based on the pre-existing code found in the CV32E40S repository \cite{cv32e40s_github}. Some design considerations had to be made when implementing CV32E40DC. As mentioned in \autoref{sec:xsecure} removing specific features of Xsecure is difficult due to them being heavily woven into many aspects of the core and the verification environment. Because of this, it was decided that only removing the PCH would be a good baseline for testing and comparison between the old and new architectures. This means that the CV32E40DC consists of two CV32E40S cores with PCH removed. To verify that the architectures work as intended, they both run a simulation of the code shown in \autoref{lst:sample_code} using \textit{Cadence Xcelium}. 
 
-Direct comparison between the cores is done by looking at the number of clock cycles needed to run the different test programs, as well as the area and power usage of the synthesized design. Synthesis is done using \textit{Cadence Genus} with a 45nm technology library. Reports of area and power consumption are generated for comparison by the tool. The reports for power consumption include details about leakage-, internal(static)- and switching-power. Leakage currents are determined by the transistor technology. Internal (static) power consumption refers to the power dissipated within internal components of a digital circuit, such as flip-flops, latches and other sequential or combinations logic elements. Switching power consumption refers to the power dissipated due to dynamic changes in the state of the digital circuit. The reports for area include details about cell count, cell area and net area. Cell count refers to the amount of standard cells used in the design. These standard cells include things like logic gates, flip-flops and other fundamental elements. Cell area refers to the area occupied by these standard cells. Net area refers to the area occupied by interconnects between the standard cells. The script used for synthesizing the designs and generating reports is shown in \autoref{lst:tcl}. 
+Direct comparison between the cores is done by looking at the number of clock cycles needed to run the different test programs, as well as the area and power consumption of the synthesized designs. Synthesis is done using \textit{Cadence Genus} with a 45nm technology library. Reports of area and power consumption are generated for comparison by the tool. The reports for power consumption include details about leakage-, internal(static)- and switching-power. Leakage currents are determined by the transistor technology. Internal (static) power consumption refers to the power dissipated within internal components of a digital circuit, such as flip-flops, latches and other sequential or combinations logic elements. Switching power consumption refers to the power dissipated due to dynamic changes in the state of the digital circuit. The reports for area include details about cell count, cell area and net area. Cell count refers to the amount of standard cells used in the design. These standard cells include things like logic gates, flip-flops and other fundamental elements. Cell area refers to the area occupied by these standard cells. Net area refers to the area occupied by interconnects between the standard cells. The script used for synthesizing the designs and generating reports is shown in \autoref{lst:tcl}. Waveforms from the simulation of the cores are analyzed using \textit{SimVision}. The number of clock cycles needed to run the different test programs are counted using a built in feature of \textit{SimVision}. 
 
-Waveforms from the simulation of the cores are analyzed using \textit{SimVision}. The number of clock cycles needed to run the different test programs are counted using a built in feature of \textit{SimVision}. These comparisons are done mostly to give some understating of the resource usage, but for evaluating the quality of the solution these metrics are not the most critical. As these cores are both meant to be used in applications where hardware security is of the utmost importance, they are often allowed to trade PPA for robustness. Both cores will therefore run two simple test programs shown in \autoref{lst:test_code} and \autoref{lst:coverage_test}. The former represents a secure boot protocol similar to the one shown in \autoref{fig:glitchable_code}. The latter represents an application with a lot of memory accesses. 
+These comparisons are done mostly to give some understating of the resource usage, but for evaluating the quality of the solution these metrics are not the most critical. As these cores are both meant to be used in applications where hardware security is of utmost importance, they are often allowed to trade PPA for robustness. Both cores will therefore run two simple test programs shown in \autoref{lst:test_code} and \autoref{lst:coverage_test} while being targeted by simulated glitch attacks. The former represents a secure boot protocol similar to the one shown in \autoref{fig:glitchable_code}. The latter represents an application with a lot of memory accesses. 
 
 In the first test we will attempt to bypass a simulated secure boot protocol. As shown in \autoref{fig:glitchable_code} there are many ways that such a program can be exploited. However, because we only removed the PCH feature the glitching in this test will be restricted to the PC. This means we will only try to do instruction skipping, and no resetting of register values or status registers for conditional branches. In the second test we investigate the fault detection coverage of both cores by glitching the values on the \textit{Open Bus Interface} (OBI) data-bus. This test purposefully attacks parts of the core that are not explicitly covered by features from \textit{Xsecure}. This way it will be possible to see whether the CV32E40DC indeed offers extra fault coverage as a trade off to the increased area and power usage. 
 
@@ -35,16 +35,16 @@ Real glitch attacks as described in \autoref{sec:glitch_attacks} are done by tam
 
 \begin{table}[h]
 \centering
-\caption{Glitch Injector output based on control signals.}
+\caption{Glitch Injector output based on control signals. \textit{x} is don't-care.}
 \label{tab:module_output}
 \begin{tabular}{ccccc}
 \toprule 
 \rowcolor{black!20} \textbf{enable} & \textbf{enable\_specific} & \textbf{rst\_n} & \textbf{in} & \textbf{out} \\
 \midrule
-0 & 0 & x & x & x \\
-\rowcolor{black!20} 1 & 0 & 1 & 0 & Random \\
-1 & 0 & 1 & 1 & Random \\
-\rowcolor{black!20} 1 & 1 & 1 & x & Specific \\
+x & x & 0 & x & 0 \\
+\rowcolor{black!20}0 & 0 & 1 & x & In \\
+1 & 0 & 1 & 0 & Random \\
+\rowcolor{black!20} x & 1 & 1 & x & Specific \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -56,19 +56,19 @@ parameter BIT_LENGTH = 1,
 parameter SPECIFIC = {BIT_LENGTH{1'b0}}
 )
 (
-    output  logic [0:BIT_LENGTH-1]      out,
+    output  logic [0:BIT_LENGTH-1]      out,            
     input   logic [0:BIT_LENGTH-1]      in,
     input   wire                        clk,
     input   wire                        rst_n,
-    input   wire                        enable,
-    input   wire                        enable_specific    
+    input   wire                        enable,         
+    input   wire                        enable_specific
 );
 
 always_ff @ (posedge clk, negedge rst_n) begin 
     if (rst_n == 1'b0) begin 
         out $<=$ 0;
     end else begin
-        reg [BIT_LENGTH-1:0] random_out; 
+        reg [BIT_LENGTH-1:0] random_out;            
 
         if (enable_specific) begin
             out $<=$ SPECIFIC;
@@ -82,15 +82,15 @@ end
 endmodule
 \end{lstlisting}
 
-While this module allows for fault injection, there are still some complications related to performing a successful attack that must be addressed. As mentioned in \autoref{sec:non_invasive}, effective glitch attacks require very precise timing. While doing this in simulation is a lot simpler than doing it on a physical device, we still need to "reverse engineer" our program to figure out where to do fault injection. The steps for performing an attack are described below:
+While this module allows for fault injection, there are still some complications related to performing a successful attack that must be addressed. As mentioned in \autoref{sec:non_invasive}, effective glitch attacks require very precise timing. While doing this in simulation is a lot simpler than doing it on a physical device, we still need to "reverse engineer" our program to figure out where and when to do fault injection. The steps for performing an attack are described below:
 
 \begin{enumerate}
     \item Write high level C code containing some vulnerability that can be exploited. 
-    \item Compile the code with no optimization to make relationship between C and Assembly as close as possible.
-    \item Analyse the Assembly and identify the instruction(s) that can be glitched.
+    \item Compile the code with no optimization to make C and assembly as closely related as possible.
+    \item Analyse the assembly and identify the instruction(s) that can be glitched.
     \item Simulate the core running the code without any fault injection to log all executed instructions. 
     \item Analyze the log file to figure out at what time the glitchable instruction was executed. The log file only logs at what time the instruction reached the WB stage, meaning we must subtract 1-3 clock periods depending on which part of the pipeline we wish to introduce the glitch. 
-    \item Rerun simulation with fault injection and verify that the expected glitch occurs at the right time. If not, redo step 5 with different timing. 
+    \item Re-run simulation with fault injection and verify that the expected glitch occurs at the right time. If not, redo step 5 with different timing. 
 \end{enumerate}
 
 \subsection{Skipping instructions}
@@ -103,9 +103,20 @@ In cases where the attacker has limited insight into the instruction sequence bu
 \section{Simulating instruction skipping}
 \label{sec:sim_instr_skip}
 
-Because the tests are restricted to instruction skipping, it limits the potential ways such a small program can be exploited. However, the tests shown in \autoref{tab:instr_skip_test} will be run on the code we created, shown in \autoref{lst:test_code}. Most, if not all, of the code in the test is somewhat redundant. Because of this, the code is compiled with the '-O0' flag. This way no optimizations are applied and the C-code and RISC-V assembly are as closely related as possible. The assembly for the test program is shown in \autoref{lst:asm_instr_skip}. 
+The tests shown in \autoref{tab:instr_skip_test} will be run on the code we created, shown in \autoref{lst:test_code}. In this code we first instantiate the variable 'result\_code' to be zero. We then simulate fetching the wrong boot image with the 'boot\_go' function (which always returns -1) and getting stuck in an infinite loop. The loop does in reality exit after the 'count' variable reaches 10 to avoid having to wait forever. The goal for an attacker in this test will be to avoid the infinite loop by glitching the system. 
+
+Most, if not all, of the code in the test is somewhat redundant. Because of this, the code is compiled with the '-O0' flag. This way no optimizations are applied and the C-code and RISC-V assembly are as closely related as possible. The assembly for the test program is shown in \autoref{lst:asm_instr_skip}. 
 
 \begin{lstlisting}[caption={Test code for simulating instruction skip.}, label=lst:test_code, language=C++]
+
+int do_boot() {
+    return 0;
+}
+
+int boot_go() {
+    return -1;
+}
+
 int main(int argc, char *argv[])
 {
     int result_code = 0;
@@ -134,13 +145,13 @@ int main(int argc, char *argv[])
 
 \begin{table}[h]
 \centering
-\caption{Instruction skipping tests.}
+\caption{Instruction skipping tests to run on code from \autoref{lst:test_code}.}
 \label{tab:instr_skip_test}
 \begin{tabular}{m{2.5cm}m{3.5cm}m{7.5cm}}
 \toprule 
 Line in C code & ASM instruction & Expected outcome \\
 \midrule
-\rowcolor{black!20} \textbf{9} & c.jal 418 $\langle$boot\_go$\rangle$ & Skipping this instruction means that the value of '-1' from the 'boot\_go()' function is never stored in the 'result\_code' register. The program then never enters the scope of the conditional statement. \\
+\rowcolor{black!20} \textbf{9} & c.jal 418 $\langle$boot\_go$\rangle$ & Skipping this instruction means that the value of '-1' from the 'boot\_go()' function is never stored in the 'result\_code' variable. The program then never enters the scope of the conditional statement. \\
 \textbf{12} & c.j 458 $\langle$main+0x20$\rangle$ & Skipping the jump instruction that keeps the 'while(1)' loop repeating will glitch out of the scope of the loop and execute the 'do\_boot()' function.  \\
 \rowcolor{black!20} \textbf{Any line} & Any instruction & From any point in the code it is potentially possible to glitch directly to the address of the 'do\_boot()' function. The real danger of this happening is discussed in \autoref{subsec:skip_instr}. \\
 \bottomrule
@@ -150,11 +161,11 @@ Line in C code & ASM instruction & Expected outcome \\
 \section{Coverage tests}
 \label{sec:coverage_test}
 
-While it is important to verify whether the CV32E40DC can replace the existing security features of \textit{Xsecure}, it does not explore one of the main advantages which is fault coverage. In order to test this, we will introduce glitches in areas that are not specifically covered by \textit{Xsecure}. One such area is the data-bus going to the data-memory during a load or store instruction. If this is attacked with only one core, the wrong data might stay in the memory undetected and faults can propagate to other parts of the execution sequence. With two cores any discrepancy between the loaded or stored data can be detected before faults disrupt the system. 
+While it is important to verify whether the CV32E40DC can replace the existing security features of \textit{Xsecure}, these tests do not explore one of the main advantages which is fault coverage. In order to test this, we will introduce glitches in areas that are not specifically covered by \textit{Xsecure}. One such area is the data-bus going to the data-memory during a load or store instruction. If this is attacked with only one core, the wrong data might stay in the memory undetected and faults can propagate to other parts of the execution sequence. With two cores any discrepancy between the loaded or stored data can be detected before faults disrupt the system. 
 
-These types of attacks pose a real threat as data-buses are often long because they have to go between different modules, and require a large area if the bus is wide. This large area makes it easy for an attacker to target the bus with something like EMFI\cite{emfi_injection} if they have some knowledge of the chip layout. Voltage and clock glitches can also potentially disrupt the data on a bus\cite{bus_glitch}. 
+These types of attacks pose a real threat as data-buses are often long because they have to go between different modules, and require a large area if the bus is wide. This large area makes it easy for an attacker to target the bus with something like EMFI\cite{emfi_injection} if they have some knowledge of the chip layout. Voltage and clock glitches can also potentially disrupt the data on a bus as shown by \cite{bus_glitch}. 
 
-In order to test the fault coverage of both cores, we have written the test program shown in \autoref{lst:coverage_test}. This code runs a simple function that calculates the 20th Fibonacci number. The function uses no recursion and the code is compiled without optimization. This is to make the C-code and Assembly as closely related as possible. Each line in the loop body between line 6 and 10 translates to at least one load and store instruction. Glitching any of these instructions will lead to a similar result. Because of this we only glitch the instructions corresponding to line 7 in the code. \autoref{tab:coverage_test} shows the tests that will be run. 
+In order to test the fault coverage of both cores, we have written the test program shown in \autoref{lst:coverage_test}. This code runs a simple function that calculates the 20th Fibonacci number. The function uses no recursion and the code is compiled without optimization. This is to make the C-code and assembly as closely related as possible. Each line in the loop body between lines 6 and 10 translates to at least one load and store instruction. Glitching any of these instructions will lead to a similar result. Because of this we only glitch the instructions corresponding to line 7 in the code. \autoref{tab:coverage_test} shows the test that will be run. 
 
 %Because disrupting the \textit{load} or \textit{store} instructions in either one of the lines in the code leads to a similar outcome, the glitches will only be applied to the instructions corresponding to ine \textbf{7}.
 
@@ -181,7 +192,7 @@ int main(int argc, char *argv[])
 
 \begin{table}[h]
 \centering
-\caption{Fault coverage tests.}
+\caption{Fault coverage tests to run on code from \autoref{lst:coverage_test}.}
 \label{tab:coverage_test}
 \begin{tabular}{m{2.5cm}m{3.5cm}m{7.5cm}}
 \toprule 
@@ -197,15 +208,15 @@ Line in C code & ASM instructions & Expected outcome \\
 \section{Implementing the CV32E40DC}
 \label{sec:dualcore}
 
-The proposed dual-core architecture is straight forward to implement. All that is needed is to connect two cores with synchronization registers at appropriate places. Choosing the correct granularity for comparisons is however important. At the highest level, comparing only the output of both cores is an option. Comparison would then have to be done on the OBI data bus. For the end-user application, this would be the most natural way to do it as the details of what has glitched is far less important than simply detecting that an error has occurred. However, for analyzing the effects of glitch attacks on a system in more detail, a more fine grained approach is needed. The extreme counterpart to only comparing the output would be to compare all wires and registers. This would allow the user to determine the exact location of an error, but at the cost of adding a lot of extra hardware. 
+The proposed dual-core architecture is straight forward to implement. All that is needed is to connect two cores with synchronization registers at appropriate places. Choosing the correct granularity for comparisons is however important. At the highest level, comparing only the output of both cores is an option. Comparison would then have to be done on the OBI data bus. For the end-user application, this would be the most natural way to do it as the details of what was glitched is far less important than simply detecting that an error has occurred. However, for analyzing the effects of glitch attacks on a system in more detail, a more fine grained approach is needed. The extreme counterpart to only comparing the output would be to compare all wires and registers. This would allow the user to determine the exact location of an error, but at the cost of adding a lot of extra hardware. 
 
 %This way of implementing the comparisons can also be argued against as it goes against one of the principal ideas of using a dual-core lockstep mechanism: simplicity of implementation. 
 
-As the purpose of this project is to analyze the effectiveness of the dual-core lockstep mechanism, some granularity is needed. However, knowing exactly which wire or register bit has glitched will not be necessary. This would also add a lot of extra work for simply connecting everything. Therefore, synchronization registers where comparison happens will be connected to the input signals going to different stages of the pipeline as well as to every input and output signal of the core going to the OBI interfaces. From this data it is then possible to detect a glitch and give the user some information about exactly where in the pipeline the fault occurred.
+As the purpose of this project is to analyze the effectiveness of the DCL mechanism, some granularity is needed. However, knowing exactly which wire or bit in a register has glitched will not be necessary. This would also introduce a lot of extra work for simply connecting everything. Therefore, synchronization registers will be connected to the input signals going to different stages of the pipeline as well as to every input and output signal of the core going to the OBI interfaces. Comparisons will be done between the pipeline stages and outputs of both cores. From this data it is then possible to detect a glitch and give the user some information about exactly where in the pipeline the fault occurred.
 
-As an added bonus from using synchronization registers is that the two cores are offset from each other by a clock cycle. This way, in the unlikely event that an attacker manages to glitch the two cores in precisely the same way at the same time, they now need to do it in a highly synchronized manner. This significantly increases the complexity of the attack. The deliberate offset between the cores introduces a form of time diversity, making it more challenging for an attacker to exploit vulnerabilities using clock glitches or other timing-based attacks. These additional security measures enhance the system's resistance to fault injection attacks and improve its overall robustness.
+An added bonus from using synchronization registers is that the two cores are offset from each other by a clock cycle. This way, in the unlikely event that an attacker manages to glitch the two cores in precisely the same way, they now need to do it in a highly synchronized manner. This significantly increases the complexity of the attack. The deliberate offset between the cores introduces a form of time diversity. This makes it more challenging for an attacker to exploit vulnerabilities using clock glitches or other timing-based attacks and enhances the system's resistance to fault injection. 
 
-The top level block diagram for the dual-core lockstep setup is shown in \autoref{fig:dual_block}. The red blocks represent a stage in the pipeline. The yellow rectangles are the registers between the different pipeline stages. The dark blue blocks are the data- and instruction-memory interfaces. The light blue blocks are the LSU modules responsible for communicating with the data interface. Each purple block represents a synchronization register that delays a signal one clock cycle. The green blocks represent logic dedicated to comparing the signals from both cores. If any of the comparisons fail, one of four bits on the \textit{alert\_compare\_o} wire will be set to '1'. Which bit is set tells the user which one of the comparisons that failed.  
+The top level block diagram for the CV32E40DC is shown in \autoref{fig:dual_block}. The red blocks represent a stage in the pipeline. The yellow rectangles are the registers between the different pipeline stages. The dark blue blocks are the data- and instruction-memory interfaces. The light blue blocks are the LSU modules responsible for communicating with the data interface. Each purple block represents a synchronization register that delays a signal one clock cycle. The green blocks represent logic dedicated to comparing the signals from both cores. If any of the comparisons fail, one of four bits on the \textit{alert\_compare\_o} wire will be set to '1'. Which bit is set tells the user which one of the comparisons failed.  
 
 \begin{figure}[ht!]
     \centering
@@ -214,9 +225,9 @@ The top level block diagram for the dual-core lockstep setup is shown in \autore
     \label{fig:dual_block}
 \end{figure}
 
-Parts of the implementation of CV32E40DC are shown in \autoref{lst:dc_code}. This is a slightly modified and extended version of the \textit{cv32e40s\_core.sv} code found in \cite{cv32e40s_github}. The major changes are the removal of the PCH feature, adding the pipeline stages as outputs and the instantiation of a second core. All the same inputs and outputs are declared for both cores. A synchronization register is made for each of these signals. The signals from both cores are compared in four separate statements. The first comparison is between all the output signals that exist in the unmodified CV32E40S. The next three comparisons are of the different pipeline stages. This way we can differentiate between an error in the pipeline or one occurring somewhere in the normal outputs. 
+Parts of the implementation of CV32E40DC are shown in \autoref{lst:dc_code}. This is a slightly modified and extended version of the \textit{cv32e40s\_core.sv} code found in \cite{cv32e40s_github}. The major changes are the removal of the PCH feature, adding the pipeline stages as outputs and the instantiation of a second core. All the same inputs and outputs are declared for both cores. A synchronization register is made for each of these signals. The signals from both cores are compared in four separate statements. The first comparison is between all the output signals that exist in the unmodified CV32E40S. The next three comparisons are between the different pipeline stages. This way we can differentiate between an error in the pipeline or one occurring somewhere in the normal outputs. 
 
-Because all inputs and outputs of the core remain the same (with the exception of the output pipeline signals) we can easily connect it to the pre-existing verification framework. \autoref{lst:dc_wrapper} shows the instantiation of the CV32E40DC and a glitch injector module in the test bench.
+Because all inputs and outputs of the CV32E40DC remain the same as the CV32E40S (with the exception of the output pipeline signals) we can easily connect it to the pre-existing verification framework. \autoref{lst:dc_wrapper} shows the instantiation of the CV32E40DC and a glitch injector module in the test bench.
 
 
 \section{Tests and Evaluation}
@@ -227,7 +238,7 @@ All tests that will be performed on both cores are shown in \autoref{tab:instruc
 \begin{table}[h!]
 \centering
 \renewcommand{\arraystretch}{2} 
-\caption{Instruction Skip and Fault Coverage Tests}
+\caption{Instruction Skip and Fault Coverage Tests.}
 \label{tab:instruction_fault_tests}
 \resizebox{\textwidth}{!}{
 \begin{tabular}{lll}
